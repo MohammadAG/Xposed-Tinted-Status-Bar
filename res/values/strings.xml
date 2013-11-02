@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tinted Status Bar</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_save">Save</string>
+    <string name="title_activity_applications_settings">ApplicationsSettings</string>
+    <string name="menu_launch">Launch</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_playstore">Play Store</string>
+    <string name="menu_xposed">Xposed modules</string>
+    <string name="menu_donate">Donate</string>
+    <string name="status_bar_tint_text">Status Bar Tint</string>
+    <string name="status_bar_icon_tint_text">Status bar icons color</string>
+    <string name="enabled">Enabled</string>
+    <string name="apply">Apply</string>
+    <string name="saturation">Saturation</string>
+    <string name="value">Value</string>
+    <string name="opacity">Opacity</string>
+    <string name="preview">Preview</string>
+    <string name="restore">Restore</string>
+    <string name="save">Save</string>
+    <string name="invalid_color">Invalid colour</string>
+    <string name="all_activities_title">All activities</string>
+    <string name="all_the_wonderful_activities">"All activities, below settings override this"</string>
+    <string name="reset_to_auto_detect">Reset to auto-detect</string>
+    <string name="copyright_summary">Copyright © 2013 – Mohammad Abu-Garbeyyeh\nView more apps and modules</string>
+    <string name="api_override_title">Allow 3rd party interaction</string>
+    <string name="api_override_summary">3rd party apps may use the API provided to change the status bar colour in those apps</string>
+    <string name="default_status_bar_tint_title">Default status bar tint color</string>
+    <string name="default_status_bar_icon_tint_title">Default status bar icon tint color</string>
+    <string name="default_navigation_bar_tint_title">Default navigation bar tint color</string>
+    <string name="default_navigation_bar_icon_tint_title">Default navigation bar tint color</string>
+    <string name="default_summary">Select the default color if no color can be determined</string>
+    <string name="max_hsv_title">Max HS[V] for black icons</string>
+    <string name="max_hsv_summary">Maximum HS[V] before auto-switching to black icons</string>
+    <string name="current_hsv_value">Current value: %s</string>
+    <string name="no_activities_error">No activities, this app should not be showing in the list.</string>
+    <string name="loading_title">Loading…</string>
+    
+    <string-array name="my_apps" translatable="false">>
+        <item>@string/menu_playstore</item>
+        <item>@string/menu_xposed</item>
+        <item>@string/menu_donate</item>
+    </string-array>
+</resources>
