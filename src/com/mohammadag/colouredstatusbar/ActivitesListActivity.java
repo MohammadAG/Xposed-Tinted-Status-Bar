@@ -27,6 +27,8 @@ import android.widget.Toast;
 import com.haarman.listviewanimations.ArrayAdapter;
 import com.haarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
 
+import com.mohammadag.colouredstatusbar.Common;
+
 public class ActivitesListActivity extends ListActivity {
 	private String mPackageName;
 	private String mFriendlyPackageName;
@@ -47,8 +49,8 @@ public class ActivitesListActivity extends ListActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Intent intent = getIntent();
-		mPackageName = intent.getStringExtra("packageName");
-		mFriendlyPackageName = intent.getStringExtra("packageUserFriendlyName");
+		mPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
+		mFriendlyPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME);
 
 		loadActivitesForPackage(mPackageName);
 
