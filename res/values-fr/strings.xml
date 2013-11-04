@@ -43,4 +43,6 @@
         <item>@string/menu_xposed</item>
         <item>@string/menu_donate</item>
     </string-array>
+    
+    <string name="xposed_description">Modifie la couleur de la barre d\'état en fonction de l\'activité affichée</string>
 </resources>
