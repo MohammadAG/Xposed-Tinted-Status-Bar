@@ -30,7 +30,7 @@
             android:value="30+" />
         <meta-data
             android:name="xposeddescription"
-            android:value="Changes status bar colour according to current activity" />
+            android:value="@string/xposed_description" />
 
         <activity
             android:name="com.mohammadag.colouredstatusbar.ApplicationSettings"

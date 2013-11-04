@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Coloration de la barre d\'état</string>
+    <string name="action_settings">Réglages</string>
+    <string name="menu_save">Enregistrer</string>
+    <string name="title_activity_applications_settings">Réglages par activité d\'application</string>
+    <string name="menu_launch">Lancer</string>
+    <string name="menu_settings">Réglages</string>
+    <string name="menu_playstore">Play Store</string>
+    <string name="menu_xposed">Modules Xposed</string>
+    <string name="menu_donate">Faire un don</string>
+    <string name="status_bar_tint_text">Coloration de la barre d\'état</string>
+    <string name="status_bar_icon_tint_text">Coloration des icônes de la barre d\'état</string>
+    <string name="enabled">Activé</string>
+    <string name="apply">Appliquer</string>
+    <string name="saturation">Saturation</string>
+    <string name="value">Valeur</string>
+    <string name="opacity">Opacité</string>
+    <string name="preview">Aperçu</string>
+    <string name="restore">Restaurer</string>
+    <string name="save">Enregistrer</string>
+    <string name="invalid_color">Couleur incorrecte</string>
+    <string name="all_activities_title">Toutes les activités</string>
+    <string name="all_the_wonderful_activities">Toutes les activités ; les réglages ci-dessous remplaceront celui-ci</string>
+    <string name="reset_to_auto_detect">Réinitialisation de l\'auto-détection</string>
+    <string name="copyright_summary">Copyright © 2013 – Mohammad Abu-Garbeyyeh\nVoir d\'autres applications et modules</string>
+    <string name="api_override_title">Autorise l\'interaction d\'applications tierces</string>
+    <string name="api_override_summary">Des applications tierces utilisant l\'API fournie peuvent changer elles-même la couleur de la barre d\'état</string>
+    <string name="default_status_bar_tint_title">Couleur par défaut pour la coloration de la barre d\'état</string>
+    <string name="default_status_bar_icon_tint_title">Couleur par défaut pour la coloration des icône de la barre d\'état</string>
+    <string name="default_navigation_bar_tint_title">Couleur par défaut pour la coloration de la barre de navigation</string>
+    <string name="default_navigation_bar_icon_tint_title">Couleur par défaut pour la coloration des icône de la barre de navigation</string>
+    <string name="default_summary">Sélectionne la couleur par défaut si elle ne peut être détectée automatiquement</string>
+    <string name="max_hsv_title">TS[V] max. pour les icônes noires</string>
+    <string name="max_hsv_summary">TS[V] maximum avant l\'utilisation automatique des icônes noires</string>
+    <string name="current_hsv_value">Valeur actuelle : %s</string>
+    <string name="no_activities_error">Aucune activité, cette application ne devrait pas être visible dans la liste.</string>
+    <string name="loading_title">Chargement…</string>
+    
+    <string-array name="my_apps" translatable="false">>
+        <item>@string/menu_playstore</item>
+        <item>@string/menu_xposed</item>
+        <item>@string/menu_donate</item>
+    </string-array>
+    
+    <string name="xposed_description">Modifie la couleur de la barre d\'état en fonction de l\'activité affichée</string>
+</resources>

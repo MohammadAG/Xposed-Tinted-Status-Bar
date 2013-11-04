@@ -43,4 +43,6 @@
         <item>@string/menu_xposed</item>
         <item>@string/menu_donate</item>
     </string-array>
+    
+    <string name="xposed_description">Changes status bar colour according to current activity</string>
 </resources>
