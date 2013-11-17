@@ -21,8 +21,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);	
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		super.onCreate(savedInstanceState);
 		if (mSettingsHelper == null)
 			mSettingsHelper = new SettingsHelper(this);
 	}

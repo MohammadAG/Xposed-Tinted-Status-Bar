@@ -20,19 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 
 import com.haarman.listviewanimations.ArrayAdapter;
 import com.haarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
 
-import com.mohammadag.colouredstatusbar.Common;
 
 public class ActivitesListActivity extends ListActivity {
 	private String mPackageName;
 	private String mFriendlyPackageName;
-	private Switch mSwitch;
+	private ToggleButton mSwitch;
 	private SettingsHelper mSettingsHelper;
 	protected boolean mDirty;
 
@@ -44,9 +44,6 @@ public class ActivitesListActivity extends ListActivity {
 
 		// TODO: make this is a single instance, or a singleton
 		mSettingsHelper = new SettingsHelper(getSharedPreferences(Common.PREFS, Context.MODE_WORLD_READABLE), this);
-
-		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Intent intent = getIntent();
 		mPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
@@ -63,21 +60,14 @@ public class ActivitesListActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.activites_list, menu);
 
 		MenuItem actionSwitch = menu.findItem(R.id.switch_button);
-		mSwitch = (Switch) actionSwitch.getActionView().findViewById(R.id.color_switch);
-		if (mSwitch != null) {
-			mSwitch.setChecked(mSettingsHelper.isEnabled(mPackageName, null));
-
-			// Toggle the visibility of the lower panel when changed
-			mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					mDirty = true;
-					String keyName = SettingsHelper.getKeyName(mPackageName, null, Common.SETTINGS_KEY_IS_ACTIVE);
-					mSettingsHelper.getSharedPreferences().edit().putBoolean(keyName, isChecked).commit();
-					getListView().invalidateViews();
-				}
-			});
-		}
+        mDirty = true;
+        String keyName = SettingsHelper.getKeyName(mPackageName, null, Common.SETTINGS_KEY_IS_ACTIVE);
+        mSettingsHelper.getSharedPreferences().edit().putBoolean(keyName, true).commit();
+        getListView().invalidateViews();
+		if(mSettingsHelper.isEnabled(mPackageName, null))
+            menu.findItem(R.id.switch_button).setTitle("Disable!");
+        else
+            menu.findItem(R.id.switch_button).setTitle("Enable!");
 
 		return true;
 	}
@@ -100,7 +90,7 @@ public class ActivitesListActivity extends ListActivity {
 			PackageManager pm = getPackageManager();
 			PackageInfo info = pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
 			ActivityInfo[] list = info.activities;
-			getActionBar().setIcon(info.applicationInfo.loadIcon(pm));
+
 
 			List<String> activityNames = new ArrayList<String>(); 
 			activityNames.add(getString(R.string.all_the_wonderful_activities));
@@ -130,7 +120,7 @@ public class ActivitesListActivity extends ListActivity {
 					boolean isEnabled = 
 							mSettingsHelper.isEnabled(mPackageName, Utils.removePackageName(activityName, mPackageName));
 
-					textView.setTextColor(isEnabled ? Color.WHITE : Color.RED);
+					textView.setTextColor(isEnabled ? Color.BLACK : Color.RED);
 
 					if (position == 0) {
 						textView.setTypeface(null, Typeface.BOLD);

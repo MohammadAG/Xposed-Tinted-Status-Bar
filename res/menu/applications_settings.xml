@@ -3,9 +3,8 @@
 
     <item
         android:id="@+id/switch_button"
-        android:actionLayout="@layout/color_switch"
         android:showAsAction="always"
-        android:title=""/>
+        android:title="Enable"/>
     <item
         android:id="@+id/menu_app_launch"
         android:icon="@android:drawable/ic_media_play"

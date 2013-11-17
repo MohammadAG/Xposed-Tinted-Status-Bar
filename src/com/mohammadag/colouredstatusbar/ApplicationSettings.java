@@ -25,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class ApplicationSettings extends Activity {
 
@@ -32,7 +33,7 @@ public class ApplicationSettings extends Activity {
 	private static final int STATUS_BAR_TINT_COLOR_REQUEST = R.id.status_bar_tint_button;
 	private static final int STATUS_BAR_ICON_TINT_COLOR_REQUEST = R.id.icon_tint_button;
 
-	private Switch mSwitch;
+	private ToggleButton mSwitch;
 	@SuppressWarnings("unused")
 	private boolean mDirty = false;
 	private SharedPreferences prefs;
@@ -75,7 +76,6 @@ public class ApplicationSettings extends Activity {
 		try {
 			PackageManager pm = getPackageManager();
 			ApplicationInfo app = pm.getApplicationInfo(i.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME), 0);
-			getActionBar().setIcon(app.loadIcon(pm));
 			mPackageName = app.packageName;
 		} catch (NameNotFoundException e) {
 			// Close the dialog gracefully, package might have been uninstalled
@@ -83,8 +83,7 @@ public class ApplicationSettings extends Activity {
 			return;
 		}
 
-		getActionBar().setDisplayShowCustomEnabled(true);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
 		mStatusBarTint = mSettingsHelper.getTintColor(mPackageName, mActivityName, false);
@@ -122,27 +121,11 @@ public class ApplicationSettings extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.applications_settings, menu);
-
-		MenuItem actionSwitch = menu.findItem(R.id.switch_button);
-		mSwitch = (Switch) actionSwitch.getActionView().findViewById(R.id.color_switch);
-		if (mSwitch != null) {
-			mSwitch.setChecked(mSettingsHelper.isEnabled(mPackageName, mActivityName));
-
-			// Toggle the visibility of the lower panel when changed
-			mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					mDirty = true;
-					Editor editor = prefs.edit();
-					String keyName = SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_IS_ACTIVE);
-
-					editor.putBoolean(keyName, isChecked);
-					editor.commit();
-				}
-			});
-		}
-
+        getMenuInflater().inflate(R.menu.applications_settings, menu);
+        if(mSettingsHelper.isEnabled(mPackageName, null))
+            menu.findItem(R.id.switch_button).setTitle("Disable!");
+        else
+            menu.findItem(R.id.switch_button).setTitle("Enable!");
 		updateMenuEntries(getApplicationContext(), menu, mPackageName);
 		return true;
 	}
@@ -153,13 +136,28 @@ public class ApplicationSettings extends Activity {
 		case android.R.id.home:
 			onBackPressed();
 			break;
+
+        case R.id.switch_button:
+            boolean state = !(mSettingsHelper.isEnabled(mPackageName, mActivityName));
+            mDirty = true;
+            Editor editor = prefs.edit();
+            String keyName = SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_IS_ACTIVE);
+            editor.putBoolean(keyName,state);
+            editor.commit();
+            if(state)
+                item.setTitle("Disable!");
+            else
+                item.setTitle("Enable!");
+            break;
+
 		case R.id.menu_app_launch:
 			Intent intent = getPackageManager().getLaunchIntentForPackage(mPackageName);
 			if (intent != null) {
 				startActivity(intent);
 			}
 			break;
-		case R.id.menu_app_store:
+
+        case R.id.menu_app_store:
 			break;
 
 		default:
@@ -212,6 +210,7 @@ public class ApplicationSettings extends Activity {
 	}
 
 	private void onStatusBarIconTintColorButtonClicked() {
+
 		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("title", getString(R.string.status_bar_icon_tint_text));
@@ -223,6 +222,7 @@ public class ApplicationSettings extends Activity {
 		bundle.putBoolean("enabled", isEnabled);
 		colorIntent.putExtras(bundle);
 		startActivityForResult(colorIntent, STATUS_BAR_ICON_TINT_COLOR_REQUEST);
+
 	}
 
 	private void resetToAutoDetect() {

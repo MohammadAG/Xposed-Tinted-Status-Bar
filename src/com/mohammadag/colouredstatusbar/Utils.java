@@ -13,9 +13,9 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.UserHandle;
+
 import de.robv.android.xposed.XposedHelpers;
 
 public class Utils {
@@ -52,9 +52,6 @@ public class Utils {
 	}
 
 	public static int getMainColorFromActionBarDrawable(Drawable drawable) throws IllegalArgumentException {
-		if (drawable instanceof ColorDrawable) {
-			return ((ColorDrawable) drawable).getColor();
-		}
 		Bitmap bitmap = drawableToBitmap(drawable);
 		int pixel = bitmap.getPixel(0, 5);
 		int red = Color.red(pixel);
@@ -79,7 +76,8 @@ public class Utils {
 	/* Helper method, on API 17 this method uses sendBroadcastAsUser to prevent
 	 * system warnings in logcat.
 	 */
-	public static void sendOrderedBroadcast(Context context, Intent intent) {
+	@SuppressLint("NewApi")
+    public static void sendOrderedBroadcast(Context context, Intent intent) {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			if (mUserHandle == null) {
 				try {

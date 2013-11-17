@@ -13,19 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import com.larswerkman.colorpicker.ColorPicker;
-import com.larswerkman.colorpicker.ColorPicker.OnColorChangedListener;
-import com.larswerkman.colorpicker.OpacityBar;
-import com.larswerkman.colorpicker.SaturationBar;
-import com.larswerkman.colorpicker.ValueBar;
+
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SaturationBar;
+import com.larswerkman.holocolorpicker.ValueBar;
 
 public class ColorPickerActivity extends Activity implements OnColorChangedListener {
 
 	private EditText editText;
 	private String prefColor;
 	private String prefKey;
-	private Switch enabledSwitch;
+	private ToggleButton enabledSwitch;
 	private boolean prefEnabled;
 
 	@Override
@@ -39,8 +41,6 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 		prefEnabled = bundle.getBoolean("enabled");
 
 		setTitle(prefTitle);
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		setContentView(R.layout.activity_color_picker);
 
@@ -138,7 +138,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.color_picker, menu);
-		enabledSwitch = (Switch) menu.findItem(R.id.action_color_enable)
+		enabledSwitch = (ToggleButton) menu.findItem(R.id.action_color_enable)
 				.getActionView().findViewById(R.id.color_switch);
 		enabledSwitch.setChecked(prefEnabled);
 		enabledSwitch.setVisibility(View.GONE);

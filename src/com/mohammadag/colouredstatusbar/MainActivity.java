@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -30,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -62,6 +65,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
 				String pkgName = ((TextView) view.findViewById(R.id.app_package)).getText().toString();
 				String friendlyName = ((TextView) view.findViewById(R.id.app_name)).getText().toString();
 				Intent i = new Intent(getApplicationContext(), ActivitesListActivity.class);
@@ -71,7 +75,36 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		new PrepareAppsAdapterTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        ProgressDialog dialog;
+
+
+
+            dialog = new ProgressDialog(((ListView) findViewById(R.id.listView)).getContext());
+            dialog.setMessage(getString(R.string.loading_title));
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.setCancelable(false);
+            dialog.show();
+
+
+
+
+            if (appList.size() == 0) {
+                loadApps(dialog);
+            }
+
+
+
+
+            AppListAdaptor appListAdaptor = new AppListAdaptor(MainActivity.this, appList);
+            mListView.setAdapter(appListAdaptor);
+            mListView.setFastScrollEnabled(true);
+            //mListView.setFastScrollAlwaysVisible(true);
+
+            try {
+                dialog.dismiss();
+            } catch (Exception e) {
+
+            }
 	}
 
 	@Override
@@ -103,42 +136,6 @@ public class MainActivity extends Activity {
 			mListView.getAdapter().getView(requestCode, v, mListView);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	// Handle background loading of apps
-	private class PrepareAppsAdapterTask extends AsyncTask<Void,Void,AppListAdaptor> {
-		ProgressDialog dialog;
-
-		@Override
-		protected void onPreExecute() {
-			dialog = new ProgressDialog(((ListView) findViewById(R.id.listView)).getContext());
-			dialog.setMessage(getString(R.string.loading_title));
-			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			dialog.setCancelable(false);
-			dialog.show();
-		}
-
-		@Override
-		protected AppListAdaptor doInBackground(Void... params) {
-			if (appList.size() == 0) {
-				loadApps(dialog);
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(final AppListAdaptor result) {
-			AppListAdaptor appListAdaptor = new AppListAdaptor(MainActivity.this, appList);
-			mListView.setAdapter(appListAdaptor);
-			mListView.setFastScrollEnabled(true);
-			mListView.setFastScrollAlwaysVisible(true);
-
-			try {
-				dialog.dismiss();
-			} catch (Exception e) {
-
-			}
-		}
 	}
 
 	@SuppressLint("DefaultLocale")
@@ -209,8 +206,8 @@ public class MainActivity extends Activity {
 			holder.app_icon.setTag(app.packageName);
 			holder.app_icon.setVisibility(View.INVISIBLE);
 
-			new ImageLoader(holder.app_icon, app.packageName).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-					app);
+			ImageLoader il = new ImageLoader(holder.app_icon, app.packageName);
+            il.onPostExecute(il.doInBackground(app));
 
 			return row;
 		}

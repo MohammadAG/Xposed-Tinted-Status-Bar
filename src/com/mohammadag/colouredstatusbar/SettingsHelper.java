@@ -22,7 +22,6 @@ public class SettingsHelper {
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
 		mXPreferences = prefs;
-		prefs.makeWorldReadable();
 	}
 
 	// For activitiy classes.

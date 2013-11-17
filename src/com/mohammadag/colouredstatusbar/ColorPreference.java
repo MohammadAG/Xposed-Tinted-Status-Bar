@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ColorPreference extends Preference implements Preference.OnPreferenceClickListener {
 
@@ -40,7 +41,7 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 	protected void onBindView(View view) {
 		super.onBindView(view);
 		mImageView = (ImageView) view.findViewById(R.id.color_image);
-		mImageView.setBackground(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
+		mImageView.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
 	}
 
 	public ColorPreference setSettingsHelper(SettingsHelper settingsHelper) {
@@ -58,7 +59,7 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 		if (mSettingsHelper == null || mSettingsActivity == null)
 			throw new RuntimeException("You have to set an instance of SettingsHelper and/or SettingsActivity");
 
-		Intent colorIntent = new Intent(mSettingsActivity, ColorPickerActivity.class);
+        Intent colorIntent = new Intent(mSettingsActivity, ColorPickerActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("title", getTitle().toString());
 		bundle.putString("key", getKey());
@@ -89,6 +90,6 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 	}
 
 	public void refresh() {
-		mImageView.setBackground(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
+		mImageView.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
 	}
 }
