@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mohammadag.colouredstatusbar"
+    package="com.mohammadag.sakyGBport"
     android:versionCode="2"
     android:versionName="1.4" >
 
     <uses-sdk
-        android:minSdkVersion="15"
+        android:minSdkVersion="10"
         android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -33,7 +35,7 @@
             android:value="Changes status bar colour according to current activity" />
 
         <activity
-            android:name="com.mohammadag.colouredstatusbar.ApplicationSettings"
+            android:name="com.mohammadag.sakyGBport.ApplicationSettings"
             android:label="@string/title_activity_applications_settings" >
         </activity>
         <activity android:name=".ColorPickerActivity" >

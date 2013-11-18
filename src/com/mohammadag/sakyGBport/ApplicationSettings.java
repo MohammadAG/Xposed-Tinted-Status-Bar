@@ -1,6 +1,6 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.sakyGBport;
 
-import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+import com.mohammadag.sakyGBport.SettingsHelper.Tint;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,8 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;

@@ -2,8 +2,8 @@
 
     <item
         android:id="@+id/switch_button"
-        android:actionLayout="@layout/color_switch"
         android:showAsAction="always"
         android:title=""/>
+
 
 </menu>

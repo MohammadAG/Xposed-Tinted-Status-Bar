@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.sakyGBport;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -6,9 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,8 +21,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,7 +38,7 @@ import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygoteInit {
-	private static View mStatusBarView;
+	private static FrameLayout mStatusBarView;
     private final String logTag = "TintedStatusBarGBport";
 	private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
 	private ArrayList<TextView> mTextLabels = new ArrayList<TextView>();
@@ -81,16 +79,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
-		Log.d(logTag,"exec initZygote()");
+
+        Log.d(logTag,"initZygote()");
         mStatusBarView = null;
 		mSettingsHelper = new SettingsHelper(new XSharedPreferences(Common.PACKAGE_NAME, Common.PREFS));
 
 		Class<?> ActivityClass = XposedHelpers.findClass("android.app.Activity", null);
-        Log.d(logTag,"find android.app.Activity");
+
 		findAndHookMethod(ActivityClass, "performResume", new XC_MethodHook() {
 			@Override
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Log.d(logTag,"found Activity and hooked");
+
 				Activity activity = (Activity) param.thisObject;
 				String packageName = activity.getPackageName();
 				String activityName = activity.getLocalClassName();
@@ -111,7 +110,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					}
 				}
 
-                Log.d(logTag,"Get status bar tint colour for package"+packageName);
+
 				String statusBarTint = mSettingsHelper.getTintColor(packageName, activityName, true);
 				String iconTint = mSettingsHelper.getIconColors(packageName, activityName, true);
 
@@ -218,21 +217,24 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (!lpparam.packageName.equals("com.android.systemui"))
 			return;
 
-        Log.d(logTag,"Searchin for systemui");
 		try {
 			Class<?> PhoneStatusBar = findClass("com.android.systemui.statusbar.StatusBarService",
 					lpparam.classLoader);
 			try {
-				findAndHookMethod(PhoneStatusBar, "makeStatusBarView", new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        Log.d(logTag,"found systemUI");
-						mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
-                        mStatusBarView = (View) getObjectField(param.thisObject, "mStatusBarView");
-					}
-				});
-			} catch (NoSuchMethodError e) {
 
+                XC_MethodHook xc_methodHook = new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
+                        mStatusBarView = (FrameLayout) getObjectField(param.thisObject, "mStatusBarView");
+                        super.afterHookedMethod(param);
+                    }
+                };
+                Method m = XposedHelpers.findMethodBestMatch(PhoneStatusBar,"makeStatusBarView",Context.class);
+                XposedBridge.hookMethod(m,xc_methodHook);
+
+			} catch (NoSuchMethodError e) {
+                Log.d(logTag,"Could Not Locate makeStatusBarView");
 			}
 
 			try {
@@ -271,11 +273,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 			doStatusBarIconsHooks(PhoneStatusBar, lpparam.classLoader);
 		} catch (ClassNotFoundError e) {
-
+            Log.d(logTag,"Could not locate com.android.systemui.statusbar.StatusBarService");
 		}
 
+
+
 		try {
-			Class<?> PhoneStatusBarView = findClass("com.android.statusbar.StatusBarService",
+			Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.StatusBarView",
 					lpparam.classLoader);
 
 			XposedBridge.hookAllConstructors(PhoneStatusBarView, new XC_MethodHook() {
@@ -286,21 +290,22 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					iF.addAction(Common.INTENT_CHANGE_COLOR_NAME);
 					iF.addAction(Common.INTENT_SAMSUNG_SVIEW_COVER);
 					iF.addAction(Common.INTENT_SETTINGS_UPDATED);
+                    Log.d(logTag,"Registering Receiver");
 					context.registerReceiver(mBroadcastReceiver, iF);
 				}
 
 				@Override
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					mStatusBarView = (View) param.thisObject;
+					mStatusBarView = (FrameLayout) param.thisObject;
 				}
 			});
 		} catch (ClassNotFoundError e) {
-
+            Log.d(logTag,"Could not locate com.android.systemui.statusbar.StatusBarView");
 		}
 
 		doBatteryHooks(lpparam.classLoader);
-		//doSignalHooks(lpparam.classLoader);
-		//doBluetoothHooks(lpparam.classLoader);
+		doSignalHooks(lpparam.classLoader);
+		doBluetoothHooks(lpparam.classLoader);
 		doClockHooks(lpparam.classLoader);
 		doTickerHooks(lpparam.classLoader);
 	}
@@ -311,7 +316,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				new XC_MethodHook() {
 			@Override
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
+				XposedBridge.log("Hooking Icons");
+                mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
 				setColorForLayout(mStatusIcons, mColorForStatusIcons);
 			}
 		});
@@ -374,36 +380,20 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	private void setStatusBarTint(final int tintColor) {
-		if (mStatusBarView == null)
-			return;
+		Log.d(logTag,"Called setStatusBarTint :) (y)");
+        if (mStatusBarView == null)
+        {
+            Log.d(logTag,"mStatusBarView == null :( what is this");
+            return;
+        }
 
 		if (mLastSetColor == tintColor)
 			return;
 
 		mLastSetColor = tintColor;
 
-		if (mAnimateStatusBarTintChange) {
-			Animation fadeOutAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
-					android.R.anim.fade_out);
-			final Animation fadeInAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
-					android.R.anim.fade_in);
-			fadeOutAnimation.setAnimationListener(new AnimationListener() {
-				@Override
-				public void onAnimationStart(Animation arg0) {}
-				@Override
-				public void onAnimationRepeat(Animation arg0) {}		
-				@Override
-				public void onAnimationEnd(Animation arg0) {
-					if (!mIsStatusBarNowTransparent) {
-						mStatusBarView.setBackgroundColor(tintColor);
-					}
-					mStatusBarView.startAnimation(fadeInAnimation);
-				}
-			});
-			mStatusBarView.startAnimation(fadeOutAnimation);
-		} else {
-			mStatusBarView.setBackgroundColor(tintColor);
-		}
+        XposedBridge.log("Changing Status bar bg to "+tintColor);
+		mStatusBarView.setBackgroundColor(tintColor);
 	}
 
 	private void setStatusBarIconsTint(int iconTint) {
@@ -525,7 +515,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	private void doClockHooks(ClassLoader classLoader) {
-		String className = "com.android.systemui.statusbar.policy.Clock";
+		String className = "com.android.systemui.statusbar.Clock";
 		try {
 			Class<?> Clock = XposedHelpers.findClass(className, classLoader);
 
@@ -587,7 +577,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	private void doTickerHooks(ClassLoader classLoader) {
-		String className = "com.android.systemui.statusbar.phone.Ticker";
+		String className = "com.android.systemui.statusbar.Ticker";
 		String notificationClassName = "com.android.internal.statusbar.StatusBarNotification";
 		String addMethod = "addEntry";
 		try {

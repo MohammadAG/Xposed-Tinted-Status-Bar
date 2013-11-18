@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.sakyGBport;
 
 import android.app.AndroidAppHelper;
 import android.content.Context;
@@ -58,7 +58,7 @@ public class SettingsHelper {
 		if (withHash && hexColor != null)
 			hexColor = "#" + hexColor;
 		if (mXPreferences != null)
-			XposedBridge.log("getTintColorForPackage: " + packageName);
+			XposedBridge.log("getTintColorForPackage: " + packageName+"Color "+hexColor);
 		return hexColor;
 	}
 

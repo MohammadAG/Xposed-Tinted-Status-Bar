@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.sakyGBport;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class ColorPreference extends Preference implements Preference.OnPreferenceClickListener {
 
