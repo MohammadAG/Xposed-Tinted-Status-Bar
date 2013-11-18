@@ -12,20 +12,20 @@
         android:summary="@string/api_override_summary"
         android:title="@string/api_override_title" />
 
-    <com.mohammadag.colouredstatusbar.ColorPreference
+    <com.mohammadag.sakyGBport.ColorPreference
         android:key="pref_default_status_bar_tint"
         android:summary="@string/default_summary"
         android:title="@string/default_status_bar_tint_title" />
-    <com.mohammadag.colouredstatusbar.ColorPreference
+    <com.mohammadag.sakyGBport.ColorPreference
         android:key="pref_default_status_bar_icon_tint"
         android:summary="@string/default_summary"
         android:title="@string/default_status_bar_icon_tint_title" />
-    <com.mohammadag.colouredstatusbar.ColorPreference
+    <com.mohammadag.sakyGBport.ColorPreference
         android:key="pref_default_nav_bar_tint"
         android:summary="@string/default_summary"
         android:title="@string/default_navigation_bar_tint_title" />
 
-    <com.mohammadag.colouredstatusbar.SliderPreference
+    <com.mohammadag.sakyGBport.SliderPreference
         android:defaultValue="0.7"
         android:key="pref_max_hsv_value_before_using_black_icons"
         android:summary="@string/max_hsv_summary"
