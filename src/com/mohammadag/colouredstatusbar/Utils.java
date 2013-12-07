@@ -15,7 +15,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.UserHandle;
 import de.robv.android.xposed.XposedHelpers;
 
 public class Utils {
@@ -79,17 +78,18 @@ public class Utils {
 	/* Helper method, on API 17 this method uses sendBroadcastAsUser to prevent
 	 * system warnings in logcat.
 	 */
+	@SuppressLint("NewApi")
 	public static void sendOrderedBroadcast(Context context, Intent intent) {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			if (mUserHandle == null) {
 				try {
-					mUserHandle = XposedHelpers.getStaticObjectField(UserHandle.class, "CURRENT");
+					mUserHandle = XposedHelpers.getStaticObjectField(android.os.UserHandle.class, "CURRENT");
 				} catch (Throwable t) {
 					context.sendOrderedBroadcast(intent, null);
 					return;
 				}
 			}
-			context.sendOrderedBroadcastAsUser(intent, (UserHandle) mUserHandle, null, null, null, 0, null, null);
+			context.sendOrderedBroadcastAsUser(intent, (android.os.UserHandle) mUserHandle, null, null, null, 0, null, null);
 		} else {
 			context.sendOrderedBroadcast(intent, null);
 		}
