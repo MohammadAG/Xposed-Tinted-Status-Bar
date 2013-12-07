@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -40,7 +41,7 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 	protected void onBindView(View view) {
 		super.onBindView(view);
 		mImageView = (ImageView) view.findViewById(R.id.color_image);
-		mImageView.setBackground(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
+		refresh();
 	}
 
 	public ColorPreference setSettingsHelper(SettingsHelper settingsHelper) {
@@ -88,7 +89,13 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 		return mSettingsHelper.getDefaultTint(tintType, false);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void refresh() {
-		mImageView.setBackground(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
+		final ColorDrawable color = new ColorDrawable(Color.parseColor("#" + getCurrentColor()));
+		if (Build.VERSION.SDK_INT <= 15) {
+			mImageView.setBackgroundDrawable(color);
+		} else {
+			mImageView.setBackground(color);
+		}
 	}
 }
