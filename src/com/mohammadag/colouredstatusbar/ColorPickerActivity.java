@@ -57,7 +57,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 
 		picker.setOldCenterColor(Color.parseColor("#ff33b5e5"));
 		picker.setOnColorChangedListener(this);
-		picker.setColor(Color.parseColor("#" + prefColor));
+		picker.setColor(Color.parseColor(Utils.addHashIfNeeded(prefColor)));
 
 		Button bPreview = (Button) findViewById(R.id.bPreviewColor);
 		bPreview.setOnClickListener(new OnClickListener() {
@@ -70,27 +70,27 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 					if (isFullyTransparent(textEditString)) {
 						colourHex = Color.parseColor("#00000000");
 					} else {
-						colourHex = Color.parseColor("#" + textEditString);
+						colourHex = Color.parseColor(Utils.addHashIfNeeded(textEditString));
 						picker.setColor(colourHex);
 					}
-					
+
 					ColorDrawable previewDrawable = new ColorDrawable(colourHex);
-					
+
 					if (Common.SETTINGS_KEY_STATUS_BAR_TINT.equals(prefKey)) {
 						getActionBar().setBackgroundDrawable(previewDrawable);
-						
+
 						/* Workaround, there's no invalidate() method that would redraw the
 						 * action bar, and setting the drawable at runtime simply does nothing.
 						 */
 						getActionBar().setDisplayShowTitleEnabled(false);
 						getActionBar().setDisplayShowTitleEnabled(true);
 					}
-					
+
 					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
 					intent.putExtra(prefKey, colourHex);
 					sendOrderedBroadcast(intent, null);
 				} catch (IllegalArgumentException e) {
-					Toast.makeText(getApplicationContext(), "Invalid colour", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -103,14 +103,14 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 			}
 		});
 	}
-	
+
 	private boolean isFullyTransparent(String colorCode) {
 		return "0".equals(colorCode) || colorCode.startsWith("00");
 	}
-	
+
 	private void returnResults() {
 		String text = editText.getText().toString();
-		
+
 		Intent intent = new Intent();
 		intent.putExtra("key", prefKey);
 		if (isFullyTransparent(text)) {
@@ -153,7 +153,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		setResult(Activity.RESULT_CANCELED);

@@ -10,12 +10,16 @@ import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -32,13 +36,13 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-
-	private SharedPreferences prefs;
 	private SettingsHelper mSettingsHelper;
 
 	private ListView mListView = null;
-	private ArrayList<ApplicationInfo> appList = new ArrayList<ApplicationInfo>();
-	private ArrayList<ApplicationInfo> filteredAppList = new ArrayList<ApplicationInfo>();
+	private ArrayList<ApplicationInfo> mAppList = new ArrayList<ApplicationInfo>();
+	private ArrayList<ApplicationInfo> mFilteredAppList = new ArrayList<ApplicationInfo>();
+
+	public int mGoogleSearchPosition;
 
 	static class ViewHolder {
 		TextView app_name;
@@ -52,21 +56,62 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		if (Utils.isDonateVersionInstalled(this)) {
+			setTitle(R.string.app_name_donate_version);
+		}
 
-		prefs = Utils.getSharedPreferences(this);
-		mSettingsHelper = new SettingsHelper(prefs, this);
+		mSettingsHelper = new SettingsHelper(this);
 
 		mListView = (ListView) findViewById(R.id.listView);
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+				final String pkgName = ((TextView) view.findViewById(R.id.app_package)).getText().toString();
+				final String friendlyName = ((TextView) view.findViewById(R.id.app_name)).getText().toString();
+				Intent i;
+				if (pkgName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB)) {
+					i = new Intent(getApplicationContext(), ApplicationSettings.class);
+					i.putExtra(Common.EXTRA_KEY_ACTIVITY_NAME, "NONE");
+				} else if (pkgName.equals("com.google.android.launcher")) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+					builder.setTitle(R.string.warning);
+					builder.setMessage(R.string.gel_stub_warning);
+					builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							mListView.post(new Runnable() {
+								@Override
+								public void run() {
+									mListView.smoothScrollToPosition(mGoogleSearchPosition+1);
+									mListView.postDelayed(new Runnable() {
+										@Override
+										public void run() {
+											mListView.performItemClick(mListView, mGoogleSearchPosition, 0);
+										}
+									}, 1100);
+								}
+							});
+						}
+					});
 
-				String pkgName = ((TextView) view.findViewById(R.id.app_package)).getText().toString();
-				String friendlyName = ((TextView) view.findViewById(R.id.app_name)).getText().toString();
-				Intent i = new Intent(getApplicationContext(), ActivitesListActivity.class);
-				i.putExtra("packageName", pkgName);
-				i.putExtra("packageUserFriendlyName", friendlyName);
+					builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Intent i = new Intent(getApplicationContext(), ActivitesListActivity.class);
+							i.putExtra(Common.EXTRA_KEY_PACKAGE_NAME, pkgName);
+							i.putExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME, friendlyName);
+
+							startActivityForResult(i, position);
+						}
+					});
+					builder.create().show();
+					return;
+				} else {
+					i = new Intent(getApplicationContext(), ActivitesListActivity.class);
+				}
+				i.putExtra(Common.EXTRA_KEY_PACKAGE_NAME, pkgName);
+				i.putExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME, friendlyName);
+
 				startActivityForResult(i, position);
 			}
 		});
@@ -120,7 +165,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected AppListAdaptor doInBackground(Void... params) {
-			if (appList.size() == 0) {
+			if (mAppList.size() == 0) {
 				loadApps(dialog);
 			}
 			return null;
@@ -128,7 +173,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(final AppListAdaptor result) {
-			AppListAdaptor appListAdaptor = new AppListAdaptor(MainActivity.this, appList);
+			AppListAdaptor appListAdaptor = new AppListAdaptor(MainActivity.this, mAppList);
 			mListView.setAdapter(appListAdaptor);
 			mListView.setFastScrollEnabled(true);
 			mListView.setFastScrollAlwaysVisible(true);
@@ -151,11 +196,11 @@ public class MainActivity extends Activity {
 		public AppListAdaptor(Context context, List<ApplicationInfo> items) {
 			super(context, R.layout.app_list_item, new ArrayList<ApplicationInfo>(items));
 
-			filteredAppList.addAll(items);
+			mFilteredAppList.addAll(items);
 			alphaIndexer = new HashMap<String, Integer>();
-			for(int i = filteredAppList.size() - 1; i >= 0; i--)
+			for(int i = mFilteredAppList.size() - 1; i >= 0; i--)
 			{
-				ApplicationInfo app = filteredAppList.get(i);
+				ApplicationInfo app = mFilteredAppList.get(i);
 				String appName = app.name;
 				String firstChar;
 				if (appName == null || appName.length() < 1) {
@@ -167,6 +212,14 @@ public class MainActivity extends Activity {
 				}
 
 				alphaIndexer.put(firstChar, i);
+			}
+
+			for (int i = 0; i < mFilteredAppList.size(); i++) {
+				ApplicationInfo info = mFilteredAppList.get(i);
+				if (info.packageName.equals(Common.PACKAGE_NAME_GOOGLE_SEARCH)) {
+					mGoogleSearchPosition = i;
+					break;
+				}
 			}
 
 			Set<String> sectionLetters = alphaIndexer.keySet();
@@ -188,7 +241,7 @@ public class MainActivity extends Activity {
 				row = getLayoutInflater().inflate(R.layout.app_list_item, parent, false);
 			}
 
-			ApplicationInfo app = filteredAppList.get(position);
+			ApplicationInfo app = mFilteredAppList.get(position);
 
 			if (row.getTag() == null) {
 				ViewHolder holder = new ViewHolder();
@@ -218,7 +271,7 @@ public class MainActivity extends Activity {
 		@Override
 		public int getPositionForSection(int section) {
 			if (section >= sections.length)
-				return filteredAppList.size() - 1;
+				return mFilteredAppList.size() - 1;
 
 			return alphaIndexer.get(sections[section]);
 		}
@@ -257,7 +310,7 @@ public class MainActivity extends Activity {
 
 	@SuppressLint("DefaultLocale")
 	private void loadApps(ProgressDialog dialog) {
-		appList.clear();
+		mAppList.clear();
 
 		PackageManager pm = getPackageManager();
 		List<ApplicationInfo> apps = getPackageManager().getInstalledApplications(0);
@@ -270,10 +323,24 @@ public class MainActivity extends Activity {
 				continue;
 
 			appInfo.name = appInfo.loadLabel(pm).toString();
-			appList.add(appInfo);
+			try {
+				/* Slower app startup, but fewer apps for the user to go through */
+				PackageInfo pkgInfo = pm.getPackageInfo(appInfo.packageName, PackageManager.GET_ACTIVITIES);
+				ActivityInfo[] list = pkgInfo.activities;
+				if (list != null)
+					mAppList.add(appInfo);
+			} catch (NameNotFoundException e) {
+				continue;
+			}
+
 		}
 
-		Collections.sort(appList, new Comparator<ApplicationInfo>() {
+		ApplicationInfo lockscreenStub = new ApplicationInfo();
+		lockscreenStub.name = getString(R.string.android_lockscreen_stub_name);
+		lockscreenStub.packageName = Common.PACKAGE_NAME_LOCKSCREEN_STUB;
+		mAppList.add(lockscreenStub);
+
+		Collections.sort(mAppList, new Comparator<ApplicationInfo>() {
 			@SuppressLint("DefaultLocale")
 			@Override
 			public int compare(ApplicationInfo lhs, ApplicationInfo rhs) {
@@ -300,6 +367,8 @@ public class MainActivity extends Activity {
 		@Override
 		protected Drawable doInBackground(Object... params) {
 			ApplicationInfo info = (ApplicationInfo) params[0];
+			if (info.packageName.equals("com.mohammadag.tintedstatusbarlockscreenstub"))
+				return getResources().getDrawable(R.drawable.ic_lock);
 			return getPackageManager().getApplicationIcon(info);
 		}
 

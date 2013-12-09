@@ -3,9 +3,7 @@ package com.mohammadag.colouredstatusbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -34,21 +32,19 @@ public class ActivitesListActivity extends ListActivity {
 	private SettingsHelper mSettingsHelper;
 	protected boolean mDirty;
 
-	@SuppressLint("WorldReadableFiles")
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// TODO: make this is a single instance, or a singleton
-		mSettingsHelper = new SettingsHelper(getSharedPreferences(Common.PREFS, Context.MODE_WORLD_READABLE), this);
+		mSettingsHelper = new SettingsHelper(getApplicationContext());
 
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Intent intent = getIntent();
-		mPackageName = intent.getStringExtra("packageName");
-		mFriendlyPackageName = intent.getStringExtra("packageUserFriendlyName");
+		mPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
+		mFriendlyPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME);
 
 		loadActivitesForPackage(mPackageName);
 
@@ -108,8 +104,23 @@ public class ActivitesListActivity extends ListActivity {
 				finish();
 				return;
 			}
+
+			/* Workaround for GEL not showing in the activity list */
+			if (packageName.equals(Common.PACKAGE_NAME_GOOGLE_SEARCH)) {
+				/* Version code from APK on the intenret */
+				if (info.versionCode >= Common.GOOGLE_SEARCH_VERSION_CODE_WITH_GEL) {
+					if (!activityNames.contains(Common.GEL_ACTIVITY_NAME)) {
+						activityNames.add(Common.GEL_ACTIVITY_NAME);
+					}
+				}
+			}
+
 			for (int i = 0; i < list.length; i++) {
 				activityNames.add(list[i].name);
+			}
+
+			if (packageName.equals("com.google.android.launcher")) {
+				Toast.makeText(this, R.string.gel_stub_toast, Toast.LENGTH_LONG).show();
 			}
 
 			ArrayAdapter<String> activityListAdapter = new ArrayAdapter<String>(activityNames) {

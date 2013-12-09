@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 
 public class StatusBarTintApi {
+	public static final String INTENT_CHANGE_COLOR_NAME = "com.mohammadag.colouredstatusbar.ChangeStatusBarColor";
+	
 	/* I was planning to have two different keys but that got annoying during development,
 	 * this was done to speed up time. The following keys should be removed eventually.
 	 * TODO: What he said ^
@@ -41,7 +43,7 @@ public class StatusBarTintApi {
 	/* Helper method, pass -1 for a colour you don't want to change */
 	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint,
 			int navBarTint, int navBarIconTint, Context context) {
-		Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+		Intent intent = new Intent(INTENT_CHANGE_COLOR_NAME);
 		if (statusBarTint != -1)
 			intent.putExtra(KEY_STATUS_BAR_TINT, statusBarTint);
 		if (iconColorTint != -1)

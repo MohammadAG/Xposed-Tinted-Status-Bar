@@ -5,30 +5,78 @@
         android:key="copyright_key"
         android:summary="@string/copyright_summary"
         android:title="@string/app_name" />
+    <Preference
+        android:key="donate_key"
+        android:summary="@string/donate_summary"
+        android:title="@string/menu_donate" />
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_allow_api_usage"
         android:summary="@string/api_override_summary"
         android:title="@string/api_override_title" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_toast_activity_names"
+        android:summary="@string/toast_activity_names_summary"
+        android:title="@string/toast_activity_names_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_react_action_bar_visibility"
+        android:summary="@string/react_actionbar_description"
+        android:title="@string/react_actionbar_title" />
 
-    <com.mohammadag.colouredstatusbar.ColorPreference
-        android:key="pref_default_status_bar_tint"
-        android:summary="@string/default_summary"
-        android:title="@string/default_status_bar_tint_title" />
-    <com.mohammadag.colouredstatusbar.ColorPreference
-        android:key="pref_default_status_bar_icon_tint"
-        android:summary="@string/default_summary"
-        android:title="@string/default_status_bar_icon_tint_title" />
-    <com.mohammadag.colouredstatusbar.ColorPreference
-        android:key="pref_default_nav_bar_tint"
-        android:summary="@string/default_summary"
-        android:title="@string/default_navigation_bar_tint_title" />
+    <PreferenceScreen
+        android:summary="@string/default_colors_summary"
+        android:title="@string/default_colors" >
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_status_bar_tint"
+            android:summary="@string/default_summary"
+            android:title="@string/default_status_bar_tint_title" />
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_status_bar_icon_tint"
+            android:summary="@string/default_summary"
+            android:title="@string/default_status_bar_icon_tint_title" />
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_status_bar_inverted_icon_tint"
+            android:summary="@string/default_status_bar_inverted_icon_tint_summary"
+            android:title="@string/default_status_bar_inverted_icon_tint_title" />
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_nav_bar_tint"
+            android:summary="@string/default_status_bar_inverted_icon_tint_summary"
+            android:title="@string/default_navigation_bar_tint_title" />
+    </PreferenceScreen>
 
     <com.mohammadag.colouredstatusbar.SliderPreference
         android:defaultValue="0.7"
         android:key="pref_max_hsv_value_before_using_black_icons"
         android:summary="@string/max_hsv_summary"
         android:title="@string/max_hsv_title" />
+
+    <PreferenceCategory android:title="@string/cf_mode" android:key="colorfilter_category">
+        <ListPreference
+            android:dialogMessage="@string/cf_mode_explanation"
+            android:dialogTitle="@string/cf_mode"
+            android:entries="@array/colorfilter_entries"
+            android:entryValues="@array/colorfilter_entries"
+            android:summary="@string/explain_cf_mode_text"
+            android:title="@string/cf_mode" />
+        <ListPreference
+            android:defaultValue="SRC_ATOP"
+            android:dialogTitle="@string/notification_cf_mode_title"
+            android:entries="@array/colorfilter_entries"
+            android:entryValues="@array/colorfilter_entries"
+            android:key="pref_notification_icon_colorfilter_mode"
+            android:summary="%s"
+            android:title="@string/notification_cf_mode_title" />
+        <ListPreference
+            android:defaultValue="SRC_ATOP"
+            android:dialogTitle="@string/system_cf_mode_title"
+            android:entries="@array/colorfilter_entries"
+            android:entryValues="@array/colorfilter_entries"
+            android:key="pref_system_icon_colorfilter_mode"
+            android:summary="%s"
+            android:title="@string/system_cf_mode_title" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colorfilter_entries">
+        <item >MULTIPLY</item>
+        <item >SRC_ATOP</item>
+    </string-array>
+    
+</resources>

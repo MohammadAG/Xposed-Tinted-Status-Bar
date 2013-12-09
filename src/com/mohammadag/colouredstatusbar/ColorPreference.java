@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class ColorPreference extends Preference implements Preference.OnPreferenceClickListener {
-
 	private SettingsHelper mSettingsHelper;
 	private SettingsActivity mSettingsActivity;
 	private ImageView mImageView;
@@ -40,7 +39,8 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 	protected void onBindView(View view) {
 		super.onBindView(view);
 		mImageView = (ImageView) view.findViewById(R.id.color_image);
-		mImageView.setBackground(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
+		ColorDrawable background = new ColorDrawable(Color.parseColor(Utils.addHashIfNeeded(getCurrentColor())));
+		Utils.setImageViewBackground(mImageView, background);
 	}
 
 	public ColorPreference setSettingsHelper(SettingsHelper settingsHelper) {
@@ -77,6 +77,8 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 			tintType = SettingsHelper.Tint.ICON;
 		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT))
 			tintType = SettingsHelper.Tint.STATUS_BAR;
+		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT))
+			tintType = SettingsHelper.Tint.ICON_INVERTED;
 
 		Context context = getContext();
 		if (mSettingsActivity != null)
@@ -89,6 +91,7 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 	}
 
 	public void refresh() {
-		mImageView.setBackground(new ColorDrawable(Color.parseColor("#" + getCurrentColor())));
+		ColorDrawable drawable = new ColorDrawable(Color.parseColor(Utils.addHashIfNeeded(getCurrentColor())));
+		Utils.setImageViewBackground(mImageView, drawable);
 	}
 }

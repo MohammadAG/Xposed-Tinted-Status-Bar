@@ -1,12 +1,8 @@
 package com.mohammadag.colouredstatusbar;
 
-import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -26,37 +22,43 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+
 public class ApplicationSettings extends Activity {
 
 	// Make these random, why not...
 	private static final int STATUS_BAR_TINT_COLOR_REQUEST = R.id.status_bar_tint_button;
 	private static final int STATUS_BAR_ICON_TINT_COLOR_REQUEST = R.id.icon_tint_button;
+	private static final int NAVIGATION_BAR_TINT_COLOR_REQUEST = R.id.navigation_bar_tint_button;
+	private static final int NAVIGATION_BAR_ICON_TINT_COLOR_REQUEST = R.id.navigation_bar_icon_tint_button;
 
 	private Switch mSwitch;
 	@SuppressWarnings("unused")
 	private boolean mDirty = false;
-	private SharedPreferences prefs;
 	private String mPackageName;
 	private String mActivityName = null;
 	@SuppressWarnings("unused")
 	private Intent parentIntent;
 	private String mStatusBarTint;
 	private String mStatusBarIconTint;
+
 	private Button mStatusBarTintButton;
+	private Button mStatusBarIconTintButton;
+	private Button mNavigationBarTintButton;
+	private Button mNavigationBarIconTintButton;
 
 	private SettingsHelper mSettingsHelper = null;
-	private Button mStatusBarIconTintButton;
-	private Button mResetToAutoDetectButton;
 
-	@SuppressLint("WorldReadableFiles")
-	@SuppressWarnings("deprecation")
+	private Button mResetToAutoDetectButton;
+	private String mNavigationBarTint;
+	private String mNavigationBarIconTint;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_application_settings);
 
-		prefs = getSharedPreferences(Common.PREFS, Context.MODE_WORLD_READABLE); 
-		mSettingsHelper = new SettingsHelper(prefs, this);
+		mSettingsHelper = new SettingsHelper(this);
 
 		Intent i = getIntent();
 		parentIntent = i;
@@ -73,10 +75,16 @@ public class ApplicationSettings extends Activity {
 		}
 
 		try {
-			PackageManager pm = getPackageManager();
-			ApplicationInfo app = pm.getApplicationInfo(i.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME), 0);
-			getActionBar().setIcon(app.loadIcon(pm));
-			mPackageName = app.packageName;
+			String packageName = i.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
+			if (packageName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB)) {
+				mPackageName = packageName;
+				getActionBar().setIcon(getResources().getDrawable(R.drawable.ic_lock));
+			} else {
+				PackageManager pm = getPackageManager();
+				ApplicationInfo app = pm.getApplicationInfo(packageName, 0);
+				getActionBar().setIcon(app.loadIcon(pm));
+				mPackageName = app.packageName;
+			}
 		} catch (NameNotFoundException e) {
 			// Close the dialog gracefully, package might have been uninstalled
 			finish();
@@ -86,11 +94,10 @@ public class ApplicationSettings extends Activity {
 		getActionBar().setDisplayShowCustomEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
 		mStatusBarTint = mSettingsHelper.getTintColor(mPackageName, mActivityName, false);
 		if (mStatusBarTint == null) mStatusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);
 		mStatusBarTintButton = (Button) findViewById(R.id.status_bar_tint_button);
-		mStatusBarTintButton.setBackgroundColor(Color.parseColor("#" + mStatusBarTint));
+		mStatusBarTintButton.setBackgroundColor(Color.parseColor(Utils.addHashIfNeeded(mStatusBarTint)));
 		mStatusBarTintButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -102,11 +109,34 @@ public class ApplicationSettings extends Activity {
 
 		mStatusBarIconTintButton = (Button) findViewById(R.id.icon_tint_button);
 		mStatusBarIconTintButton.setBackgroundColor(
-				Color.parseColor("#" + mStatusBarIconTint));
+				Color.parseColor(Utils.addHashIfNeeded(mStatusBarIconTint)));
 		mStatusBarIconTintButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				onStatusBarIconTintColorButtonClicked();
+			}
+		});
+		mNavigationBarTint = mSettingsHelper.getNavigationBarTint(mPackageName, mActivityName, false);
+		mNavigationBarIconTint = mSettingsHelper.getNavigationBarIconTint(mPackageName, activityName, false);
+
+		mNavigationBarTintButton = (Button) findViewById(R.id.navigation_bar_tint_button);
+		mNavigationBarIconTintButton = (Button) findViewById(R.id.navigation_bar_icon_tint_button);
+
+		mNavigationBarTintButton.setBackgroundColor(
+				Color.parseColor(Utils.addHashIfNeeded(mNavigationBarTint)));
+		mNavigationBarTintButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				onNavigationBarTintButtonClicked();
+			}
+		});
+
+		mNavigationBarIconTintButton.setBackgroundColor(
+				Color.parseColor(Utils.addHashIfNeeded(mNavigationBarIconTint)));
+		mNavigationBarIconTintButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				onNavigationBarIconTintButtonClicked();
 			}
 		});
 
@@ -134,7 +164,7 @@ public class ApplicationSettings extends Activity {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					mDirty = true;
-					Editor editor = prefs.edit();
+					Editor editor = mSettingsHelper.getSharedPreferences().edit();
 					String keyName = SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_IS_ACTIVE);
 
 					editor.putBoolean(keyName, isChecked);
@@ -225,6 +255,28 @@ public class ApplicationSettings extends Activity {
 		startActivityForResult(colorIntent, STATUS_BAR_ICON_TINT_COLOR_REQUEST);
 	}
 
+	private void onNavigationBarTintButtonClicked() {
+		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putString("title", getString(R.string.navigation_bar_tint_text));
+		bundle.putString("key", Common.SETTINGS_KEY_NAVIGATION_BAR_TINT);
+		String mOldColor = mSettingsHelper.getNavigationBarTint(mPackageName, mActivityName, false);
+		bundle.putString("color", mOldColor);
+		colorIntent.putExtras(bundle);
+		startActivityForResult(colorIntent, NAVIGATION_BAR_TINT_COLOR_REQUEST);
+	}
+
+	private void onNavigationBarIconTintButtonClicked() {
+		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putString("title", getString(R.string.navigation_bar_icon_tint_text));
+		bundle.putString("key", Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT);
+		String mOldColor = mSettingsHelper.getNavigationBarTint(mPackageName, mActivityName, false);
+		bundle.putString("color", mOldColor);
+		colorIntent.putExtras(bundle);
+		startActivityForResult(colorIntent, NAVIGATION_BAR_ICON_TINT_COLOR_REQUEST);
+	}
+
 	private void resetToAutoDetect() {
 		Editor editor = mSettingsHelper.getSharedPreferences().edit();
 
@@ -236,8 +288,8 @@ public class ApplicationSettings extends Activity {
 		mStatusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);
 		mStatusBarIconTint = mSettingsHelper.getDefaultTint(Tint.ICON, false);
 
-		mStatusBarTintButton.setBackgroundColor(Color.parseColor("#" + mStatusBarTint));
-		mStatusBarIconTintButton.setBackgroundColor(Color.parseColor("#" + mStatusBarIconTint));
+		mStatusBarTintButton.setBackgroundColor(Color.parseColor(Utils.addHashIfNeeded(mStatusBarTint)));
+		mStatusBarIconTintButton.setBackgroundColor(Color.parseColor(Utils.addHashIfNeeded(mStatusBarIconTint)));
 	}
 
 	@Override
@@ -258,13 +310,12 @@ public class ApplicationSettings extends Activity {
 			}
 			mStatusBarTint = newColor;
 			try {
-				int color = Color.parseColor("#" + newColor);
+				int color = Color.parseColor(Utils.addHashIfNeeded(newColor));
 				mStatusBarTintButton.setBackgroundColor(color);
-				mSettingsHelper.setTintColor(mPackageName, mActivityName, newColor);
+				mSettingsHelper.setStatusBarTintColor(mPackageName, mActivityName, newColor);
 			} catch (IllegalArgumentException e) {
 				Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
 			}
-
 		} else if (requestCode == STATUS_BAR_ICON_TINT_COLOR_REQUEST) {
 			String newColor = Common.COLOR_WHITE;
 			if (data != null) {
@@ -276,9 +327,43 @@ public class ApplicationSettings extends Activity {
 			}
 			mStatusBarIconTint = newColor;
 			try {
-				int color = Color.parseColor("#" + newColor);
+				int color = Color.parseColor(Utils.addHashIfNeeded(newColor));
 				mStatusBarIconTintButton.setBackgroundColor(color);
 				mSettingsHelper.setIconColors(mPackageName, mActivityName, newColor);
+			} catch (IllegalArgumentException e) {
+				Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
+			}
+		} else if (requestCode == NAVIGATION_BAR_TINT_COLOR_REQUEST) {
+			String newColor = Common.COLOR_BLACK;
+			if (data != null) {
+				if (data.hasExtra("color"))
+					newColor = data.getStringExtra("color");
+			}
+			if ("#0".equals(newColor)) {
+				newColor = "#00000000";
+			}
+			mStatusBarTint = newColor;
+			try {
+				int color = Color.parseColor(Utils.addHashIfNeeded(newColor));
+				mNavigationBarTintButton.setBackgroundColor(color);
+				mSettingsHelper.setTintColor(Tint.NAV_BAR, mPackageName, mActivityName, newColor);
+			} catch (IllegalArgumentException e) {
+				Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
+			}
+		} else if (requestCode == NAVIGATION_BAR_ICON_TINT_COLOR_REQUEST) {
+			String newColor = Common.COLOR_WHITE;
+			if (data != null) {
+				if (data.hasExtra("color"))
+					newColor = data.getStringExtra("color");
+			}
+			if ("#0".equals(newColor)) {
+				newColor = "#00000000";
+			}
+			mStatusBarTint = newColor;
+			try {
+				int color = Color.parseColor(Utils.addHashIfNeeded(newColor));
+				mNavigationBarIconTintButton.setBackgroundColor(color);
+				mSettingsHelper.setTintColor(Tint.NAV_BAR_ICON, mPackageName, mActivityName, newColor);
 			} catch (IllegalArgumentException e) {
 				Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
 			}

@@ -1,6 +1,5 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.hooks;
 
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import android.view.View;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -47,22 +46,18 @@ public class XperiaTransparencyHook extends XC_MethodHook {
 	@Override
 	protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 		View layout = (View) param.args[0];
-		View statusBarWindow = (View) getObjectField(param.thisObject, "mStatusBarWindow");
 
-		if (layout.equals(statusBarWindow)) {
-			int outViewId = (Integer) param.args[1];
-			int inViewId = (Integer) param.args[2];
+		int outViewId = (Integer) param.args[1];
+		int inViewId = (Integer) param.args[2];
 
-			View outView = (View)layout.findViewById(outViewId);
-			View inView = (View)layout.findViewById(inViewId);
+		View outView = (View)layout.findViewById(outViewId);
+		View inView = (View)layout.findViewById(inViewId);
 
-			outView.setAlpha(0f);
-			inView.setAlpha(0f);
+		outView.setAlpha(0f);
+		inView.setAlpha(0f);
 
-			boolean isOpaque = (Boolean) XposedHelpers.callMethod(param.thisObject, "isOpaque", inViewId);
+		boolean isOpaque = (Boolean) XposedHelpers.callMethod(param.thisObject, "isOpaque", inViewId);
 
-			if (isOpaque)
-				param.setResult(null);
-		}
+		if (isOpaque) param.setResult(null);
 	}
 }

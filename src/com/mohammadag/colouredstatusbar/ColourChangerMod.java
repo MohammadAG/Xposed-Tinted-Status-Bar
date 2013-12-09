@@ -1,10 +1,8 @@
 package com.mohammadag.colouredstatusbar;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
@@ -12,11 +10,12 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.XModuleResources;
 import android.graphics.Color;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,38 +23,61 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageSwitcher;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+import com.mohammadag.colouredstatusbar.hooks.ActionBarHooks;
+import com.mohammadag.colouredstatusbar.hooks.BatteryHooks;
+import com.mohammadag.colouredstatusbar.hooks.BluetoothControllerHook;
+import com.mohammadag.colouredstatusbar.hooks.HtcTransparencyHook;
+import com.mohammadag.colouredstatusbar.hooks.KitKatBatteryHook;
+import com.mohammadag.colouredstatusbar.hooks.SViewHooks;
+import com.mohammadag.colouredstatusbar.hooks.SignalClusterHook;
+import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
+import com.mohammadag.colouredstatusbar.hooks.StatusBarLayoutInflationHook;
+import com.mohammadag.colouredstatusbar.hooks.StatusBarViewHook;
+import com.mohammadag.colouredstatusbar.hooks.TickerHooks;
+
+import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygoteInit {
+public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
 	private static View mStatusBarView;
-	private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
-	private ArrayList<TextView> mTextLabels = new ArrayList<TextView>();
+	private static View mNavigationBarView;
+	private static View mKitKatBatteryView;
+	private static ArrayList<ImageView> mSystemIconViews = new ArrayList<ImageView>();
+	private static ArrayList<ImageView> mNotificationIconViews = new ArrayList<ImageView>();
+	private static ArrayList<TextView> mTextLabels = new ArrayList<TextView>();
 	private static int mColorForStatusIcons = 0;
 	private static SettingsHelper mSettingsHelper;
 
-	private static int mLastTint = Color.parseColor("#" + Common.COLOR_A_SHADE_OF_GREY);
+	private static int mLastTint = Color.BLACK;
 	private static int mLastIconTint = Color.WHITE;
+	private static int mNavigationBarTint = Color.BLACK;
+	private static int mNavigationBarIconTint = Color.WHITE;
 
+	/* Notification icons */
 	private static LinearLayout mStatusIcons = null;
 
 	private int mLastSetColor;
-	private static final boolean mClockAnimation = false;
 	private static final boolean mAnimateStatusBarTintChange = true;
+	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor("#66000000");
 
 	/* Wokraround for Samsung UX */
 	private static boolean mIsStatusBarNowTransparent = false;
+
+	private static XModuleResources mResources;
 
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
@@ -70,17 +92,30 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					mLastIconTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, -1);
 					setStatusBarIconsTint(mLastIconTint);
 				}
+
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT)) {
+					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
+					setNavigationBarTint(mNavigationBarTint);
+				}
+
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT)) {
+					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
+					setNavigationBarIconTint(mNavigationBarIconTint);
+				}
 			} else if (Common.INTENT_SETTINGS_UPDATED.equals(intent.getAction())) {
-				Log.d("Xposed", "ColouredStatusBar settings updated, reloading...");
+				Log.d("Xposed", "TintedStatusBar settings updated, reloading...");
 				mSettingsHelper.reload();
 			}
 		}
 	};
 
+
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
 		mStatusBarView = null;
 		mSettingsHelper = new SettingsHelper(new XSharedPreferences(Common.PACKAGE_NAME, Common.PREFS));
+
+		mResources = XModuleResources.createInstance(startupParam.modulePath, null);
 
 		Class<?> ActivityClass = XposedHelpers.findClass("android.app.Activity", null);
 		findAndHookMethod(ActivityClass, "performResume", new XC_MethodHook() {
@@ -91,6 +126,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				String activityName = activity.getLocalClassName();
 
 				mSettingsHelper.reload();
+
+				if (mSettingsHelper.getBoolean(Common.SETTINGS_KEY_TOAST_ACTIVITY_NAMES, false)) {
+					String tosatText = mResources.getString(R.string.toast_text_package_name, packageName);
+					tosatText += "\n";
+					tosatText += mResources.getString(R.string.toast_text_activity_name, activityName);
+					Toast.makeText(activity, tosatText, Toast.LENGTH_SHORT).show();
+				}
 
 				if (!mSettingsHelper.isEnabled(packageName, activityName))
 					return;
@@ -109,22 +151,49 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				String statusBarTint = mSettingsHelper.getTintColor(packageName, activityName, true);
 				String iconTint = mSettingsHelper.getIconColors(packageName, activityName, true);
 
-				Drawable backgroundDrawable = null;
+				String navigationBarTint = mSettingsHelper.getNavigationBarTint(packageName, activityName, false);
+				String navBarIconTint = mSettingsHelper.getNavigationBarIconTint(packageName, activityName, false);
+
+				int navigationBarTintColor = 0;
+				int navigationBarIconTintColor = 0;
+
+				try {
+					navigationBarTintColor = Color.parseColor(Utils.addHashIfNeeded(navigationBarTint));
+				} catch (Throwable t) { }
+
+				try {
+					navigationBarIconTintColor = Color.parseColor(Utils.addHashIfNeeded(navBarIconTint));
+				} catch (Throwable t) { }
+
 				int color = 0;
+				int actionBarTextColor = -2;
 
 				ActionBar actionBar = activity.getActionBar();
 				boolean colorHandled = false;
 				if (actionBar != null) {
 					// If it's not showing, we shouldn't detect it.
 					if (actionBar.isShowing()) {
-						Object container = XposedHelpers.getObjectField(actionBar, "mContainerView");
+						FrameLayout container = (FrameLayout) XposedHelpers.getObjectField(actionBar, "mContainerView");
 						if (container != null) {
-							backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
+							Drawable backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
 							if (backgroundDrawable != null) {
 								try {
 									color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
 									colorHandled = true;
 								} catch (IllegalArgumentException e) {}
+								container.invalidate();
+							}
+
+							try {
+								TextView mTitleView = (TextView) getObjectField(
+										getObjectField(container, "mActionBarView"), "mTitleView");
+								if (mTitleView != null) {
+									if (mTitleView.getVisibility() == View.VISIBLE) {
+										actionBarTextColor = mTitleView.getCurrentTextColor();
+									}
+								}
+							} catch (Throwable t) {
+
 							}
 						}
 					}
@@ -141,8 +210,16 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					}
 				}
 
+				int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
+				int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
+
 				if (iconTint == null) {
-					iconTintColor = Utils.getIconColorForColor(statusBarTintColor, mSettingsHelper.getHsvMax());
+					if (actionBarTextColor != -2) {
+						iconTintColor = actionBarTextColor;
+					} else {
+						iconTintColor = Utils.getIconColorForColor(statusBarTintColor,
+								defaultNormal, invertedIconTint, mSettingsHelper.getHsvMax());
+					}
 				} else {
 					iconTintColor = Color.parseColor(iconTint);
 				}
@@ -164,32 +241,21 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				/* We failed to get a colour, fall back to the defaults */
 				if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT))
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, mSettingsHelper.getDefaultTint(SettingsHelper.Tint.STATUS_BAR));
+					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, mSettingsHelper.getDefaultTint(Tint.STATUS_BAR));
 				if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT))
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, mSettingsHelper.getDefaultTint(SettingsHelper.Tint.ICON));
+					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, defaultNormal);
+
+				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, navigationBarTintColor);
+				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, navigationBarIconTintColor);
 
 				activity.sendOrderedBroadcast(intent, null);
 			}
 		});
 
-		try {
-			Class<?> ActionBarImpl = findClass("com.android.internal.app.ActionBarImpl", null);
-			findAndHookMethod(ActionBarImpl, "setBackgroundDrawable", Drawable.class, new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					ActionBar actionBar = (ActionBar) param.thisObject;
-					int color = Utils.getMainColorFromActionBarDrawable((Drawable) param.args[0]);
-					sendColorChangeIntent(color, Utils.getIconColorForColor(color, mSettingsHelper.getHsvMax()), actionBar.getThemedContext());
-				}
-			});
-		} catch (ClassNotFoundError e) {
-
-		} catch (NoSuchMethodError e) {
-
-		}
+		new ActionBarHooks(mSettingsHelper);
 	}
 
-	private static void sendColorChangeIntent(int statusBarTint, int iconColorTint, Context context) {
+	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint, Context context) {
 		Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTint);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconColorTint);
@@ -200,127 +266,70 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
 		if (lpparam.packageName.equals("android")) {
-			doSViewHooks(lpparam.classLoader);	
+			new SViewHooks(this, lpparam.classLoader);
 		}
 
 		if (!lpparam.packageName.equals("com.android.systemui"))
 			return;
 
+		new StatusBarHook(this, lpparam.classLoader);
+		new StatusBarViewHook(this, lpparam.classLoader);
+		new BatteryHooks(this, lpparam.classLoader);
+		new SignalClusterHook(this, lpparam.classLoader);
+		new BluetoothControllerHook(this, lpparam.classLoader);
+		new TickerHooks(this, lpparam.classLoader);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			new KitKatBatteryHook(this, lpparam.classLoader);
+		}
+
+		HtcTransparencyHook.doHook(lpparam.classLoader);
+	}
+
+	private void setKitKatBatteryColor(int iconColor) {
+		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT)
+			return;
+		
+		if (mKitKatBatteryView == null)
+			return;
+
 		try {
-			Class<?> PhoneStatusBar = findClass("com.android.systemui.statusbar.phone.PhoneStatusBar",
-					lpparam.classLoader);
-			try {
-				findAndHookMethod(PhoneStatusBar, "makeStatusBarView", new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
-					}
-				});
-			} catch (NoSuchMethodError e) {
-
-			}
-
-			try {
-				Method swapViews = XposedHelpers.findMethodBestMatch(PhoneStatusBar, "swapViews", View.class, int.class,
-						int.class, long.class);
-
-				XperiaTransparencyHook xperiaHook = new XperiaTransparencyHook();
-				XposedBridge.hookMethod(swapViews, xperiaHook);
-			} catch (NoSuchMethodError e) {
-				// Not an Xperia
-			} catch (NoSuchFieldError e) {
-				// Whaaaa?
-			}
-
-			try {
-				findAndHookMethod(PhoneStatusBar, "transparentizeStatusBar", int.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						// This is casted internally from a boolean to an int, not sure why,
-						// could be a Handler thing.
-						int isTransparent = (Integer)param.args[0];
-
-						if (isTransparent == 0) {
-							mIsStatusBarNowTransparent = false;
-
-							View statusBarView = (View) getObjectField(param.thisObject, "mStatusBarView");
-							statusBarView.setBackgroundColor(mLastTint);
-						} else if (isTransparent == 1) {
-							mIsStatusBarNowTransparent = true;
-						}
-					}
-				});
-			} catch (NoSuchMethodError e) {
-				// Not an S4
-			}
-
-			doStatusBarIconsHooks(PhoneStatusBar, lpparam.classLoader);
-		} catch (ClassNotFoundError e) {
-
+			final int[] colors = (int[]) XposedHelpers.getObjectField(mKitKatBatteryView, "mColors");
+			colors[colors.length-1] = iconColor;
+			XposedHelpers.setObjectField(mKitKatBatteryView, "mColors", colors);
+		} catch (NoSuchFieldError e) {
+			e.printStackTrace();
 		}
 
 		try {
-			Class<?> PhoneStatusBarView = findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView",
-					lpparam.classLoader);
-
-			XposedBridge.hookAllConstructors(PhoneStatusBarView, new XC_MethodHook() {
-				@Override
-				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-					Context context = (Context) param.args[0];
-					IntentFilter iF = new IntentFilter();
-					iF.addAction(Common.INTENT_CHANGE_COLOR_NAME);
-					iF.addAction(Common.INTENT_SAMSUNG_SVIEW_COVER);
-					iF.addAction(Common.INTENT_SETTINGS_UPDATED);
-					context.registerReceiver(mBroadcastReceiver, iF);
-				}
-
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					mStatusBarView = (View) param.thisObject;
-				}
-			});
-		} catch (ClassNotFoundError e) {
-
+			final Paint framePaint = (Paint) XposedHelpers.getObjectField(mKitKatBatteryView, "mFramePaint");
+			framePaint.setColor(iconColor);
+			framePaint.setAlpha(100);
+		} catch (NoSuchFieldError e) {
+			e.printStackTrace();
 		}
 
-		doBatteryHooks(lpparam.classLoader);
-		doSignalHooks(lpparam.classLoader);
-		doBluetoothHooks(lpparam.classLoader);
-		doClockHooks(lpparam.classLoader);
-		doTickerHooks(lpparam.classLoader);
+		try {
+			final Paint boltPaint = (Paint) XposedHelpers.getObjectField(mKitKatBatteryView, "mBoltPaint");
+			boltPaint.setColor(Utils.getIconColorForColor(iconColor, Color.BLACK, Color.WHITE, 0.7f));
+			boltPaint.setAlpha(100);
+		} catch (NoSuchFieldError e) {
+			e.printStackTrace();
+		}
+
+		try {
+			XposedHelpers.setIntField(mKitKatBatteryView, "mChargeColor", iconColor);
+		} catch (NoSuchFieldError e) {
+			/* Beanstalk, not sure why the ROM changed this */
+			try {
+				XposedHelpers.setIntField(mKitKatBatteryView, "mBatteryColor", iconColor);
+			} catch (NoSuchFieldError e1) {}
+			e.printStackTrace();
+		}
+
+		mKitKatBatteryView.invalidate();
 	}
 
-	private void doStatusBarIconsHooks(Class<?> PhoneStatusBar, ClassLoader classLoader) {
-		Class<?> StatusBarIcon = XposedHelpers.findClass("com.android.internal.statusbar.StatusBarIcon", null);
-		findAndHookMethod(PhoneStatusBar, "addIcon", String.class, int.class, int.class, StatusBarIcon,
-				new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
-				setColorForLayout(mStatusIcons, mColorForStatusIcons);
-			}
-		});
-
-		findAndHookMethod(PhoneStatusBar, "removeIcon", String.class, int.class, int.class,
-				new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				mStatusIcons = (LinearLayout) getObjectField(param.thisObject, "mStatusIcons");
-			}
-		});
-
-		Class<?> StatusBarIconView = XposedHelpers.findClass("com.android.systemui.statusbar.StatusBarIconView", classLoader);
-		XposedBridge.hookAllConstructors(StatusBarIconView, new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				ImageView view = (ImageView) param.thisObject;
-				view.setColorFilter(mColorForStatusIcons, Mode.MULTIPLY);
-				addStatusBarImageView(view);
-			}
-		});
-	}
-
-	private static void setColorForLayout(LinearLayout statusIcons, int color) {
+	private static void setColorForLayout(LinearLayout statusIcons, int color, PorterDuff.Mode mode) {
 		if (color == 0)
 			return;
 
@@ -331,34 +340,14 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			try {
 				ImageView view = (ImageView) statusIcons.getChildAt(i);
 				if (view != null)
-					view.setColorFilter(color, Mode.MULTIPLY);
+					view.setColorFilter(color, mode);
 			} catch (ClassCastException e) {
 
 			}
 		}
 	}
 
-	private void setColorToAllTextSwitcherChildren(TextSwitcher switcher, int color) {
-		if (color != 0) {
-			for (int i = 0; i < switcher.getChildCount(); i++) {
-				TextView view = (TextView) switcher.getChildAt(i);
-				view.setTextColor(color);
-				mTextLabels.add(view);
-			}
-		}	
-	}
-
-	private void setColorToAllImageSwitcherChildren(ImageSwitcher switcher, int color) {
-		if (color != 0) {
-			for (int i = 0; i < switcher.getChildCount(); i++) {
-				ImageView view = (ImageView) switcher.getChildAt(i);
-				view.setColorFilter(color, Mode.MULTIPLY);
-				addStatusBarImageView(view);
-			}
-		}	
-	}
-
-	private void setStatusBarTint(final int tintColor) {
+	public void setStatusBarTint(final int tintColor) {
 		if (mStatusBarView == null)
 			return;
 
@@ -380,26 +369,50 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				@Override
 				public void onAnimationEnd(Animation arg0) {
 					if (!mIsStatusBarNowTransparent) {
-						mStatusBarView.setBackgroundColor(tintColor);
+						mStatusBarView.setAlpha(1f);
+						if (tintColor == KITKAT_TRANSPARENT_COLOR) {
+							mStatusBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
+							mStatusBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+									mResources, R.drawable.status_background));
+						} else {
+							mStatusBarView.setBackgroundColor(tintColor);
+						}
 					}
 					mStatusBarView.startAnimation(fadeInAnimation);
 				}
 			});
 			mStatusBarView.startAnimation(fadeOutAnimation);
 		} else {
-			mStatusBarView.setBackgroundColor(tintColor);
+			mStatusBarView.setAlpha(1f);
+			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
+				mStatusBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
+				mStatusBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+						mResources, R.drawable.status_background));
+			} else {
+				mStatusBarView.setBackgroundColor(tintColor);
+			}
 		}
 	}
 
-	private void setStatusBarIconsTint(int iconTint) {
+	public void setStatusBarIconsTint(int iconTint) {
 		mColorForStatusIcons = iconTint;
 		try {
-			if (mIconViews != null) {
-				for (ImageView view : mIconViews) {
+			if (mSystemIconViews != null) {
+				for (ImageView view : mSystemIconViews) {
 					if (view != null) {
-						view.setColorFilter(iconTint, Mode.MULTIPLY);
+						view.setColorFilter(iconTint, mSettingsHelper.getSystemIconCfType());
 					} else {
-						mIconViews.remove(view);
+						mSystemIconViews.remove(view);
+					}
+				}
+			}
+
+			if (mNotificationIconViews != null) {
+				for (ImageView view : mNotificationIconViews) {
+					if (view != null) {
+						view.setColorFilter(iconTint, mSettingsHelper.getNotificationIconCfType());
+					} else {
+						mNotificationIconViews.remove(view);
 					}
 				}
 			}
@@ -413,249 +426,154 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					}
 				}
 			}
+
+			if (mStatusBarView != null) {
+				Intent intent = new Intent("gravitybox.intent.action.STATUSBAR_COLOR_CHANGED");
+				intent.putExtra("iconColor", iconTint);
+				mStatusBarView.getContext().sendBroadcast(intent);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		setColorForLayout(mStatusIcons, iconTint);
+		setColorForLayout(mStatusIcons, iconTint, mSettingsHelper.getNotificationIconCfType());
+		setKitKatBatteryColor(iconTint);
 	}
 
-	private void addStatusBarImageView(ImageView imageView) {
-		if (!mIconViews.contains(imageView))
-			mIconViews.add(imageView);
-	}
+	private void setNavigationBarTint(final int tintColor) {
+		if (mNavigationBarView == null)
+			return;
 
-	private void doBatteryHooks(ClassLoader classLoader) {
-		String className = "com.android.systemui.statusbar.policy.BatteryController";
-		String addIconMethodName = "addIconView";
-		String addLabelMethodName = "addLabelView";
-		try {
-			Class<?> BatteryController = XposedHelpers.findClass(className, classLoader);
+		final View view = (View) XposedHelpers.getObjectField(mNavigationBarView, "mCurrentView");
 
-			try {
-				XposedHelpers.findAndHookMethod(BatteryController, addIconMethodName, ImageView.class,
-						new XC_MethodHook() {
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						addStatusBarImageView((ImageView) param.args[0]);
-					}
-				});
-			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + addIconMethodName);
-			}
-
-			try {
-				XposedHelpers.findAndHookMethod(BatteryController, addLabelMethodName, TextView.class,
-						new XC_MethodHook() {
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						mTextLabels.add((TextView) param.args[0]);
-					}
-				});
-			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + addLabelMethodName);
-			}
-
-		} catch (ClassNotFoundError e) {
-			// Really shouldn't happen, but we can't afford a crash here.
-			XposedBridge.log("Not hooking class: " + className);
-		}
-	}
-
-	private void doSignalHooks(ClassLoader classLoader) {
-		final String className = "com.android.systemui.statusbar.SignalClusterView";
-		String methodName = "onAttachedToWindow";
-		try {
-			Class<?> SignalClusterView = XposedHelpers.findClass(className, classLoader);
-
-			findAndHookMethod(SignalClusterView, methodName, new XC_MethodHook() {
+		boolean animateNavBar = false;
+		if (animateNavBar) {
+			Animation fadeOutAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
+					android.R.anim.slide_out_right);
+			final Animation fadeInAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
+					android.R.anim.slide_in_left);
+			fadeOutAnimation.setAnimationListener(new AnimationListener() {
 				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					for (String name : Common.SIGNAL_CLUSTER_ICON_NAMES) {
-						try {
-							ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
-							addStatusBarImageView(view);
-						} catch (NoSuchFieldError e) {
-							XposedBridge.log("Couldn't find field " + name + "in class " + className);
-						}
-					}
-				}
-			});
-		} catch (ClassNotFoundError e) {
-			// Really shouldn't happen, but we can't afford a crash here.
-			XposedBridge.log("Not hooking class: " + className);
-		} catch (NoSuchMethodError e) {
-			XposedBridge.log("Not hooking method " + className + "." + methodName);
-		}
-	}
-
-	private void doBluetoothHooks(ClassLoader classLoader) {
-		String className = "com.android.systemui.statusbar.policy.BluetoothController";
-		String methodName = "addIconView";
-		try {
-			Class<?> BluetoothController = XposedHelpers.findClass(className, classLoader);
-
-			XposedHelpers.findAndHookMethod(BluetoothController, methodName, ImageView.class, new XC_MethodHook() {
+				public void onAnimationStart(Animation arg0) {}
 				@Override
-				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-					addStatusBarImageView((ImageView) param.args[0]);
-				}
-			});
-		} catch (ClassNotFoundError e) {
-			XposedBridge.log("Not hooking class: " + className);
-		} catch (NoSuchMethodError e) {
-			XposedBridge.log("Not hooking method " + className + "." + methodName);
-		}
-
-	}
-
-	private void doClockHooks(ClassLoader classLoader) {
-		String className = "com.android.systemui.statusbar.policy.Clock";
-		try {
-			Class<?> Clock = XposedHelpers.findClass(className, classLoader);
-
-			XposedBridge.hookAllConstructors(Clock, new XC_MethodHook() {
+				public void onAnimationRepeat(Animation arg0) {}		
 				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					TextView clock = (TextView) param.thisObject;
-					// TODO: TouchWiz specific, replace this with more generic code.
-					try {
-						boolean mExpandedHeader = XposedHelpers.getBooleanField(param.thisObject,
-								"mExpandedHeader");
-						if (!mExpandedHeader)
-							mTextLabels.add(clock);
-					} catch (NoSuchFieldError e) {
-						/* TODO: Check if this is Sony specific :/ */
-						if (clock.getId() != clock.getResources().getIdentifier("clock_expanded",
-								"id", "com.android.systemui"))
-							mTextLabels.add(clock);
-					}
-				}
-			});
-
-			findAndHookMethod(Clock, "updateClock", new XC_MethodHook() {
-				@Override
-				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-					if (mClockAnimation) {
-						TextView clock = (TextView) param.thisObject;
-						Animation fadeOutAnimation = AnimationUtils.loadAnimation(clock.getContext(),
-								android.R.anim.fade_out);
-						clock.setAnimation(fadeOutAnimation);
-					}
-				}
-
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					TextView clock = (TextView) param.thisObject;
-
-					if (mColorForStatusIcons != 0) {
-						try {
-							boolean mExpandedHeader = XposedHelpers.getBooleanField(param.thisObject,
-									"mExpandedHeader");
-							if (!mExpandedHeader)
-								clock.setTextColor(mColorForStatusIcons);
-						} catch (NoSuchFieldError e) {
-							clock.setTextColor(mColorForStatusIcons);
-						}	
-					}
-
-					if (mClockAnimation) {
-						Animation fadeInAnimation = AnimationUtils.loadAnimation(clock.getContext(),
-								android.R.anim.fade_in);
-						clock.setAnimation(fadeInAnimation);
-					}
-				}
-			});
-		} catch (ClassNotFoundError e) {
-			XposedBridge.log("Not hooking class: " + className);
-		}
-	}
-
-	private void doTickerHooks(ClassLoader classLoader) {
-		String className = "com.android.systemui.statusbar.phone.Ticker";
-		String notificationClassName = "com.android.internal.statusbar.StatusBarNotification";
-		String addMethod = "addEntry";
-		try {
-			Class<?> Ticker = findClass(className, classLoader);
-			Class<?> StatusBarNotification = findClass(notificationClassName, classLoader);
-
-			XposedBridge.hookAllConstructors(Ticker, new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					setColorToAllTextSwitcherChildren(
-							(TextSwitcher) XposedHelpers.getObjectField(param.thisObject, "mTextSwitcher"),
-							mColorForStatusIcons);
-					setColorToAllImageSwitcherChildren(
-							(ImageSwitcher) XposedHelpers.getObjectField(param.thisObject, "mIconSwitcher"),
-							mColorForStatusIcons);
-				}
-			});
-
-			try {
-				findAndHookMethod(Ticker, addMethod, StatusBarNotification, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						setColorToAllTextSwitcherChildren(
-								(TextSwitcher) getObjectField(param.thisObject, "mTextSwitcher"),
-								mColorForStatusIcons);
-						setColorToAllImageSwitcherChildren(
-								(ImageSwitcher) XposedHelpers.getObjectField(param.thisObject, "mIconSwitcher"),
-								mColorForStatusIcons);
-					};
-				});
-			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + addMethod);
-			}
-		} catch (ClassNotFoundError e) {
-			XposedBridge.log("Not hooking class: " + className);
-		}
-	}
-
-	private void doSViewHooks(ClassLoader classLoader) {
-		try {
-			Class<?> SViewCoverManager = findClass("com.android.internal.policy.impl.sviewcover.SViewCoverManager", classLoader);
-
-			findAndHookMethod(SViewCoverManager, "handleShow", new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					boolean isUiShowing = XposedHelpers.getBooleanField(param.thisObject, "mShowingCoverUI");
-					if (!isUiShowing)
-						return;		
-
-					if (mStatusBarView == null) {
-						Context context = (Context) getObjectField(param.thisObject, "mContext");
-						Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, Color.BLACK);
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, Color.WHITE);
-						Utils.sendOrderedBroadcast(context, intent);
+				public void onAnimationEnd(Animation arg0) {
+					if (tintColor == KITKAT_TRANSPARENT_COLOR) {
+						view.setBackground(new BarBackgroundDrawable(view.getContext(),
+								mResources, R.drawable.nav_background));
 					} else {
-						setStatusBarTint(Color.BLACK);
-						setStatusBarIconsTint(Color.WHITE);
+						view.setBackgroundColor(tintColor);
 					}
+					view.startAnimation(fadeInAnimation);
 				}
 			});
-
-			findAndHookMethod(SViewCoverManager, "handleHide", new XC_MethodHook() {
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					boolean isUiShowing = XposedHelpers.getBooleanField(param.thisObject, "mShowingCoverUI");
-					if (isUiShowing)
-						return;
-
-					if (mStatusBarView == null) {
-						Context context = (Context) getObjectField(param.thisObject, "mContext");
-						Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, mLastTint);
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, mLastIconTint);
-						Utils.sendOrderedBroadcast(context, intent);
-					} else {
-						setStatusBarTint(mLastTint);
-						setStatusBarIconsTint(mLastIconTint);
-					}
-				}
-			});
-		} catch (ClassNotFoundError e) {
-
+			view.startAnimation(fadeOutAnimation);
+		} else {
+			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
+				view.setBackground(new BarBackgroundDrawable(view.getContext(),
+						mResources, R.drawable.nav_background));
+			} else {
+				view.setBackgroundColor(tintColor);
+			}
 		}
+	}
+
+	private void setNavigationBarIconTint(final int tintColor) {
+		if (mNavigationBarView == null)
+			return;
+
+	}
+
+	public void addSystemIconView(ImageView imageView) {
+		addSystemIconView(imageView, false);
+	}
+
+	public void addSystemIconView(ImageView imageView, boolean applyColor) {
+		if (!mSystemIconViews.contains(imageView))
+			mSystemIconViews.add(imageView);
+
+		if (applyColor) {
+			imageView.setColorFilter(mColorForStatusIcons, mSettingsHelper.getSystemIconCfType());
+		}
+	}
+
+	public void addNotificationIconView(ImageView imageView) {
+		if (!mNotificationIconViews.contains(imageView))
+			mNotificationIconViews.add(imageView);
+	}
+
+	@Override
+	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+		if (!resparam.packageName.equals("com.android.systemui"))
+			return;
+
+		try {
+			// Before anything else, let's make sure we're not dealing with a Lenovo device
+			// Lenovo is known for doing some deep customizations into UI, so let's just check
+			// if is possible to hook a specific layout and work with it in that case
+			String layout = "lenovo_gemini_super_status_bar";
+			try {
+				int resourceId = resparam.res.getIdentifier(layout, "layout", "com.android.systemui");
+				if (resourceId == 0)
+					layout = Utils.hasGeminiSupport() ? "gemini_super_status_bar" : "super_status_bar";
+			} catch (Throwable t) {
+				layout = Utils.hasGeminiSupport() ? "gemini_super_status_bar" : "super_status_bar";
+			}
+
+			resparam.res.hookLayout("com.android.systemui", "layout", layout, new StatusBarLayoutInflationHook(this));
+		} catch (Throwable t) {
+			XposedBridge.log(t);
+		}
+	}
+
+	public int getLastStatusBarTint() {
+		return mLastTint;
+	}
+
+	public void addTextLabel(TextView textView) {
+		mTextLabels.add(textView);
+	}
+
+	public void setStatusIcons(LinearLayout statusIcons) {
+		mStatusIcons = statusIcons;
+	}
+
+	public void setNavigationBarView(View navBarView) {
+		mNavigationBarView = navBarView;
+	}
+
+	public void refreshStatusIconColors() {
+		if (mStatusIcons != null)
+			setColorForLayout(mStatusIcons, mColorForStatusIcons, mSettingsHelper.getNotificationIconCfType());
+	}
+
+	public int getLastIconTint() {
+		return mLastIconTint;
+	}
+
+	public BroadcastReceiver getBroadcastReceiver() {
+		return mBroadcastReceiver;
+	}
+
+	public void setStatusBarView(View view) {
+		mStatusBarView = view;
+	}
+
+	public int getColorForStatusIcons() {
+		return mColorForStatusIcons;
+	}
+
+	public SettingsHelper getSettingsHelper() {
+		return mSettingsHelper;
+	}
+
+	public void setKitKatBatteryView(View batteryView) {
+		mKitKatBatteryView = batteryView;
+		setKitKatBatteryColor(mLastIconTint);
+	}
+	
+	public void setTouchWizTransparentStatusBar(boolean transparent) {
+		mIsStatusBarNowTransparent = transparent;
 	}
 }

@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import de.robv.android.xposed.XSharedPreferences;
-import de.robv.android.xposed.XposedBridge;
 
 public class SettingsHelper {
 	private XSharedPreferences mXPreferences = null;
@@ -17,7 +17,7 @@ public class SettingsHelper {
 	private static final boolean DEBUG = true;
 
 	/* TODO: Rework this class to use this enum for more consistent code */
-	public enum Tint { STATUS_BAR, ICON, NAV_BAR };
+	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED, NAV_BAR, NAV_BAR_ICON };
 
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
@@ -56,10 +56,51 @@ public class SettingsHelper {
 		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_STATUS_BAR_TINT);
 		String defaultValue = getDefaultTintColor(packageName, activityName);
 		String hexColor = getString(keyName, defaultValue);
-		if (withHash && hexColor != null)
-			hexColor = "#" + hexColor;
-		if (mXPreferences != null)
-			XposedBridge.log("getTintColorForPackage: " + packageName);
+		if (hexColor != null) {
+			if (withHash)
+				hexColor = Utils.addHashIfNeeded(hexColor);
+			else
+				hexColor = Utils.removeHashIfNeeded(hexColor);
+		}
+		return hexColor;
+	}
+
+
+	public String getNavigationBarTint(String packageName, String activityName, boolean withHash) {
+		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_NAVIGATION_BAR_TINT);
+		String defaultValue;
+
+		if (activityName == null)
+			defaultValue = getDefaultTint(Tint.NAV_BAR, false);
+		else
+			defaultValue = getNavigationBarTint(packageName, null, false);
+
+		String hexColor = getString(keyName, defaultValue);
+		if (hexColor != null) {
+			if (withHash)
+				hexColor = Utils.addHashIfNeeded(hexColor);
+			else
+				hexColor = Utils.removeHashIfNeeded(hexColor);
+		}
+		return hexColor;
+	}
+
+	public String getNavigationBarIconTint(String packageName, String activityName, boolean withHash) {
+		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT);
+
+		String defaultValue;
+		if (activityName == null)
+			defaultValue = getDefaultTint(Tint.NAV_BAR_ICON, false);
+		else
+			defaultValue = getNavigationBarIconTint(packageName, null, false);
+
+		String hexColor = getString(keyName, defaultValue);
+		if (hexColor != null) {
+			if (withHash)
+				hexColor = Utils.addHashIfNeeded(hexColor);
+			else
+				hexColor = Utils.removeHashIfNeeded(hexColor);
+		}
 		return hexColor;
 	}
 
@@ -86,23 +127,56 @@ public class SettingsHelper {
 		}
 
 		String hexColor = getString(keyName, defaultValue);
-		if (withHash && hexColor != null)
-			hexColor = "#" + hexColor;
-
-		if (mXPreferences != null)
-			XposedBridge.log("getIconColors: " + packageName + " " + activityName + " : " + hexColor);
+		if (hexColor != null) {
+			if (withHash)
+				hexColor = Utils.addHashIfNeeded(hexColor);
+			else
+				hexColor = Utils.removeHashIfNeeded(hexColor);
+		}
 
 		return hexColor;
 	}
 
 	/* Setters */
-	public void setTintColor(String packageName, String activityName, String color) {
+	public void setStatusBarTintColor(String packageName, String activityName, String color) {
 		if (mPreferences == null) {
 			return;
 		}
 
 		mPreferences.edit().putString(getKeyName(packageName, activityName,
 				Common.SETTINGS_KEY_STATUS_BAR_TINT), color).commit();
+
+		mContext.sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
+	}
+
+	public void setTintColor(Tint tintType, String packageName, String activityName, String color) {
+		if (mPreferences == null)
+			return;
+
+		String key = null;
+		switch (tintType) {
+		case STATUS_BAR:
+			key = Common.SETTINGS_KEY_STATUS_BAR_TINT;
+			break;
+		case ICON:
+			key = Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT;
+			break;
+		case NAV_BAR:
+			key = Common.SETTINGS_KEY_NAVIGATION_BAR_TINT;
+			break;
+		case NAV_BAR_ICON:
+			key = Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT;
+			break;
+		case ICON_INVERTED:
+		default:
+			break;
+		}
+
+		if (key == null)
+			return;
+
+		mPreferences.edit().putString(getKeyName(packageName, activityName,
+				key), color).commit();
 
 		mContext.sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
 	}
@@ -148,20 +222,16 @@ public class SettingsHelper {
 			if ("phone.LocationPickerActivity".equals(activityName))
 				return "292929";
 		}
+		
+		/* TODO: Support Android 4.4 API */
+		if (activityName.equals(Common.GEL_ACTIVITY_NAME)) {
+			return "66000000";
+		}
 
 		return getTintColor(packageName, null, false);
 	}
 
 	private static String getDefaultTintColorForPackage(String packageName) {
-		/*if ("com.android.vending".equals(packageName))
-			return "96aa39";
-		else if ("com.google.android.talk".equals(packageName))
-			return "e5e5e5";
-		else if ("com.viber.voip".equals(packageName))
-			return "774f99";
-		else if ("com.whatsapp".equals(packageName))
-			return "2f4444";
-		 */
 		if ("com.skype.raider".equals(packageName))
 			return "01aef0";
 		else if ("com.dropbox.android".equals(packageName))
@@ -180,7 +250,6 @@ public class SettingsHelper {
 			return "57a330";
 
 		return null;
-		//return Common.COLOR_A_SHADE_OF_GREY;
 	}
 
 	private static String getDefaultIconTintColorForActivity(String packageName, String activityName) {
@@ -200,31 +269,6 @@ public class SettingsHelper {
 	}
 
 	private static String getDefaultIconTintColorForPackage(String packageName) {
-		if ("com.android.vending".equals(packageName))
-			return Common.COLOR_WHITE;
-		else if ("com.google.android.talk".equals(packageName))
-			return "FF080808";
-		else if ("com.viber.voip".equals(packageName))
-			return Common.COLOR_WHITE;
-		else if ("com.skype.raider".equals(packageName))
-			return Common.COLOR_WHITE;
-		else if ("com.whatsapp".equals(packageName))
-			return Common.COLOR_WHITE;
-		else if ("com.dropbox.android".equals(packageName))
-			return Common.COLOR_WHITE;
-		else if ("com.google.android.gm".equals(packageName))
-			return "000000";
-		else if ("com.chrome.beta".equals(packageName) || "com.android.chrome".equals(packageName))
-			return "090909";
-		else if ("bbc.mobile.news.ww".equals(packageName))
-			return Common.COLOR_WHITE;	
-		else if ("com.paypal.android.p2pmobile".equals(packageName))
-			return Common.COLOR_WHITE;
-		else if ("com.google.android.apps.plus".equals(packageName))
-			return Common.COLOR_BLACK;
-		else if ("com.evernote".equals(packageName))
-			return Common.COLOR_WHITE;
-
 		return null;
 	}
 
@@ -242,11 +286,18 @@ public class SettingsHelper {
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT, Common.COLOR_BLACK, withHash);
 		case NAV_BAR:
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT, Common.COLOR_BLACK, withHash);
+		case NAV_BAR_ICON:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
 		case ICON:
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
+		case ICON_INVERTED:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Common.COLOR_BLACK, withHash);
 		}
 
-		return Common.COLOR_BLACK;
+		if (withHash)
+			return Utils.addHashIfNeeded(Common.COLOR_BLACK);
+		else
+			return Common.COLOR_BLACK;
 	}
 
 	public int getDefaultTint(Tint tintType) {
@@ -255,11 +306,31 @@ public class SettingsHelper {
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT, Color.BLACK);
 		case NAV_BAR:
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT, Color.BLACK);
+		case NAV_BAR_ICON:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT, Color.WHITE);
 		case ICON:
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT, Color.WHITE);
+		case ICON_INVERTED:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Color.BLACK);
 		}
 
 		return Color.BLACK;
+	}
+
+	public boolean shouldReactToActionBarVisibility() {
+		return getBoolean(Common.SETTINGS_KEY_REACT_TO_ACTION_BAR_VISIBILITY, true);
+	}
+
+	public boolean animateStatusBarTintChange() {
+		return getBoolean(Common.SETTINGS_KEY_ANIMATE_TINT_CHANGE, true);
+	}
+
+	public PorterDuff.Mode getSystemIconCfType() {
+		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_SYSTEM_ICON_CF_MODE, "SRC_ATOP"));
+	}
+
+	public PorterDuff.Mode getNotificationIconCfType() {
+		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_NOTIFICATION_ICON_CF_MODE	, "SRC_ATOP"));
 	}
 
 	private int getColorForKey(String key, int defaultColor) {
@@ -269,7 +340,7 @@ public class SettingsHelper {
 		} else {
 			int color;
 			try {
-				color = Color.parseColor("#" + colorFromPreferences);
+				color = Color.parseColor(Utils.addHashIfNeeded(colorFromPreferences));
 				return color;
 			} catch (IllegalArgumentException e) {
 				return defaultColor;
@@ -280,11 +351,19 @@ public class SettingsHelper {
 	@Deprecated
 	private String getColorForKey(String key, String defaultColor, boolean withHash) {
 		String colorFromPreferences = getString(key, null);
+		String returnValue;
 		if (colorFromPreferences == null) {
-			return defaultColor;
+			returnValue = defaultColor;
 		} else {
-			return colorFromPreferences;
+			returnValue = colorFromPreferences;
 		}
+
+		if (withHash)
+			returnValue = Utils.addHashIfNeeded(returnValue);
+		else
+			returnValue = Utils.removeHashIfNeeded(returnValue);
+
+		return returnValue;
 	}
 
 	/* Helper methods */

@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ApplicationSettings" >
+    tools:context=".ApplicationSettings" 
+    tools:ignore="contentDescription,NestedWeights" >
 
     <TextView
         android:id="@+id/currentActivity"
@@ -29,7 +30,6 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -48,7 +48,6 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/TextView01"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -56,6 +55,50 @@
 
             <Button
                 android:id="@+id/icon_tint_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.14"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/navigation_bar_tint_text" />
+
+            <Button
+                android:id="@+id/navigation_bar_tint_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/navigation_bar_icon_tint_text" />
+
+            <Button
+                android:id="@+id/navigation_bar_icon_tint_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
