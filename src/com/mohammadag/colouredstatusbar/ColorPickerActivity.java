@@ -14,11 +14,11 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.larswerkman.colorpicker.ColorPicker;
-import com.larswerkman.colorpicker.ColorPicker.OnColorChangedListener;
-import com.larswerkman.colorpicker.OpacityBar;
-import com.larswerkman.colorpicker.SaturationBar;
-import com.larswerkman.colorpicker.ValueBar;
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SaturationBar;
+import com.larswerkman.holocolorpicker.ValueBar;
 
 public class ColorPickerActivity extends Activity implements OnColorChangedListener {
 
