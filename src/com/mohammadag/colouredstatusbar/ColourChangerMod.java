@@ -79,6 +79,11 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static boolean mIsStatusBarNowTransparent = false;
 
 	private static XModuleResources mResources;
+	
+	/* Fall back to old method to get the clock when no clock is found */
+	private static ClassLoader mSystemUiClassLoader = null;
+	private static boolean mFoundClock = false;
+	private static boolean mHookClockOnSystemUiInit = false;
 
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
@@ -109,7 +114,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 	};
-
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
@@ -275,6 +279,11 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		if (!lpparam.packageName.equals("com.android.systemui"))
 			return;
+		
+		if (mHookClockOnSystemUiInit)
+			doClockHooks(lpparam.classLoader);
+		
+		mSystemUiClassLoader = lpparam.classLoader;
 
 		new StatusBarHook(this, lpparam.classLoader);
 		new StatusBarViewHook(this, lpparam.classLoader);
@@ -582,5 +591,31 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 	public void setTouchWizTransparentStatusBar(boolean transparent) {
 		mIsStatusBarNowTransparent = transparent;
+	}
+
+	public void setNoClockFound() {
+		if (mSystemUiClassLoader != null)
+			doClockHooks(mSystemUiClassLoader);
+		else
+			mHookClockOnSystemUiInit = true;
+	}
+	
+	private void doClockHooks(ClassLoader loader) {
+		Class<?> Clock = XposedHelpers.findClass("com.android.systemui.statusbar.policy.Clock", loader);
+		XposedBridge.hookAllConstructors(Clock, new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+				addTextLabel((TextView) param.thisObject);
+				mFoundClock = true;
+			}
+		});
+		
+		findAndHookMethod(Clock, "updateClock", new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+				TextView textView = (TextView) param.thisObject;
+				textView.setTextColor(mLastIconTint);
+			}
+		});
 	}
 }

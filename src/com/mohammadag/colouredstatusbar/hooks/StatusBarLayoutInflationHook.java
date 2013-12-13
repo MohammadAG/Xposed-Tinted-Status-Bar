@@ -33,5 +33,7 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 
 		if (clock != null)
 			mInstance.addTextLabel(clock);
+		else
+			mInstance.setNoClockFound();
 	}
 }
