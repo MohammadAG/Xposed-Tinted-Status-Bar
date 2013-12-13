@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -167,33 +168,35 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				int color = 0;
 				int actionBarTextColor = -2;
+				boolean colorHandled = false;				
 
-				ActionBar actionBar = activity.getActionBar();
-				boolean colorHandled = false;
-				if (actionBar != null) {
-					// If it's not showing, we shouldn't detect it.
-					if (actionBar.isShowing()) {
-						FrameLayout container = (FrameLayout) XposedHelpers.getObjectField(actionBar, "mContainerView");
-						if (container != null) {
-							Drawable backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
-							if (backgroundDrawable != null) {
-								try {
-									color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
-									colorHandled = true;
-								} catch (IllegalArgumentException e) {}
-								container.invalidate();
-							}
-
-							try {
-								TextView mTitleView = (TextView) getObjectField(
-										getObjectField(container, "mActionBarView"), "mTitleView");
-								if (mTitleView != null) {
-									if (mTitleView.getVisibility() == View.VISIBLE) {
-										actionBarTextColor = mTitleView.getCurrentTextColor();
-									}
+				if (Utils.hasActionBar()) {
+					ActionBar actionBar = activity.getActionBar();
+					if (actionBar != null) {
+						// If it's not showing, we shouldn't detect it.
+						if (actionBar.isShowing()) {
+							FrameLayout container = (FrameLayout) XposedHelpers.getObjectField(actionBar, "mContainerView");
+							if (container != null) {
+								Drawable backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
+								if (backgroundDrawable != null) {
+									try {
+										color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
+										colorHandled = true;
+									} catch (IllegalArgumentException e) {}
+									container.invalidate();
 								}
-							} catch (Throwable t) {
 
+								try {
+									TextView mTitleView = (TextView) getObjectField(
+											getObjectField(container, "mActionBarView"), "mTitleView");
+									if (mTitleView != null) {
+										if (mTitleView.getVisibility() == View.VISIBLE) {
+											actionBarTextColor = mTitleView.getCurrentTextColor();
+										}
+									}
+								} catch (Throwable t) {
+
+								}
 							}
 						}
 					}
@@ -252,7 +255,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		});
 
-		new ActionBarHooks(mSettingsHelper);
+		if (Utils.hasActionBar())
+			new ActionBarHooks(mSettingsHelper);
 	}
 
 	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint, Context context) {
@@ -288,7 +292,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private void setKitKatBatteryColor(int iconColor) {
 		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT)
 			return;
-		
+
 		if (mKitKatBatteryView == null)
 			return;
 
@@ -366,6 +370,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				public void onAnimationStart(Animation arg0) {}
 				@Override
 				public void onAnimationRepeat(Animation arg0) {}		
+				@SuppressLint("NewApi")
 				@Override
 				public void onAnimationEnd(Animation arg0) {
 					if (!mIsStatusBarNowTransparent) {
@@ -440,6 +445,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		setKitKatBatteryColor(iconTint);
 	}
 
+	@SuppressLint("NewApi")
 	private void setNavigationBarTint(final int tintColor) {
 		if (mNavigationBarView == null)
 			return;
@@ -457,6 +463,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				public void onAnimationStart(Animation arg0) {}
 				@Override
 				public void onAnimationRepeat(Animation arg0) {}		
+				@SuppressLint("NewApi")
 				@Override
 				public void onAnimationEnd(Animation arg0) {
 					if (tintColor == KITKAT_TRANSPARENT_COLOR) {
@@ -572,7 +579,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		mKitKatBatteryView = batteryView;
 		setKitKatBatteryColor(mLastIconTint);
 	}
-	
+
 	public void setTouchWizTransparentStatusBar(boolean transparent) {
 		mIsStatusBarNowTransparent = transparent;
 	}

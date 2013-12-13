@@ -40,7 +40,8 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 
 		setTitle(prefTitle);
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (Utils.hasActionBar())
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		setContentView(R.layout.activity_color_picker);
 
@@ -76,7 +77,8 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 
 					ColorDrawable previewDrawable = new ColorDrawable(colourHex);
 
-					if (Common.SETTINGS_KEY_STATUS_BAR_TINT.equals(prefKey)) {
+					if (Common.SETTINGS_KEY_STATUS_BAR_TINT.equals(prefKey)
+							&& Utils.hasActionBar()) {
 						getActionBar().setBackgroundDrawable(previewDrawable);
 
 						/* Workaround, there's no invalidate() method that would redraw the

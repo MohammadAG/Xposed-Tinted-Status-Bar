@@ -78,11 +78,13 @@ public class ApplicationSettings extends Activity {
 			String packageName = i.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
 			if (packageName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB)) {
 				mPackageName = packageName;
-				getActionBar().setIcon(getResources().getDrawable(R.drawable.ic_lock));
+				if (Utils.hasActionBar())
+					getActionBar().setIcon(getResources().getDrawable(R.drawable.ic_lock));
 			} else {
 				PackageManager pm = getPackageManager();
 				ApplicationInfo app = pm.getApplicationInfo(packageName, 0);
-				getActionBar().setIcon(app.loadIcon(pm));
+				if (Utils.hasActionBar())
+					getActionBar().setIcon(app.loadIcon(pm));
 				mPackageName = app.packageName;
 			}
 		} catch (NameNotFoundException e) {
@@ -91,8 +93,10 @@ public class ApplicationSettings extends Activity {
 			return;
 		}
 
-		getActionBar().setDisplayShowCustomEnabled(true);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (Utils.hasActionBar()) {
+			getActionBar().setDisplayShowCustomEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		mStatusBarTint = mSettingsHelper.getTintColor(mPackageName, mActivityName, false);
 		if (mStatusBarTint == null) mStatusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);

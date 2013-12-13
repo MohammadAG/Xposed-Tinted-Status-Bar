@@ -219,6 +219,7 @@ public class Utils {
 		return ret;
 	}
 
+	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	public static void setImageViewBackground(ImageView view, Drawable drawable) {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -226,5 +227,9 @@ public class Utils {
 		} else {
 			view.setBackgroundDrawable(drawable);
 		}
+	}
+	
+	public static boolean hasActionBar() {
+		return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 	}
 }

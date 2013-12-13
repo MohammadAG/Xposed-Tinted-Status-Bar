@@ -39,8 +39,10 @@ public class ActivitesListActivity extends ListActivity {
 		// TODO: make this is a single instance, or a singleton
 		mSettingsHelper = new SettingsHelper(getApplicationContext());
 
-		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (Utils.hasActionBar()) {
+			getActionBar().setHomeButtonEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		Intent intent = getIntent();
 		mPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
