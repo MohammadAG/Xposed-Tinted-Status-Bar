@@ -86,9 +86,9 @@ public class SettingsHelper {
 	}
 
 	public String getNavigationBarIconTint(String packageName, String activityName, boolean withHash) {
-		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT);
-
+		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT);
 		String defaultValue;
+
 		if (activityName == null)
 			defaultValue = getDefaultTint(Tint.NAV_BAR_ICON, false);
 		else
