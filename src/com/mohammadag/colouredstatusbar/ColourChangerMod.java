@@ -358,7 +358,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 	}
-
+	@SuppressLint("NewApi")
 	public void setStatusBarTint(final int tintColor) {
 		if (mStatusBarView == null)
 			return;
@@ -378,7 +378,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				public void onAnimationStart(Animation arg0) {}
 				@Override
 				public void onAnimationRepeat(Animation arg0) {}		
-				@SuppressLint("NewApi")
 				@Override
 				public void onAnimationEnd(Animation arg0) {
 					if (!mIsStatusBarNowTransparent) {
