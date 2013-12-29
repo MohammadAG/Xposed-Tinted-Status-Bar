@@ -23,7 +23,7 @@
     <CheckBoxPreference
         android:key="pref_animate_tint"
         android:summary="@string/animate_tint_summary"
-        android:title="@string/animate_tint_title" />
+        android:title="@string/animate_tint_title" android:defaultValue="true"/>
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_react_action_bar_visibility"
@@ -47,7 +47,7 @@
             android:title="@string/default_status_bar_inverted_icon_tint_title" />
         <com.mohammadag.colouredstatusbar.ColorPreference
             android:key="pref_default_nav_bar_tint"
-            android:summary="@string/default_status_bar_inverted_icon_tint_summary"
+            android:summary="@string/default_summary"
             android:title="@string/default_navigation_bar_tint_title" />
     </PreferenceScreen>
 
