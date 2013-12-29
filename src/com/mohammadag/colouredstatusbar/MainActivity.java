@@ -260,7 +260,6 @@ public class MainActivity extends Activity {
 					? Color.parseColor("#0099CC") : Color.RED);
 			holder.app_package.setText(app.packageName);
 			holder.app_icon.setTag(app.packageName);
-			holder.app_icon.setVisibility(View.INVISIBLE);
 
 			new ImageLoader(holder.app_icon, app.packageName).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
 					app);
@@ -367,7 +366,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected Drawable doInBackground(Object... params) {
 			ApplicationInfo info = (ApplicationInfo) params[0];
-			if (info.packageName.equals("com.mohammadag.tintedstatusbarlockscreenstub"))
+			if (info.packageName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB))
 				return getResources().getDrawable(R.drawable.ic_lock);
 			return getPackageManager().getApplicationIcon(info);
 		}
@@ -377,7 +376,6 @@ public class MainActivity extends Activity {
 			super.onPostExecute(result);
 			if (imageView.getTag().toString().equals(mPackageName)) {
 				imageView.setImageDrawable(result);
-				imageView.setVisibility(View.VISIBLE);
 			}
 		}
 	}
