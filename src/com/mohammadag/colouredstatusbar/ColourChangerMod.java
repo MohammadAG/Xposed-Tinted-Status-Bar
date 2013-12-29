@@ -499,6 +499,19 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mNavigationBarView == null)
 			return;
 
+		ImageView recentsButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getRecentsButton");
+		ImageView menuButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getMenuButton");
+		ImageView backButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getBackButton");
+		ImageView homeButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getHomeButton");
+		
+		if (recentsButton != null)
+			recentsButton.setColorFilter(tintColor);
+		if (menuButton != null)
+			menuButton.setColorFilter(tintColor);
+		if (backButton != null)
+			backButton.setColorFilter(tintColor);
+		if (homeButton != null)
+			homeButton.setColorFilter(tintColor);
 	}
 
 	public void addSystemIconView(ImageView imageView) {
