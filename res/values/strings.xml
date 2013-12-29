@@ -43,17 +43,16 @@
     <string name="no_activities_error">No activities, this app should not be showing in the list.</string>
     <string name="loading_title">Loading…</string>
     <string name="donate_summary">Support development. Extra features may be unlocked in the future</string>
-    
-    <string-array name="my_apps" translatable="false">>
-        <item>@string/menu_playstore</item>
+
+    <string-array name="my_apps" translatable="false">
+>        <item>@string/menu_playstore</item>
         <item>@string/menu_xposed</item>
     </string-array>
-    
+
     <string name="toast_activity_names_title">Toast activity titles</string>
     <string name="toast_activity_names_summary">Toasts will be shown whenever an activity is started, this can help you find activity names</string>
     <string name="toast_text_package_name">Package name: %s</string>
     <string name="toast_text_activity_name">Activity name: %s</string>
-    
     <string name="thank_you">Thank you!</string>
     <string name="thank_you_summary">Thank you for your donation. I really appreciate it :)</string>
     <string name="android_lockscreen_stub_name">Android Lockscreen</string>
@@ -70,4 +69,7 @@
     <string name="explain_cf_mode_text">Explain the following settings</string>
     <string name="unlocked_secret_settings">You\'ve unlocked some secret settings, these may or may not work as intended</string>
     <string name="warning">Warning</string>
+    <string name="animate_tint_title">Animate status bar color changes</string>
+    <string name="animate_tint_summary">Fade in and out the status bar when changing its color</string>
+
 </resources>

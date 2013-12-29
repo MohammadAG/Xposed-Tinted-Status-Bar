@@ -72,7 +72,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static LinearLayout mStatusIcons = null;
 
 	private int mLastSetColor;
-	private static final boolean mAnimateStatusBarTintChange = true;
 	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor("#66000000");
 
 	/* Wokraround for Samsung UX */
@@ -369,7 +368,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		mLastSetColor = tintColor;
 
-		if (mAnimateStatusBarTintChange) {
+		if (mSettingsHelper.animateStatusBarTintChange()) {
 			Animation fadeOutAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
 					android.R.anim.fade_out);
 			final Animation fadeInAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),

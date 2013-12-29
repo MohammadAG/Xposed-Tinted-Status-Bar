@@ -21,6 +21,10 @@
         android:summary="@string/toast_activity_names_summary"
         android:title="@string/toast_activity_names_title" />
     <CheckBoxPreference
+        android:key="pref_animate_tint"
+        android:summary="@string/animate_tint_summary"
+        android:title="@string/animate_tint_title" />
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_react_action_bar_visibility"
         android:summary="@string/react_actionbar_description"
@@ -53,7 +57,9 @@
         android:summary="@string/max_hsv_summary"
         android:title="@string/max_hsv_title" />
 
-    <PreferenceCategory android:title="@string/cf_mode" android:key="colorfilter_category">
+    <PreferenceCategory
+        android:key="colorfilter_category"
+        android:title="@string/cf_mode" >
         <ListPreference
             android:dialogMessage="@string/cf_mode_explanation"
             android:dialogTitle="@string/cf_mode"
