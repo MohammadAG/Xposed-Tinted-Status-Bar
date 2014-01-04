@@ -409,6 +409,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		}
 
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+			mNavigationBarTint = tintColor;
 			setNavigationBarTint(tintColor, true);
 		}
 	}
@@ -458,6 +459,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		setColorForLayout(mStatusIcons, iconTint, mSettingsHelper.getNotificationIconCfType());
 		setKitKatBatteryColor(iconTint);
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+			mNavigationBarIconTint = iconTint;
 			setNavigationBarIconTint(iconTint, true);
 		}
 	}
