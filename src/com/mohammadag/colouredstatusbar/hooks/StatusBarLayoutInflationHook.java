@@ -31,9 +31,11 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 					liparam.res.getIdentifier("clock", "id", "com.android.systemui"));
 		}
 
-		if (clock != null)
+		if (clock != null) {
+			mInstance.setClockFound();
 			mInstance.addTextLabel(clock);
-		else
+		} else {
 			mInstance.setNoClockFound();
+		}
 	}
 }

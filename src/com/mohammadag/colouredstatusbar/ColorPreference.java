@@ -73,12 +73,20 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 		SettingsHelper.Tint tintType = null;
 		if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT))
 			tintType = SettingsHelper.Tint.NAV_BAR;
+		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT))
+			tintType = SettingsHelper.Tint.NAV_BAR_ICON;
 		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT))
 			tintType = SettingsHelper.Tint.ICON;
 		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT))
 			tintType = SettingsHelper.Tint.STATUS_BAR;
 		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT))
 			tintType = SettingsHelper.Tint.ICON_INVERTED;
+		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT))
+			tintType = SettingsHelper.Tint.NAV_BAR_IM;
+		else if (getKey().equals(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT))
+			tintType = SettingsHelper.Tint.NAV_BAR_ICON_IM;
+		else
+			throw new RuntimeException("You forgot to add the key to ColorPreference!!");
 
 		Context context = getContext();
 		if (mSettingsActivity != null)

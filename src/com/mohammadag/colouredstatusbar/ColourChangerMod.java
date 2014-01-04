@@ -36,6 +36,7 @@ import com.mohammadag.colouredstatusbar.hooks.BatteryHooks;
 import com.mohammadag.colouredstatusbar.hooks.BluetoothControllerHook;
 import com.mohammadag.colouredstatusbar.hooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.KitKatBatteryHook;
+import com.mohammadag.colouredstatusbar.hooks.NavigationBarHook;
 import com.mohammadag.colouredstatusbar.hooks.SViewHooks;
 import com.mohammadag.colouredstatusbar.hooks.SignalClusterHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
@@ -78,7 +79,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static boolean mIsStatusBarNowTransparent = false;
 
 	private static XModuleResources mResources;
-	
+
 	/* Fall back to old method to get the clock when no clock is found */
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
@@ -278,14 +279,15 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		if (!lpparam.packageName.equals("com.android.systemui"))
 			return;
-		
+
 		if (mHookClockOnSystemUiInit)
 			doClockHooks(lpparam.classLoader);
-		
+
 		mSystemUiClassLoader = lpparam.classLoader;
 
 		new StatusBarHook(this, lpparam.classLoader);
 		new StatusBarViewHook(this, lpparam.classLoader);
+		new NavigationBarHook(this, lpparam.classLoader);
 		new BatteryHooks(this, lpparam.classLoader);
 		new SignalClusterHook(this, lpparam.classLoader);
 		new BluetoothControllerHook(this, lpparam.classLoader);
@@ -351,8 +353,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		for (int i = 0; i < statusIcons.getChildCount(); i++) {
 			try {
 				ImageView view = (ImageView) statusIcons.getChildAt(i);
-				if (view != null)
+				if (view != null) {
 					view.setColorFilter(color, mode);
+				}
 			} catch (ClassCastException e) {
 
 			}
@@ -404,6 +407,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				mStatusBarView.setBackgroundColor(tintColor);
 			}
 		}
+
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+			setNavigationBarTint(tintColor, true);
+		}
 	}
 
 	public void setStatusBarIconsTint(int iconTint) {
@@ -450,12 +457,19 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		setColorForLayout(mStatusIcons, iconTint, mSettingsHelper.getNotificationIconCfType());
 		setKitKatBatteryColor(iconTint);
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+			setNavigationBarIconTint(iconTint, true);
+		}
 	}
 
 	@SuppressLint("NewApi")
-	private void setNavigationBarTint(final int tintColor) {
+	private void setNavigationBarTint(final int tintColor, boolean force) {
 		if (mNavigationBarView == null)
 			return;
+
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
+			return;
+		}
 
 		final View view = (View) XposedHelpers.getObjectField(mNavigationBarView, "mCurrentView");
 
@@ -491,17 +505,32 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				view.setBackgroundColor(tintColor);
 			}
 		}
+		
+		if (mNavigationBarView != null) {
+			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
+			intent.putExtra("navbarBgColor", tintColor);
+			intent.putExtra("navbarColorEnable", true);
+			mNavigationBarView.getContext().sendBroadcast(intent);
+		}
 	}
 
-	private void setNavigationBarIconTint(final int tintColor) {
+	private void setNavigationBarTint(final int tintColor) {
+		setNavigationBarTint(tintColor, false);
+	}
+
+	private void setNavigationBarIconTint(final int tintColor, boolean force) {
 		if (mNavigationBarView == null)
 			return;
+
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
+			return;
+		}
 
 		ImageView recentsButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getRecentsButton");
 		ImageView menuButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getMenuButton");
 		ImageView backButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getBackButton");
 		ImageView homeButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getHomeButton");
-		
+
 		if (recentsButton != null)
 			recentsButton.setColorFilter(tintColor);
 		if (menuButton != null)
@@ -510,6 +539,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			backButton.setColorFilter(tintColor);
 		if (homeButton != null)
 			homeButton.setColorFilter(tintColor);
+		
+		if (mNavigationBarView != null) {
+			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
+			intent.putExtra("navbarKeyColor", tintColor);
+			intent.putExtra("navbarColorEnable", true);
+			mNavigationBarView.getContext().sendBroadcast(intent);
+		}
+	}
+
+	private void setNavigationBarIconTint(final int tintColor) {
+		setNavigationBarIconTint(tintColor, false);
 	}
 
 	public void addSystemIconView(ImageView imageView) {
@@ -605,12 +645,19 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	public void setNoClockFound() {
+		if (mFoundClock)
+			return;
+		
 		if (mSystemUiClassLoader != null)
 			doClockHooks(mSystemUiClassLoader);
 		else
 			mHookClockOnSystemUiInit = true;
 	}
 	
+	public void setClockFound() {
+		mFoundClock = true;
+	}
+
 	private void doClockHooks(ClassLoader loader) {
 		Class<?> Clock = XposedHelpers.findClass("com.android.systemui.statusbar.policy.Clock", loader);
 		XposedBridge.hookAllConstructors(Clock, new XC_MethodHook() {
@@ -620,7 +667,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				mFoundClock = true;
 			}
 		});
-		
+
 		findAndHookMethod(Clock, "updateClock", new XC_MethodHook() {
 			@Override
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -628,5 +675,15 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				textView.setTextColor(mLastIconTint);
 			}
 		});
+	}
+
+	public void onKeyboardVisible(boolean keyboardUp) {
+		if (keyboardUp) {
+			setNavigationBarTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_IM), true);
+			setNavigationBarIconTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_ICON_IM), true);
+		} else {
+			setNavigationBarTint(mNavigationBarTint, true);
+			setNavigationBarIconTint(mNavigationBarIconTint, true);
+		}
 	}
 }

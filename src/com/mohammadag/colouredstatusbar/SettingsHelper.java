@@ -17,7 +17,8 @@ public class SettingsHelper {
 	private static final boolean DEBUG = true;
 
 	/* TODO: Rework this class to use this enum for more consistent code */
-	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED, NAV_BAR, NAV_BAR_ICON };
+	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED,
+		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM };
 
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
@@ -292,6 +293,10 @@ public class SettingsHelper {
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
 		case ICON_INVERTED:
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Common.COLOR_BLACK, withHash);
+		case NAV_BAR_ICON_IM:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT, Common.COLOR_WHITE, withHash);
+		case NAV_BAR_IM:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT, Common.COLOR_BLACK, withHash);
 		}
 
 		if (withHash)
@@ -312,6 +317,10 @@ public class SettingsHelper {
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT, Color.WHITE);
 		case ICON_INVERTED:
 			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Color.BLACK);
+		case NAV_BAR_ICON_IM:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT, Color.WHITE);
+		case NAV_BAR_IM:
+			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT, Color.BLACK);
 		}
 
 		return Color.BLACK;
@@ -322,15 +331,15 @@ public class SettingsHelper {
 	}
 
 	public boolean animateStatusBarTintChange() {
-		return getBoolean(Common.SETTINGS_KEY_ANIMATE_TINT_CHANGE, true);
+		return getBoolean(Common.SETTINGS_KEY_ANIMATE_TINT_CHANGE, false);
 	}
 
 	public PorterDuff.Mode getSystemIconCfType() {
-		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_SYSTEM_ICON_CF_MODE, "SRC_ATOP"));
+		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_SYSTEM_ICON_CF_MODE, "MULTIPLY"));
 	}
 
 	public PorterDuff.Mode getNotificationIconCfType() {
-		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_NOTIFICATION_ICON_CF_MODE	, "SRC_ATOP"));
+		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_NOTIFICATION_ICON_CF_MODE	, "MULTIPLY"));
 	}
 
 	private int getColorForKey(String key, int defaultColor) {
@@ -405,6 +414,10 @@ public class SettingsHelper {
 			String processedActivityName = Utils.removePackageName(activityName, packageName);
 			return packageName + "." + processedActivityName + "/" + keyName;
 		}
+	}
+	
+	public boolean shouldLinkStatusBarAndNavBar() {
+		return getBoolean(Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS, false);
 	}
 
 	public float getHsvMax() {

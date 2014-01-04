@@ -21,14 +21,19 @@
         android:summary="@string/toast_activity_names_summary"
         android:title="@string/toast_activity_names_title" />
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="pref_animate_tint"
         android:summary="@string/animate_tint_summary"
-        android:title="@string/animate_tint_title" android:defaultValue="true"/>
+        android:title="@string/animate_tint_title" />
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_react_action_bar_visibility"
         android:summary="@string/react_actionbar_description"
         android:title="@string/react_actionbar_title" />
+    <CheckBoxPreference
+        android:key="pref_link_panel_view_colors"
+        android:summary="@string/link_panel_views_summary"
+        android:title="@string/link_panel_views_title" />
 
     <PreferenceScreen
         android:summary="@string/default_colors_summary"
@@ -49,6 +54,18 @@
             android:key="pref_default_nav_bar_tint"
             android:summary="@string/default_summary"
             android:title="@string/default_navigation_bar_tint_title" />
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_nav_bar_icon_tint"
+            android:summary="@string/default_summary"
+            android:title="@string/default_navigation_bar_icon_tint_title" />
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_nav_bar_im_tint"
+            android:summary="@string/default_summary_keyboard"
+            android:title="@string/default_navigation_bar_im_tint_title" />
+        <com.mohammadag.colouredstatusbar.ColorPreference
+            android:key="pref_default_nav_bar_icon_im_tint"
+            android:summary="@string/default_summary_keyboard"
+            android:title="@string/default_navigation_bar_icon_im_tint_title" />
     </PreferenceScreen>
 
     <com.mohammadag.colouredstatusbar.SliderPreference
@@ -68,7 +85,7 @@
             android:summary="@string/explain_cf_mode_text"
             android:title="@string/cf_mode" />
         <ListPreference
-            android:defaultValue="SRC_ATOP"
+            android:defaultValue="MULTIPLY"
             android:dialogTitle="@string/notification_cf_mode_title"
             android:entries="@array/colorfilter_entries"
             android:entryValues="@array/colorfilter_entries"
@@ -76,7 +93,7 @@
             android:summary="%s"
             android:title="@string/notification_cf_mode_title" />
         <ListPreference
-            android:defaultValue="SRC_ATOP"
+            android:defaultValue="MULTIPLY"
             android:dialogTitle="@string/system_cf_mode_title"
             android:entries="@array/colorfilter_entries"
             android:entryValues="@array/colorfilter_entries"

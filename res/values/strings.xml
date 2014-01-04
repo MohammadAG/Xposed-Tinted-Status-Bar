@@ -71,5 +71,10 @@
     <string name="warning">Warning</string>
     <string name="animate_tint_title">Animate status bar color changes</string>
     <string name="animate_tint_summary">Fade in and out the status bar when changing its color</string>
+    <string name="link_panel_views_title">Link status and nav bar colors</string>
+    <string name="link_panel_views_summary">The navigation bar will follow the status bar colors</string>
+    <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
+    <string name="default_navigation_bar_im_tint_title">Navigation Bar Tint (IM)</string>
+    <string name="default_summary_keyboard">Select the default color when the keyboard is visible</string>
 
 </resources>

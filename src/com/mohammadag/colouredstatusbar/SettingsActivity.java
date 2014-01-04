@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
@@ -16,16 +14,6 @@ import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
 	private SettingsHelper mSettingsHelper = null;
-	private PreferenceCategory mCfCategory;
-	private Handler mHandler = null;
-	private int mClickCount = 0;
-	private Runnable mZeroCounterRunnable = new Runnable() {
-		@Override
-		public void run() {
-			mClickCount = 0;
-		}
-	};
-	protected boolean mSettingsUnlocked;
 
 	@Override
 	public SharedPreferences getSharedPreferences(String name, int mode) {
@@ -37,11 +25,10 @@ public class SettingsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);	
 		if (Utils.hasActionBar())
 			getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		if (mSettingsHelper == null)
 			mSettingsHelper = new SettingsHelper(this);
 
-		mHandler = new Handler();
 	}
 
 	@SuppressWarnings({ "deprecation" })
@@ -94,28 +81,13 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		});
 
-		mCfCategory = (PreferenceCategory) findPreference("colorfilter_category");
-		getPreferenceScreen().removePreference(mCfCategory);
-		mSettingsUnlocked = false;
-
 		if (Utils.isDonateVersionInstalled(getApplicationContext())) {
 			copyrightPreference.setTitle(R.string.app_name_donate_version);
 
 			donatePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					mClickCount++;
-					if (mClickCount >= 3 && !mSettingsUnlocked) {
-						Toast.makeText(SettingsActivity.this, R.string.unlocked_secret_settings, Toast.LENGTH_SHORT).show();
-						getPreferenceScreen().addPreference(mCfCategory);
-						mSettingsUnlocked = true;
-					} else {
-						if (mClickCount <= 1)
-							Toast.makeText(SettingsActivity.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
-					}
-					mHandler.removeCallbacks(mZeroCounterRunnable);
-
-					mHandler.postDelayed(mZeroCounterRunnable, 300);
+					Toast.makeText(SettingsActivity.this, R.string.thank_you, Toast.LENGTH_SHORT).show();
 					return false;
 				}
 			});
@@ -128,7 +100,10 @@ public class SettingsActivity extends PreferenceActivity {
 				Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT,
 				Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT,
 				Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT,
-				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT
+				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT,
+				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT,
+				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT,
+				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT
 		};
 
 		intializeColorPreferences(colorKeys);

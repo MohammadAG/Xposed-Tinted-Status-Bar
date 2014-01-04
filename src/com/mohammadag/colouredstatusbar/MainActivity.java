@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
 				if (pkgName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB)) {
 					i = new Intent(getApplicationContext(), ApplicationSettings.class);
 					i.putExtra(Common.EXTRA_KEY_ACTIVITY_NAME, "NONE");
-				} else if (pkgName.equals("com.google.android.launcher")) {
+				} else if (pkgName.equals(Common.PACKAGE_NAME_GEL_STUB)) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 					builder.setTitle(R.string.warning);
 					builder.setMessage(R.string.gel_stub_warning);
@@ -86,9 +86,13 @@ public class MainActivity extends Activity {
 									mListView.postDelayed(new Runnable() {
 										@Override
 										public void run() {
-											mListView.performItemClick(mListView, mGoogleSearchPosition, 0);
+											Intent i = new Intent(getApplicationContext(), ActivitesListActivity.class);
+											i.putExtra(Common.EXTRA_KEY_PACKAGE_NAME, Common.PACKAGE_NAME_GOOGLE_SEARCH);
+											i.putExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME, "Google Search");
+
+											startActivityForResult(i, 0);
 										}
-									}, 1100);
+									}, 500);
 								}
 							});
 						}
