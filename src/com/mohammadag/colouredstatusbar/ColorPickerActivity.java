@@ -87,9 +87,28 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 						getActionBar().setDisplayShowTitleEnabled(false);
 						getActionBar().setDisplayShowTitleEnabled(true);
 					}
+					
+					String previewKey;
 
 					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
-					intent.putExtra(prefKey, colourHex);
+					if (Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT.equals(prefKey)
+							|| Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT.equals(prefKey)) {
+						previewKey = Common.SETTINGS_KEY_NAVIGATION_BAR_TINT;
+					} else if (Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT.equals(prefKey)) {
+						previewKey = Common.SETTINGS_KEY_STATUS_BAR_TINT;
+					} else if (Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT.equals(prefKey)
+							|| Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT.equals(prefKey)) {
+						previewKey = Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT;
+					} else if (Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT.equals(prefKey)
+							|| Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT.equals(prefKey)) {
+						if (Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT.equals(prefKey))
+							intent.putExtra(Common.SETTINGS_KEY_STATUS_BAR_TINT, Color.WHITE);
+						previewKey = Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT;
+					} else {
+						previewKey = prefKey;
+					}
+					
+					intent.putExtra(previewKey, colourHex);
 					sendOrderedBroadcast(intent, null);
 				} catch (IllegalArgumentException e) {
 					Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
