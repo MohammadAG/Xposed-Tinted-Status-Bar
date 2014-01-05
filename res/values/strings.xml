@@ -38,7 +38,7 @@
     <string name="default_navigation_bar_icon_tint_title">Default navigation bar icon tint color</string>
     <string name="default_summary">Select the default color if no color can be determined</string>
     <string name="max_hsv_title">Max HS[V] for black icons</string>
-    <string name="max_hsv_summary">Maximum HS[V] before auto-switching to black icons</string>
+    <string name="max_hsv_summary">Maximum HS[V] before auto-switching to black icons when action bar has no title text</string>
     <string name="current_hsv_value">Current value: %s</string>
     <string name="no_activities_error">No activities, this app should not be showing in the list.</string>
     <string name="loading_title">Loading…</string>
