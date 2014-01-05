@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
@@ -107,6 +108,14 @@ public class SettingsActivity extends PreferenceActivity {
 		};
 
 		intializeColorPreferences(colorKeys);
+		
+		findPreference(Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
+				return true;
+			}
+		});
 	}
 
 
