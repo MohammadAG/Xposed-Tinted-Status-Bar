@@ -2,6 +2,7 @@ package com.mohammadag.colouredstatusbar;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 
 import java.util.ArrayList;
 
@@ -100,13 +101,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				}
 
 				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT)) {
-					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
-					setNavigationBarTint(mNavigationBarTint);
+					if (!mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+						mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
+						setNavigationBarTint(mNavigationBarTint);
+					}
 				}
 
 				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT)) {
-					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
-					setNavigationBarIconTint(mNavigationBarIconTint);
+					if (!mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+						mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
+						setNavigationBarIconTint(mNavigationBarIconTint);
+					}
 				}
 			} else if (Common.INTENT_SETTINGS_UPDATED.equals(intent.getAction())) {
 				Log.d("Xposed", "TintedStatusBar settings updated, reloading...");
@@ -527,11 +532,66 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
 			return;
 		}
+		
+		ImageView recentsButton = null;
+		ImageView menuButton = null;
+		ImageView backButton = null;
+		ImageView homeButton = null;
+		
+		Class<?> NavbarEditor = null;
 
-		ImageView recentsButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getRecentsButton");
-		ImageView menuButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getMenuButton");
-		ImageView backButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getBackButton");
-		ImageView homeButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getHomeButton");
+		try {
+			recentsButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getRecentsButton");
+		} catch (NoSuchMethodError e) {
+			try {
+				NavbarEditor = getObjectField(mNavigationBarView, "mEditBar").getClass();
+				recentsButton =
+						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
+								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_RECENT"));
+			} catch (NoSuchMethodError e1) {
+				e1.printStackTrace();
+			} catch (NoSuchFieldError e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		try {
+			menuButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getMenuButton");
+		} catch (NoSuchMethodError e) {
+			try {
+				if (NavbarEditor != null) {
+					menuButton =
+							(ImageView) XposedHelpers.callMethod(mNavigationBarView,
+									"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_ALWAYS_MENU"));
+				}
+			} catch (NoSuchMethodError e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		try {
+			backButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getBackButton");
+		} catch (NoSuchMethodError e) {
+			try {
+				backButton =
+						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
+								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_BACK"));
+			} catch (NoSuchMethodError e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		try {
+			homeButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getHomeButton");
+		} catch (NoSuchMethodError e) {
+			try {
+				homeButton =
+						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
+								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_HOME"));
+			} catch (NoSuchMethodError e1) {
+				e1.printStackTrace();
+			}
+		}
 
 		if (recentsButton != null)
 			recentsButton.setColorFilter(tintColor);
