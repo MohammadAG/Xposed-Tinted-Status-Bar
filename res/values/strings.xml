@@ -35,7 +35,7 @@
     <string name="default_status_bar_inverted_icon_tint_title">Default inverted icon color</string>
     <string name="default_status_bar_inverted_icon_tint_summary">Select the default color if a light background is determined</string>
     <string name="default_navigation_bar_tint_title">Default navigation bar tint color</string>
-    <string name="default_navigation_bar_icon_tint_title">Default navigation bar tint color</string>
+    <string name="default_navigation_bar_icon_tint_title">Default navigation bar icon tint color</string>
     <string name="default_summary">Select the default color if no color can be determined</string>
     <string name="max_hsv_title">Max HS[V] for black icons</string>
     <string name="max_hsv_summary">Maximum HS[V] before auto-switching to black icons</string>
