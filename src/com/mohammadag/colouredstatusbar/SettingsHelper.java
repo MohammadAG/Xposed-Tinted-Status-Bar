@@ -270,6 +270,10 @@ public class SettingsHelper {
 	}
 
 	private static String getDefaultIconTintColorForPackage(String packageName) {
+		if ("com.chrome.beta".equals(packageName) || "com.android.chrome".equals(packageName))
+			return "090909";
+		else if ("com.google.android.apps.plus".equals(packageName))
+			return Common.COLOR_BLACK;
 		return null;
 	}
 
