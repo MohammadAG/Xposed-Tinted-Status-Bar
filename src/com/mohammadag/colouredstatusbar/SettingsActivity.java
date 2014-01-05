@@ -150,6 +150,12 @@ public class SettingsActivity extends PreferenceActivity {
 
 		mSettingsHelper.getSharedPreferences().edit().putString(key, data.getStringExtra("color")).commit();
 		findColorPreference(key).refresh();
+		
+		/* For most things, we don't need this since we reload settings each
+		 * time an activity is resumed, but it's needed for input method-specific
+		 * keys, since SettingsHelper is part of SystemUI there, not Zygote.
+		 */
+		sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
