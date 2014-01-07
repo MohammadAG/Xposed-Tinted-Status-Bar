@@ -513,7 +513,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 		
-		if (mNavigationBarView != null) {
+		if (mNavigationBarView != null && tintColor != KITKAT_TRANSPARENT_COLOR) {
 			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
 			intent.putExtra("navbarBgColor", tintColor);
 			intent.putExtra("navbarColorEnable", true);
