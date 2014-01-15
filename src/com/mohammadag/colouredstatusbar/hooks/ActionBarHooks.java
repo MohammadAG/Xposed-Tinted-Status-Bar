@@ -52,8 +52,9 @@ public class ActionBarHooks {
 						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT,
 								mSettingsHelper.getDefaultTint(Tint.ICON));
 
-					ColourChangerMod.sendColorChangeIntent(statusBarTint, Utils.getIconColorForColor(statusBarTint, defaultNormal,
-							invertedIconTint, mSettingsHelper.getHsvMax()), actionBar.getThemedContext());
+					if (mSettingsHelper.shouldReactToActionBarVisibility())
+						ColourChangerMod.sendColorChangeIntent(statusBarTint, Utils.getIconColorForColor(statusBarTint, defaultNormal,
+								invertedIconTint, mSettingsHelper.getHsvMax()), actionBar.getThemedContext());
 				};
 			});
 
@@ -87,7 +88,8 @@ public class ActionBarHooks {
 								invertedIconTint, mSettingsHelper.getHsvMax());
 					}
 
-					ColourChangerMod.sendColorChangeIntent(color, iconTint, actionBar.getThemedContext());
+					if (mSettingsHelper.shouldReactToActionBarVisibility())
+						ColourChangerMod.sendColorChangeIntent(color, iconTint, actionBar.getThemedContext());
 				}
 			});
 		} catch (ClassNotFoundError e) {
