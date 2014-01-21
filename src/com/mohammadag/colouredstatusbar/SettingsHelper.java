@@ -249,6 +249,8 @@ public class SettingsHelper {
 			return "dddddd";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
+		else if ("com.pushbullet.android".equals(packageName))
+			return "23ae60";
 
 		return null;
 	}
