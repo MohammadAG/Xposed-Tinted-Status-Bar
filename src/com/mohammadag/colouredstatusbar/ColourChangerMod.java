@@ -86,6 +86,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
+	
+	/* Floating Window Intent ID */
+	public static final int FLAG_FLOATING_WINDOW = 0x00002000;
 
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
@@ -135,6 +138,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				Activity activity = (Activity) param.thisObject;
 				String packageName = activity.getPackageName();
 				String activityName = activity.getLocalClassName();
+				Intent activityIntent = activity.getIntent();
 
 				mSettingsHelper.reload();
 
@@ -146,6 +150,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				}
 
 				if (!mSettingsHelper.isEnabled(packageName, activityName))
+					return;
+					
+				if (activityIntent.getFlags() & FLAG_FLOATING_WINDOW)
 					return;
 
 				if (mSettingsHelper.getBoolean(Common.SETTINGS_KEY_ALLOW_API_CHANGES, true)) {
