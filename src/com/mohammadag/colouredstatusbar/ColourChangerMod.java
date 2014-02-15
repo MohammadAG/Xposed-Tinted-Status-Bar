@@ -152,7 +152,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				if (!mSettingsHelper.isEnabled(packageName, activityName))
 					return;
 					
-				if (activityIntent.getFlags() & FLAG_FLOATING_WINDOW)
+				if ((activityIntent.getFlags() & FLAG_FLOATING_WINDOW) != 0)
 					return;
 
 				if (mSettingsHelper.getBoolean(Common.SETTINGS_KEY_ALLOW_API_CHANGES, true)) {
