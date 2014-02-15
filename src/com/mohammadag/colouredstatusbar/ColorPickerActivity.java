@@ -117,10 +117,14 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 		});
 		Button bApply = (Button) findViewById(R.id.bApplyColor);
 		bApply.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				returnResults();
+				try {
+					Color.parseColor(Utils.addHashIfNeeded(editText.getText().toString()));
+					returnResults();
+				} catch (IllegalArgumentException e) {
+					Toast.makeText(getApplicationContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
+				}		
 			}
 		});
 	}

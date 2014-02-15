@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ColorPreference extends Preference implements Preference.OnPreferenceClickListener {
 	private SettingsHelper mSettingsHelper;
@@ -39,7 +40,15 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 	protected void onBindView(View view) {
 		super.onBindView(view);
 		mImageView = (ImageView) view.findViewById(R.id.color_image);
-		ColorDrawable background = new ColorDrawable(Color.parseColor(Utils.addHashIfNeeded(getCurrentColor())));
+		int color;
+		try {
+			color = Color.parseColor(Utils.addHashIfNeeded(getCurrentColor()));
+		} catch (IllegalArgumentException e) {
+			color = Color.RED;
+			setSummary(R.string.invalid_color);
+			Toast.makeText(view.getContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
+		}
+		ColorDrawable background = new ColorDrawable(color);
 		Utils.setImageViewBackground(mImageView, background);
 	}
 
