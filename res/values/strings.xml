@@ -45,7 +45,7 @@
     <string name="donate_summary">Support development. Extra features may be unlocked in the future</string>
 
     <string-array name="my_apps" translatable="false">
->        <item>@string/menu_playstore</item>
+        <item>@string/menu_playstore</item>
         <item>@string/menu_xposed</item>
     </string-array>
 
