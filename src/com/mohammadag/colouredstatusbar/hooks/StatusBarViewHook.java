@@ -1,6 +1,7 @@
 package com.mohammadag.colouredstatusbar.hooks;
 
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,19 +31,32 @@ public class StatusBarViewHook {
 					Context context = (Context) param.args[0];
 					IntentFilter iF = new IntentFilter();
 					iF.addAction(Common.INTENT_CHANGE_COLOR_NAME);
-					iF.addAction(Common.INTENT_SAMSUNG_SVIEW_COVER);
-					iF.addAction(Common.INTENT_SETTINGS_UPDATED);
+					iF.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF);
-
+					
+					IntentFilter iF2 = new IntentFilter();
+					iF2.addAction(Common.INTENT_SAMSUNG_SVIEW_COVER);
+					iF2.addAction(Common.INTENT_SETTINGS_UPDATED);
+					context.registerReceiver(mInstance.getBroadcastReceiver(), iF2);
+					
 					IntentFilter lockscreenFilter = new IntentFilter();
 					lockscreenFilter.addAction(Intent.ACTION_SCREEN_ON);
 					lockscreenFilter.addAction(Intent.ACTION_SCREEN_OFF);
 					context.registerReceiver(new BroadcastReceiver() {
+						@SuppressLint("NewApi")
 						@Override
 						public void onReceive(Context context, Intent intent) {
 							mInstance.getSettingsHelper().reload();
 							KeyguardManager kgm = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-							if (kgm.isKeyguardLocked()) {
+							boolean keyguardLocked;
+							
+							if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+								keyguardLocked = kgm.isKeyguardLocked();
+							} else {
+								keyguardLocked = kgm.inKeyguardRestrictedInputMode();
+							}
+							
+							if (keyguardLocked) {
 
 								String statusBarUserTint = mInstance.getSettingsHelper().getTintColor(
 										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
