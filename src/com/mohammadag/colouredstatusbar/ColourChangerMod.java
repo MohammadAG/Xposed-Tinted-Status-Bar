@@ -6,6 +6,9 @@ import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 
 import java.util.ArrayList;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,9 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -74,6 +74,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static LinearLayout mStatusIcons = null;
 
 	private int mLastSetColor;
+	private int mLastSetNavBarTint;
 	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor("#66000000");
 
 	/* Wokraround for Samsung UX */
@@ -374,34 +375,20 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mLastSetColor == tintColor)
 			return;
 
-		mLastSetColor = tintColor;
-
-		if (mSettingsHelper.animateStatusBarTintChange()) {
-			Animation fadeOutAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
-					android.R.anim.fade_out);
-			final Animation fadeInAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
-					android.R.anim.fade_in);
-			fadeOutAnimation.setAnimationListener(new AnimationListener() {
-				@Override
-				public void onAnimationStart(Animation arg0) {}
-				@Override
-				public void onAnimationRepeat(Animation arg0) {}		
-				@Override
-				public void onAnimationEnd(Animation arg0) {
-					if (!mIsStatusBarNowTransparent) {
-						mStatusBarView.setAlpha(1f);
-						if (tintColor == KITKAT_TRANSPARENT_COLOR) {
-							mStatusBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
-							mStatusBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
-									mResources, R.drawable.status_background));
-						} else {
-							mStatusBarView.setBackgroundColor(tintColor);
-						}
-					}
-					mStatusBarView.startAnimation(fadeInAnimation);
-				}
-			});
-			mStatusBarView.startAnimation(fadeOutAnimation);
+		if (mSettingsHelper.animateStatusBarTintChange()) {			
+			if (tintColor != KITKAT_TRANSPARENT_COLOR) {
+				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), mLastSetColor, tintColor);
+				colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
+				    @Override
+				    public void onAnimationUpdate(ValueAnimator animator) {
+				        mStatusBarView.setBackgroundColor((Integer)animator.getAnimatedValue());
+				    }
+				});
+				colorAnimation.start();
+			} else {
+				mStatusBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+						mResources, R.drawable.status_background));
+			}
 		} else {
 			mStatusBarView.setAlpha(1f);
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
@@ -412,6 +399,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				mStatusBarView.setBackgroundColor(tintColor);
 			}
 		}
+		
+		mLastSetColor = tintColor;
 
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
 			mNavigationBarTint = tintColor;
@@ -477,33 +466,24 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
 			return;
 		}
+		
 
 		final View view = (View) XposedHelpers.getObjectField(mNavigationBarView, "mCurrentView");
 
-		boolean animateNavBar = false;
-		if (animateNavBar) {
-			Animation fadeOutAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
-					android.R.anim.slide_out_right);
-			final Animation fadeInAnimation = AnimationUtils.loadAnimation(mStatusBarView.getContext(),
-					android.R.anim.slide_in_left);
-			fadeOutAnimation.setAnimationListener(new AnimationListener() {
-				@Override
-				public void onAnimationStart(Animation arg0) {}
-				@Override
-				public void onAnimationRepeat(Animation arg0) {}		
-				@SuppressLint("NewApi")
-				@Override
-				public void onAnimationEnd(Animation arg0) {
-					if (tintColor == KITKAT_TRANSPARENT_COLOR) {
-						view.setBackground(new BarBackgroundDrawable(view.getContext(),
-								mResources, R.drawable.nav_background));
-					} else {
-						view.setBackgroundColor(tintColor);
-					}
-					view.startAnimation(fadeInAnimation);
-				}
-			});
-			view.startAnimation(fadeOutAnimation);
+		if (mSettingsHelper.animateStatusBarTintChange()) {
+			if (tintColor != KITKAT_TRANSPARENT_COLOR) {
+				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), mLastSetNavBarTint, tintColor);
+				colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
+				    @Override
+				    public void onAnimationUpdate(ValueAnimator animator) {
+				        mNavigationBarView.setBackgroundColor((Integer)animator.getAnimatedValue());
+				    }
+				});
+				colorAnimation.start();
+			} else {
+				mNavigationBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+						mResources, R.drawable.nav_background));
+			}
 		} else {
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
 				view.setBackground(new BarBackgroundDrawable(view.getContext(),
@@ -519,6 +499,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			intent.putExtra("navbarColorEnable", true);
 			mNavigationBarView.getContext().sendBroadcast(intent);
 		}
+		
+		mLastSetNavBarTint = tintColor;
 	}
 
 	private void setNavigationBarTint(final int tintColor) {
