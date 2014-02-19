@@ -50,6 +50,12 @@ public class ActivitesListActivity extends ListActivity {
 
 		loadActivitesForPackage(mPackageName);
 
+
+		float scale = getResources().getDisplayMetrics().density;
+		int padding = (int) (8 * scale + 0.5f);
+		getListView().setPadding(padding * 2, padding, padding * 2, padding);
+		getListView().setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
+
 		setTitle(mFriendlyPackageName);
 	}
 

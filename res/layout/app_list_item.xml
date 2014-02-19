@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="left|center"
-    android:paddingLeft="@dimen/activity_horizontal_margin" 
+    android:padding="8dp"
     tools:ignore="contentDescription" >
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@android:drawable/sym_def_app_icon" />
 
     <LinearLayout
@@ -18,21 +19,21 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp" >
+        android:paddingLeft="8dp" >
 
         <TextView
             android:id="@+id/app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left" />
+            android:gravity="left"
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
             android:id="@+id/app_package"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:textColor="#0099CC" />
+            android:textAppearance="?android:textAppearanceSmall"/>
     </LinearLayout>
 
 </LinearLayout>
