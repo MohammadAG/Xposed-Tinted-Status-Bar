@@ -26,7 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -138,9 +138,8 @@ public class MainActivity extends Activity {
 
 		mSearchItem = menu.findItem(R.id.action_search);
 		final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+		searchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
-		assert searchView != null;
-		assert mSearchItem != null;
 		mSearchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem menuItem) {

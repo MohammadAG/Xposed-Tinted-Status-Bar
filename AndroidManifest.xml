@@ -39,7 +39,8 @@
         </activity>
         <activity android:name=".ColorPickerActivity" >
         </activity>
-        <activity android:name=".ActivitesListActivity" >
+        <activity android:name=".ActivitesListActivity"
+            android:configChanges="orientation|screenSize" >
         </activity>
         <activity
             android:name=".SettingsActivity"

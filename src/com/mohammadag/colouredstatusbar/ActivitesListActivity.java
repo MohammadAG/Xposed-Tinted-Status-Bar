@@ -15,6 +15,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,7 @@ public class ActivitesListActivity extends ListActivity {
 
 		mSearchItem = menu.findItem(R.id.action_search);
 		final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+		searchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
 		mSearchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 			@Override
