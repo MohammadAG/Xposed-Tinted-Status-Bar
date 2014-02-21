@@ -21,7 +21,7 @@
         android:summary="@string/toast_activity_names_summary"
         android:title="@string/toast_activity_names_title" />
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="pref_animate_tint"
         android:summary="@string/animate_tint_summary"
         android:title="@string/animate_tint_title" />

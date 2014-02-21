@@ -337,7 +337,7 @@ public class SettingsHelper {
 	}
 
 	public boolean animateStatusBarTintChange() {
-		return getBoolean(Common.SETTINGS_KEY_ANIMATE_TINT_CHANGE, false);
+		return getBoolean(Common.SETTINGS_KEY_ANIMATE_TINT_CHANGE, true);
 	}
 
 	public PorterDuff.Mode getSystemIconCfType() {
