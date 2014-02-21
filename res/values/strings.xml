@@ -69,8 +69,8 @@
     <string name="explain_cf_mode_text">Explain the following settings</string>
     <string name="unlocked_secret_settings">You\'ve unlocked some secret settings, these may or may not work as intended</string>
     <string name="warning">Warning</string>
-    <string name="animate_tint_title">Animate status bar color changes</string>
-    <string name="animate_tint_summary">Fade in and out the status bar when changing its color</string>
+    <string name="animate_tint_title">Animate color changes</string>
+    <string name="animate_tint_summary">Gradually change status bar and navigation bar colors</string>
     <string name="link_panel_views_title">Link status and nav bar colors</string>
     <string name="link_panel_views_summary">The navigation bar will follow the status bar colors</string>
     <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
