@@ -54,6 +54,18 @@ public class StatusBarHook {
 		} catch (NoSuchMethodError e) {
 			// Not an S4
 		}
+		
+		try {
+			findAndHookMethod(PhoneStatusBar, "setSystemUiVisibility", int.class, int.class, new XC_MethodHook() {
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+					int vis = (Integer) param.args[0];
+					final boolean lightsOut = (vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0;
+					mInstance.onLightsOutChanged(lightsOut);
+				};
+			});
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 
 		XC_MethodHook addRemoveIconHook = new XC_MethodHook() {
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -64,10 +76,14 @@ public class StatusBarHook {
 			};
 		};
 
-		Class<?> StatusBarIcon = XposedHelpers.findClass("com.android.internal.statusbar.StatusBarIcon", null);
-		findAndHookMethod(PhoneStatusBar, "addIcon", String.class, int.class, int.class, StatusBarIcon, addRemoveIconHook);
-		findAndHookMethod(PhoneStatusBar, "removeIcon", String.class, int.class, int.class, addRemoveIconHook);
-
+		try {
+			Class<?> StatusBarIcon = XposedHelpers.findClass("com.android.internal.statusbar.StatusBarIcon", null);
+			findAndHookMethod(PhoneStatusBar, "addIcon", String.class, int.class, int.class, StatusBarIcon, addRemoveIconHook);
+			findAndHookMethod(PhoneStatusBar, "removeIcon", String.class, int.class, int.class, addRemoveIconHook);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		
 		Class<?> StatusBarIconView = XposedHelpers.findClass("com.android.systemui.statusbar.StatusBarIconView", classLoader);
 		XposedBridge.hookAllConstructors(StatusBarIconView, new XC_MethodHook() {
 			@Override

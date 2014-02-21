@@ -5,6 +5,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -287,7 +288,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
 		if (lpparam.packageName.equals("android")) {
-			new SViewHooks(this, lpparam.classLoader);
+			if (android.os.Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("samsung"))
+				new SViewHooks(this, lpparam.classLoader);
 		}
 
 		if (!lpparam.packageName.equals("com.android.systemui"))
@@ -733,6 +735,23 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			setNavigationBarTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_IM), true);
 			setNavigationBarIconTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_ICON_IM), true);
 		} else {
+			setNavigationBarTint(mNavigationBarTint, true);
+			setNavigationBarIconTint(mNavigationBarIconTint, true);
+		}
+	}
+	
+	public void onLightsOutChanged(boolean lightsOut) {
+		int transparent = Color.parseColor("#c3121212");
+		if (lightsOut) {
+			setStatusBarTint(transparent);
+			setStatusBarIconsTint(Color.WHITE);
+			
+			setNavigationBarTint(transparent, true);
+			setNavigationBarIconTint(Color.WHITE, true);
+		} else {
+			setStatusBarTint(mLastSetColor);
+			setStatusBarIconsTint(mLastIconTint);
+			
 			setNavigationBarTint(mNavigationBarTint, true);
 			setNavigationBarIconTint(mNavigationBarIconTint, true);
 		}
