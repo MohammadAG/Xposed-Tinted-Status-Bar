@@ -71,6 +71,7 @@ public class Utils {
 		int blue = Color.blue(pixel);
 		int green = Color.green(pixel);
 		int alpha = Color.alpha(pixel);
+		copyDrawable = null;
 		return Color.argb(alpha, red, green, blue);
 	}
 
