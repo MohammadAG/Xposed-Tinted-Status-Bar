@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tinted Status Bar</string>
+    <string name="app_name_donate_version">Tinted Status Bar (Spenderversion)</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="menu_save">Speichern</string>
+    <string name="title_activity_applications_settings">Tinted Status Bar Einstellungen</string>
+    <string name="menu_launch">Starten</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_playstore">Play Store</string>
+    <string name="menu_xposed">Xposed Modules</string>
+    <string name="menu_donate">Spenden</string>
+    <string name="status_bar_tint_text">Färbung der Statusleiste</string>
+    <string name="status_bar_icon_tint_text">Färbung der Symbole in der Statusleiste</string>
+    <string name="navigation_bar_tint_text">Färbung der Navigationsleiste</string>
+    <string name="navigation_bar_icon_tint_text">Färbung der Symbole in der Navigationsleiste</string>
+    <string name="enabled">Aktiviert</string>
+    <string name="apply">Anwenden</string>
+    <string name="saturation">Sättigung</string>
+    <string name="value">Wert</string>
+    <string name="opacity">Deckkraft</string>
+    <string name="preview">Vorschau</string>
+    <string name="restore">Wiederherstellen</string>
+    <string name="save">Speichern</string>
+    <string name="invalid_color">Ungültige Farbe</string>
+    <string name="all_activities_title">Alle Activities</string>
+    <string name="all_the_wonderful_activities">"Alle Activities, Einstellungen darunter überspielen das"</string>
+    <string name="reset_to_auto_detect">Zurücksetzen zu Auto-Erkennung</string>
+    <string name="copyright_summary">Copyright © 2013 – Mohammad Abu-Garbeyyeh\nSchau dir noch mehr Apps und Modules an</string>
+    <string name="api_override_title">Erlaube Interaktion mit anderen Apps</string>
+    <string name="api_override_summary">Andere Apps verwenden eventuell die vorgesehene API, um die Farbe der Statusleiste zu ändern</string>
+    <string name="default_status_bar_tint_title">Standardfärbung der Statusleiste</string>
+    <string name="default_status_bar_icon_tint_title">Standardfärbung der Statusleistensymbole</string>
+    <string name="default_status_bar_inverted_icon_tint_title">Voreingestellte umgekehrte Symbolfarbe</string>
+    <string name="default_status_bar_inverted_icon_tint_summary">Wähle die Standardfarbe, wenn ein heller Hintergrund ermittelt wurde</string>
+    <string name="default_navigation_bar_tint_title">Standardfärbung der Navigationsleiste</string>
+    <string name="default_navigation_bar_icon_tint_title">Standardfärbung der Navigationsleistensmbole</string>
+    <string name="default_summary">Wähle die Standardfarbe, wenn keine Farbe ermittelt werden kann</string>
+    <string name="max_hsv_title">Maximale HS[V] für schwarze Symbole</string>
+    <string name="max_hsv_summary">Maximale HS[V] vor dem Auto-Wechsel zu schwarzen Symbolen, wenn Aktionsleiste keinen Titeltext hat</string>
+    <string name="current_hsv_value">Aktueller Wert: %s</string>
+    <string name="no_activities_error">Keine Activities, diese App sollte nicht in der Liste zu sehen sein.</string>
+    <string name="loading_title">Lädt…</string>
+    <string name="donate_summary">Unterstütze die Entwicklung. Zustätzliche Funktionen werden eventuell in Zukunft freigeschaltet</string>
+
+    <string-array name="my_apps" translatable="false">
+        <item>@string/menu_playstore</item>
+        <item>@string/menu_xposed</item>
+    </string-array>
+
+    <string name="toast_activity_names_title">Toast Activity Titel</string>
+    <string name="toast_activity_names_summary">Toasts werden angezeigt, wenn eine Activity gestartet wird, dies kann dir helfen, die Namen für die Activities zu finden</string>
+    <string name="toast_text_package_name">Paketname: %s</string>
+    <string name="toast_text_activity_name">Name der Activity: %s</string>
+    <string name="thank_you">Danke!</string>
+    <string name="thank_you_summary">Danke für deine Spende. Ich weiß das wirklich zu schätzen :)</string>
+    <string name="android_lockscreen_stub_name">Android Sperrbildschirm</string>
+    <string name="gel_stub_warning">Diese App ist ein Stück vom eigentlichen Launcher. Gehe zum tatsächlichen Launcher?</string>
+    <string name="gel_stub_toast">TDiese App ist ein Stück vom eigentlichen Launcher, bearbeite Google-Suche, um Veränderungen daran zu machen\'s GEL Einstellungen</string>
+    <string name="react_actionbar_title">Reagiere auf Veränderungen der Sichtbarkeit der Aktionsleiste</string>
+    <string name="react_actionbar_description">Das Aktivieren dieser Funktion bewirkt, dass die Färbung der Statusleiste sich bei Veränderung der Sichtbarkeit der Aktionsliste verändert</string>
+    <string name="system_cf_mode_title">Systemsymbole Farbfilter-Modus</string>
+    <string name="notification_cf_mode_title">Benachrichtigungssymbole Farbfilter-Modus</string>
+    <string name="cf_mode_explanation">Das Verändern des Farbfilter-Modus' ermöglicht dir mehr Kontrolle darüber, wie Symbolfarben verändert werden, MULTIPLY erhält womöglich die Farben des ürsprünglichen Symbols, während SRC_ATOP garantiert, dass deine ausgewählte Farbe angewendet wird.</string>
+    <string name="default_colors">Standardfärbungen</string>
+    <string name="default_colors_summary">Ändere die verwendeten Standardfärbungen</string>
+    <string name="cf_mode">Farbfilter-Modi</string>
+    <string name="explain_cf_mode_text">Erklärung für folgende Einstellungen</string>
+    <string name="unlocked_secret_settings">Du hast ein paar geheime Einstellungen freigeschaltet, die mehr oder weniger so funktionieren werden, wie vorgesehen</string>
+    <string name="warning">Achtung</string>
+    <string name="animate_tint_title">Animiere Farbänderungen</string>
+    <string name="animate_tint_summary">Ändere die Farben der Status- und Navigationsleiste schrittweise</string>
+    <string name="link_panel_views_title">Verknüpfe die Farben von Status- und Navigationsleiste</string>
+    <string name="link_panel_views_summary">Die Navigationsleiste wird die selben Farben haben wie die Statusleiste</string>
+    <string name="default_navigation_bar_icon_im_tint_title">Färbung der Navigationsleistensymbole (IM)</string>
+    <string name="default_navigation_bar_im_tint_title">Färbung der Navigationsleiste (IM)</string>
+    <string name="default_summary_keyboard">Wähle die Standardfarbe, wenn die Tastatur sichtbar ist</string>
+
+</resources>
