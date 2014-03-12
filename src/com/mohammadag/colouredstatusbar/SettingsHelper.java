@@ -224,6 +224,13 @@ public class SettingsHelper {
 				return "292929";
 		}
 		
+		if ("com.instagram.android".equals(packageName)) {
+			if ("creation.activity.MediaCaptureActivity".equals(activityName))
+				return "ff25292c";
+			else
+				return "ff2d5b81";
+		}
+		
 		/* TODO: Support Android 4.4 API */
 		if (activityName.equals(Common.GEL_ACTIVITY_NAME)) {
 			return "66000000";
