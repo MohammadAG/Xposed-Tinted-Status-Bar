@@ -11,16 +11,13 @@ import android.content.Intent;
 public class StatusBarTintApi {
 	public static final String INTENT_CHANGE_COLOR_NAME = "com.mohammadag.colouredstatusbar.ChangeStatusBarColor";
 	
-	/* I was planning to have two different keys but that got annoying during development,
-	 * this was done to speed up time. The following keys should be removed eventually.
-	 * TODO: What he said ^
-	 */
 	public static final String KEY_STATUS_BAR_TINT = "status_bar_color";
 	public static final String KEY_STATUS_BAR_ICON_TINT = "status_bar_icons_color";
 	public static final String KEY_NAVIGATION_BAR_TINT = "navigation_bar_color";
 	public static final String KEY_NAVIGATION_BAR_ICON_TINT = "navigation_bar_icon_tint";
 
-	/* You can use this meta-data value to override auto detection of colours. 
+	/* 
+	 * You can use this meta-data value to override auto detection of colours. 
 	 * <meta-data android:name="override_tinted_status_bar_defaults" android:value="true" />
 	 * 
 	 * You should implement colour changes by sending an intent from the onResume() method of
