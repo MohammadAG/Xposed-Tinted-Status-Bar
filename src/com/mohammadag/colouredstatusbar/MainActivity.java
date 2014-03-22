@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 			setTitle(R.string.app_name_donate_version);
 		}
 
-		mSettingsHelper = new SettingsHelper(this);
+		mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
 
 		mListView = (ListView) findViewById(R.id.listView);
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

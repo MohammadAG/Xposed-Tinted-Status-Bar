@@ -9,6 +9,8 @@ import android.graphics.PorterDuff;
 import de.robv.android.xposed.XSharedPreferences;
 
 public class SettingsHelper {
+	private static SettingsHelper mInstance;
+
 	private XSharedPreferences mXPreferences = null;
 	private SharedPreferences mPreferences = null;
 	private Context mContext = null;
@@ -32,9 +34,16 @@ public class SettingsHelper {
 		mContext = context;
 	}
 
-	public SettingsHelper(Context context) {
+	private SettingsHelper(Context context) {
 		mPreferences = Utils.getSharedPreferences(context);
 		mContext = context;
+	}
+
+	public static SettingsHelper getInstance(Context context) {
+		if (mInstance == null)
+			mInstance = new SettingsHelper(context);
+
+		return mInstance;
 	}
 
 	public SharedPreferences getSharedPreferences() {

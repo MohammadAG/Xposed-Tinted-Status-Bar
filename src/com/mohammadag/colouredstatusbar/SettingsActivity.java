@@ -28,7 +28,7 @@ public class SettingsActivity extends PreferenceActivity {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		if (mSettingsHelper == null)
-			mSettingsHelper = new SettingsHelper(this);
+			mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
 	}
 
 	@SuppressWarnings({ "deprecation" })

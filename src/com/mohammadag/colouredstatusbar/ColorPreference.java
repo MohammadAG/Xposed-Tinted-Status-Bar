@@ -102,7 +102,7 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 			context = mSettingsActivity;
 
 		if (mSettingsHelper == null)
-			mSettingsHelper = new SettingsHelper(context);
+			mSettingsHelper = SettingsHelper.getInstance(context);
 
 		return mSettingsHelper.getDefaultTint(tintType, false);
 	}

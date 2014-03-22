@@ -36,8 +36,7 @@ public class ActivitesListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// TODO: make this is a single instance, or a singleton
-		mSettingsHelper = new SettingsHelper(getApplicationContext());
+		mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
 
 		if (Utils.hasActionBar()) {
 			getActionBar().setHomeButtonEnabled(true);

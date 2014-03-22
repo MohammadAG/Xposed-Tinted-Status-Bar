@@ -58,7 +58,7 @@ public class ApplicationSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_application_settings);
 
-		mSettingsHelper = new SettingsHelper(this);
+		mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
 
 		Intent i = getIntent();
 		parentIntent = i;
