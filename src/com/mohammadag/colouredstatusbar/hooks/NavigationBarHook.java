@@ -10,16 +10,15 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 public class NavigationBarHook {
 	private static final int NAVIGATION_HINT_BACK_ALT;
-	private static final int STATUS_BAR_DISABLE_RECENT;
+	private static final int STATUS_BAR_DISABLE_RECENT = 0x01000000;
+	private static boolean mWasKeyboardUp = false;
 	private ColourChangerMod mInstance;
 	
 	static {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
 			NAVIGATION_HINT_BACK_ALT = 1 << 0;
-			STATUS_BAR_DISABLE_RECENT = 0x01000000;
 		} else {
 			NAVIGATION_HINT_BACK_ALT = 1 << 3;
-			STATUS_BAR_DISABLE_RECENT = 0x01000000;
 		}
 	}
 
@@ -37,6 +36,10 @@ public class NavigationBarHook {
 				boolean keyboardUp = !((disabledFlags & STATUS_BAR_DISABLE_RECENT) != 0) && 
 						(iconHints & NAVIGATION_HINT_BACK_ALT) != 0;
 
+				if (keyboardUp == mWasKeyboardUp)
+					return;
+
+				mWasKeyboardUp = keyboardUp;
 				mInstance.onKeyboardVisible(keyboardUp);
 			}
 		});
