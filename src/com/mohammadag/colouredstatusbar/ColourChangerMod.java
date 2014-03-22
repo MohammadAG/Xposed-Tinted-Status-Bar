@@ -93,6 +93,11 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	/* Floating Window Intent ID */
 	public static final int FLAG_FLOATING_WINDOW = 0x00002000;
 
+	public void log(String text) {
+		if (mSettingsHelper.isDebugMode())
+			XposedBridge.log("TintedStatusBar: " + text);
+	}
+
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -341,12 +346,14 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mKitKatBatteryView == null)
 			return;
 
+		boolean debug = mSettingsHelper.isDebugMode();
+
 		try {
 			final int[] colors = (int[]) XposedHelpers.getObjectField(mKitKatBatteryView, "mColors");
 			colors[colors.length-1] = iconColor;
 			XposedHelpers.setObjectField(mKitKatBatteryView, "mColors", colors);
 		} catch (NoSuchFieldError e) {
-			e.printStackTrace();
+			if (debug) e.printStackTrace();
 		}
 
 		try {
@@ -354,7 +361,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			framePaint.setColor(iconColor);
 			framePaint.setAlpha(100);
 		} catch (NoSuchFieldError e) {
-			e.printStackTrace();
+			if (debug) e.printStackTrace();
 		}
 
 		try {
@@ -362,7 +369,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			boltPaint.setColor(Utils.getIconColorForColor(iconColor, Color.BLACK, Color.WHITE, 0.7f));
 			boltPaint.setAlpha(100);
 		} catch (NoSuchFieldError e) {
-			e.printStackTrace();
+			if (debug) e.printStackTrace();
 		}
 
 		try {
@@ -372,7 +379,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			try {
 				XposedHelpers.setIntField(mKitKatBatteryView, "mBatteryColor", iconColor);
 			} catch (NoSuchFieldError e1) {}
-			e.printStackTrace();
+			if (debug) e.printStackTrace();
 		}
 
 		mKitKatBatteryView.invalidate();
@@ -663,7 +670,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 			resparam.res.hookLayout("com.android.systemui", "layout", layout, new StatusBarLayoutInflationHook(this));
 		} catch (Throwable t) {
-			XposedBridge.log(t);
+			log(t.getMessage());
 		}
 	}
 

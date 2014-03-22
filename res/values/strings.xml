@@ -76,5 +76,7 @@
     <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
     <string name="default_navigation_bar_im_tint_title">Navigation Bar Tint (IM)</string>
     <string name="default_summary_keyboard">Select the default color when the keyboard is visible</string>
+    <string name="debug_mode_title">Debug mode</string>
+    <string name="debug_mode_summary">Enables logging to logcat and/or Xposed logs</string>
 
 </resources>

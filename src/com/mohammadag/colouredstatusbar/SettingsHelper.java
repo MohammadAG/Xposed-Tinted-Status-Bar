@@ -436,4 +436,8 @@ public class SettingsHelper {
 	public float getHsvMax() {
 		return getFloat(Common.SETTINGS_KEY_HSV_VALUE, 0.7f);
 	}
+
+	public boolean isDebugMode() {
+		return getBoolean(Common.SETTINGS_KEY_DEBUG_MODE, false);
+	}
 }

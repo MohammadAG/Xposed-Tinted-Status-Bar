@@ -5,7 +5,6 @@ import android.widget.ImageView;
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 
@@ -27,9 +26,9 @@ public class BluetoothControllerHook {
 				}
 			});
 		} catch (ClassNotFoundError e) {
-			XposedBridge.log("Not hooking class: " + className);
+			mInstance.log("Not hooking class: " + className);
 		} catch (NoSuchMethodError e) {
-			XposedBridge.log("Not hooking method " + className + "." + methodName);
+			mInstance.log("Not hooking method " + className + "." + methodName);
 		}
 	}
 }

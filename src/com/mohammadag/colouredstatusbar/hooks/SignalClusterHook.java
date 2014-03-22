@@ -2,12 +2,14 @@ package com.mohammadag.colouredstatusbar.hooks;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
+import java.util.Locale;
+
+import android.widget.ImageView;
+
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
 
-import android.widget.ImageView;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 
@@ -21,7 +23,7 @@ public class SignalClusterHook {
 					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
 					mInstance.addSystemIconView(view);
 				} catch (NoSuchFieldError e) {
-					XposedBridge.log("Couldn't find field " + name + "in class " + param.method.getClass().getName());
+					mInstance.log("Couldn't find field " + name + "in class " + param.method.getClass().getName());
 				}
 			}
 		}
@@ -41,15 +43,15 @@ public class SignalClusterHook {
 			try {
 				findAndHookMethod(SignalClusterView, methodName, mSignalClusterHook);
 			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + methodName);
+				mInstance.log("Not hooking method " + className + "." + methodName);
 			}
 		} catch (ClassNotFoundError e) {
 			// Really shouldn't happen, but we can't afford a crash here.
-			XposedBridge.log("Not hooking class: " + className);
+			mInstance.log("Not hooking class: " + className);
 		}
 
 		/* HTC Specific hook */
-		if (!android.os.Build.MANUFACTURER.toLowerCase().contains("htc"))
+		if (!android.os.Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("htc"))
 			return;
 
 		try {

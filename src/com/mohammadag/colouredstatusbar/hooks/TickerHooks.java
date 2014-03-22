@@ -56,10 +56,10 @@ public class TickerHooks {
 					};
 				});
 			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + addMethod);
+					mInstance.log("Not hooking method " + className + "." + addMethod);
 			}
 		} catch (ClassNotFoundError e) {
-			XposedBridge.log("Not hooking class: " + className);
+			mInstance.log("Not hooking class: " + className);
 		}
 	}
 

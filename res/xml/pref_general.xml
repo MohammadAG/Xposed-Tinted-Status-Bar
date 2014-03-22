@@ -102,4 +102,9 @@
             android:title="@string/system_cf_mode_title" />
     </PreferenceCategory>
 
+    <CheckBoxPreference
+        android:key="pref_debug_mode"
+        android:summary="@string/debug_mode_summary"
+        android:title="@string/debug_mode_title" />
+
 </PreferenceScreen>

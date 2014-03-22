@@ -29,7 +29,6 @@ public class SettingsActivity extends PreferenceActivity {
 
 		if (mSettingsHelper == null)
 			mSettingsHelper = new SettingsHelper(this);
-
 	}
 
 	@SuppressWarnings({ "deprecation" })

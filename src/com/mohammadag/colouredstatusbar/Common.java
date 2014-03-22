@@ -50,6 +50,7 @@ public class Common {
 	public static final String SETTINGS_KEY_SYSTEM_ICON_CF_MODE = "pref_system_icon_colorfilter_mode";
 	public static final String SETTINGS_KEY_NOTIFICATION_ICON_CF_MODE = "pref_notification_icon_colorfilter_mode";
 	public static final String SETTINGS_KEY_LINK_PANEL_VIEW_COLORS = "pref_link_panel_view_colors";
+	public static final String SETTINGS_KEY_DEBUG_MODE = "pref_debug_mode";
 
 	public static final String EXTRA_KEY_ACTIVITY_NAME = "activityName";
 	public static final String EXTRA_KEY_PACKAGE_NAME = "packageName";
@@ -61,9 +62,4 @@ public class Common {
 	public static final String URL_MY_MODULES = "http://repo.xposed.info/module-overview?combine=MohammadAG&sort_by=title";
 	public static final String URL_MY_APPS = "market://search?q=pub:Mohammad Abu-Garbeyyeh";
 	public static final String URL_DONATION_PACKAGE = "market://details?id=" + PACKAGE_NAME_DONATE;
-
-	
-	
-
-
 }

@@ -6,7 +6,6 @@ import android.widget.TextView;
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 
@@ -30,7 +29,7 @@ public class BatteryHooks {
 					}
 				});
 			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + addIconMethodName);
+				mInstance.log("Not hooking method " + className + "." + addIconMethodName);
 			}
 
 			try {
@@ -42,12 +41,12 @@ public class BatteryHooks {
 					}
 				});
 			} catch (NoSuchMethodError e) {
-				XposedBridge.log("Not hooking method " + className + "." + addLabelMethodName);
+				mInstance.log("Not hooking method " + className + "." + addLabelMethodName);
 			}
 
 		} catch (ClassNotFoundError e) {
 			// Really shouldn't happen, but we can't afford a crash here.
-			XposedBridge.log("Not hooking class: " + className);
+			mInstance.log("Not hooking class: " + className);
 		}
 	}
 }
