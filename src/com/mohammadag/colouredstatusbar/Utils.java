@@ -4,7 +4,6 @@ import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -20,10 +19,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
-import de.robv.android.xposed.XposedHelpers;
 
 public class Utils {
-	private static Object mUserHandle;
 	private static Boolean mHasGeminiSupport = null;
 	private static final int mPlayMusicOrangeColor = Color.parseColor("#f4842d");
 
@@ -89,31 +86,6 @@ public class Utils {
 			return defaultInverted;
 		} else {
 			return defaultNormal;
-		}
-	}
-
-	/* Helper method, on API 17 this method uses sendBroadcastAsUser to prevent
-	 * system warnings in logcat.
-	 * 
-	 * Changed UserHandle to android.os.UserHandle, thanks to zst123 for the patch! :)
-	 * https://github.com/zst123/Xposed-Tinted-Status-Bar/commit/fb57b46cf057f12acf78ce9918750dae301c508a
-	 */
-	@Deprecated
-	public static void sendOrderedBroadcast(Context context, Intent intent) {
-		/* TODO: Find a way to check if the caller is a system app */
-		final boolean disableBroadcastAsUser = true;
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1 && !disableBroadcastAsUser) {
-			if (mUserHandle == null) {
-				try {
-					mUserHandle = XposedHelpers.getStaticObjectField(android.os.UserHandle.class, "CURRENT");
-				} catch (Throwable t) {
-					context.sendOrderedBroadcast(intent, null);
-					return;
-				}
-			}
-			context.sendOrderedBroadcastAsUser(intent, (android.os.UserHandle) mUserHandle, null, null, null, 0, null, null);
-		} else {
-			context.sendOrderedBroadcast(intent, null);
 		}
 	}
 
