@@ -472,6 +472,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 			if (mStatusBarView != null) {
 				Intent intent = new Intent("gravitybox.intent.action.STATUSBAR_COLOR_CHANGED");
+				intent.putExtra("iconColorEnable", true);
 				intent.putExtra("iconColor", iconTint);
 				mStatusBarView.getContext().sendBroadcast(intent);
 			}
@@ -496,8 +497,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			return;
 		}
 
-		final View view = (View) XposedHelpers.getObjectField(mNavigationBarView, "mCurrentView");
-
 		if (mSettingsHelper.animateStatusBarTintChange()) {
 			if (tintColor != KITKAT_TRANSPARENT_COLOR) {
 				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), mLastSetNavBarTint, tintColor);
@@ -509,15 +508,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				});
 				colorAnimation.start();
 			} else {
+				mNavigationBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
 				mNavigationBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
 						mResources, R.drawable.nav_background));
 			}
 		} else {
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
-				view.setBackground(new BarBackgroundDrawable(view.getContext(),
+				mNavigationBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
+				mNavigationBarView.setBackground(new BarBackgroundDrawable(mNavigationBarView.getContext(),
 						mResources, R.drawable.nav_background));
 			} else {
-				view.setBackgroundColor(tintColor);
+				mNavigationBarView.setBackgroundColor(tintColor);
 			}
 		}
 		
