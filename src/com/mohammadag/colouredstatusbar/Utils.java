@@ -98,7 +98,7 @@ public class Utils {
 	 * Changed UserHandle to android.os.UserHandle, thanks to zst123 for the patch! :)
 	 * https://github.com/zst123/Xposed-Tinted-Status-Bar/commit/fb57b46cf057f12acf78ce9918750dae301c508a
 	 */
-	@SuppressWarnings("unused")
+	@Deprecated
 	public static void sendOrderedBroadcast(Context context, Intent intent) {
 		/* TODO: Find a way to check if the caller is a system app */
 		final boolean disableBroadcastAsUser = true;

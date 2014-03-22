@@ -76,9 +76,11 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 	private int mLastSetColor;
 	private int mLastSetNavBarTint;
+	private long mLastReceivedTime;
 	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor("#66000000");
 
 	/* Wokraround for Samsung UX */
+	@SuppressWarnings("unused")
 	private static boolean mIsStatusBarNowTransparent = false;
 
 	private static XModuleResources mResources;
@@ -95,6 +97,21 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (Common.INTENT_CHANGE_COLOR_NAME.equals(intent.getAction())) {
+				if (intent.hasExtra("time")) {
+					long time = intent.getLongExtra("time", -1);
+					if (time != -1) {
+						if (mLastReceivedTime == -1) {
+							mLastReceivedTime = -1;
+						} else {
+							if (time < mLastReceivedTime) {
+								return;
+							} else {
+								mLastReceivedTime = time;
+							}
+						}
+					}
+				}
+
 				if (intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT)) {
 					mLastTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);
 					setStatusBarTint(mLastTint);
@@ -269,7 +286,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, navigationBarTintColor);
 				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, navigationBarIconTintColor);
 
-				activity.sendOrderedBroadcast(intent, null);
+				intent.putExtra("time", System.currentTimeMillis());
+				activity.sendBroadcast(intent);
 			}
 		});
 
@@ -282,7 +300,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTint);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconColorTint);
 
-		Utils.sendOrderedBroadcast(context, intent);
+		intent.putExtra("time", System.currentTimeMillis());
+
+		context.sendBroadcast(intent);
 	}
 
 	@Override

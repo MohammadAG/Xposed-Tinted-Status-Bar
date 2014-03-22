@@ -50,6 +50,8 @@ public class StatusBarTintApi {
 		if (navBarIconTint != -1)
 			intent.putExtra(KEY_NAVIGATION_BAR_ICON_TINT, navBarIconTint);
 
-		context.sendOrderedBroadcast(intent, null);
+		/* Used internally to keep track of delayed intents */
+		intent.putExtra("time", System.currentTimeMillis());
+		context.sendBroadcast(intent);
 	}
 }
