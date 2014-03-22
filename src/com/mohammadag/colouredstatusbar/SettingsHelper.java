@@ -28,12 +28,6 @@ public class SettingsHelper {
 		prefs.makeWorldReadable();
 	}
 
-	// For activitiy classes.
-	public SettingsHelper(SharedPreferences prefs, Context context) {
-		mPreferences = prefs;
-		mContext = context;
-	}
-
 	private SettingsHelper(Context context) {
 		mPreferences = Utils.getSharedPreferences(context);
 		mContext = context;
