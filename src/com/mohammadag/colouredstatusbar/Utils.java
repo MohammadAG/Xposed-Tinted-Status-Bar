@@ -3,6 +3,7 @@ package com.mohammadag.colouredstatusbar;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import android.annotation.SuppressLint;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -52,6 +53,19 @@ public class Utils {
 		}
 
 		return bitmap;
+	}
+
+	@SuppressLint("NewApi")
+	public static boolean isKeyguardLocked(Context context) {
+		KeyguardManager kgm = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+		boolean keyguardLocked;
+
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			keyguardLocked = kgm.isKeyguardLocked();
+		} else {
+			keyguardLocked = kgm.inKeyguardRestrictedInputMode();
+		}
+		return keyguardLocked;
 	}
 
 	public static int getMainColorFromActionBarDrawable(Drawable drawable) throws IllegalArgumentException {

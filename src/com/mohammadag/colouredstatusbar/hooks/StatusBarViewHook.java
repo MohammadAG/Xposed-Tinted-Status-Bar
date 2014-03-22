@@ -2,7 +2,6 @@ package com.mohammadag.colouredstatusbar.hooks;
 
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import android.annotation.SuppressLint;
-import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.view.View;
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+import com.mohammadag.colouredstatusbar.Utils;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -47,17 +47,8 @@ public class StatusBarViewHook {
 						@Override
 						public void onReceive(Context context, Intent intent) {
 							mInstance.getSettingsHelper().reload();
-							KeyguardManager kgm = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-							boolean keyguardLocked;
-							
-							if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-								keyguardLocked = kgm.isKeyguardLocked();
-							} else {
-								keyguardLocked = kgm.inKeyguardRestrictedInputMode();
-							}
-							
-							if (keyguardLocked) {
 
+							if (Utils.isKeyguardLocked(context)) {
 								String statusBarUserTint = mInstance.getSettingsHelper().getTintColor(
 										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
 
