@@ -31,11 +31,14 @@ public class ActionBarHooks {
 				@Override
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
-					int color = Utils.getMainColorFromActionBarDrawable((Drawable) param.args[0]);
-					int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
-					int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
-					ColourChangerMod.sendColorChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
-							invertedIconTint, mSettingsHelper.getHsvMax()), actionBar.getThemedContext());
+					Drawable drawable = (Drawable) param.args[0];
+					if (drawable != null) {
+						int color = Utils.getMainColorFromActionBarDrawable(drawable);
+						int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
+						int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
+						ColourChangerMod.sendColorChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
+								invertedIconTint, mSettingsHelper.getHsvMax()), actionBar.getThemedContext());
+					}
 				}
 			});
 
@@ -76,6 +79,9 @@ public class ActionBarHooks {
 
 					}
 					Drawable drawable = (Drawable) getObjectField(actionBarContainer, "mBackground");
+					if (drawable == null)
+						return;
+
 					int color = Utils.getMainColorFromActionBarDrawable(drawable);
 					int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
 					int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
