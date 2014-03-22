@@ -443,4 +443,8 @@ public class SettingsHelper {
 	public boolean isDebugMode() {
 		return getBoolean(Common.SETTINGS_KEY_DEBUG_MODE, false);
 	}
+
+	public boolean shouldReactToLightsOut() {
+		return getBoolean(Common.SETTINGS_KEY_REACT_LIGHTS_OUT, true);
+	}
 }

@@ -51,6 +51,7 @@ public class Common {
 	public static final String SETTINGS_KEY_NOTIFICATION_ICON_CF_MODE = "pref_notification_icon_colorfilter_mode";
 	public static final String SETTINGS_KEY_LINK_PANEL_VIEW_COLORS = "pref_link_panel_view_colors";
 	public static final String SETTINGS_KEY_DEBUG_MODE = "pref_debug_mode";
+	public static final String SETTINGS_KEY_REACT_LIGHTS_OUT = "pref_react_lights_out";
 
 	public static final String EXTRA_KEY_ACTIVITY_NAME = "activityName";
 	public static final String EXTRA_KEY_PACKAGE_NAME = "packageName";

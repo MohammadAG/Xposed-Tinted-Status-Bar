@@ -18,6 +18,7 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class StatusBarHook {
 	private ColourChangerMod mInstance;
+	private boolean mWasLightsOut = false;
 
 	public StatusBarHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
@@ -60,7 +61,13 @@ public class StatusBarHook {
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					int vis = (Integer) param.args[0];
 					final boolean lightsOut = (vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0;
-					mInstance.onLightsOutChanged(lightsOut);
+
+					if (lightsOut == mWasLightsOut) {
+						return;
+					} else {
+						mWasLightsOut = lightsOut;
+						mInstance.onLightsOutChanged(lightsOut);
+					}
 				};
 			});
 		} catch (Throwable t) {

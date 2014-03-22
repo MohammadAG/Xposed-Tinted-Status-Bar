@@ -31,9 +31,17 @@
         android:summary="@string/react_actionbar_description"
         android:title="@string/react_actionbar_title" />
     <CheckBoxPreference
+        android:key="pref_react_lights_out"
+        android:summary="@string/react_lightsout_summary"
+        android:title="@string/react_lightsout_title" />
+    <CheckBoxPreference
         android:key="pref_link_panel_view_colors"
         android:summary="@string/link_panel_views_summary"
         android:title="@string/link_panel_views_title" />
+    <CheckBoxPreference
+        android:key="pref_debug_mode"
+        android:summary="@string/debug_mode_summary"
+        android:title="@string/debug_mode_title" />
 
     <PreferenceScreen
         android:summary="@string/default_colors_summary"
@@ -101,10 +109,5 @@
             android:summary="%s"
             android:title="@string/system_cf_mode_title" />
     </PreferenceCategory>
-
-    <CheckBoxPreference
-        android:key="pref_debug_mode"
-        android:summary="@string/debug_mode_summary"
-        android:title="@string/debug_mode_title" />
 
 </PreferenceScreen>

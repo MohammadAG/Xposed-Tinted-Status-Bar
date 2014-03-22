@@ -768,6 +768,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 	
 	public void onLightsOutChanged(boolean lightsOut) {
+		if (!mSettingsHelper.shouldReactToLightsOut())
+			return;
+
 		int transparent = Color.parseColor("#c3121212");
 		if (lightsOut) {
 			setStatusBarTint(transparent);
