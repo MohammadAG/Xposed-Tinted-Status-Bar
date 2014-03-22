@@ -64,8 +64,13 @@ public class StatusBarViewHook {
 								String statusBarUserIconTint = mInstance.getSettingsHelper().getIconColors(
 										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
 
-								int statusBarTint;
-								int statusBarIconTint;
+								String navBarUserTint = mInstance.getSettingsHelper().getNavigationBarTint(
+										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
+
+								String navBarIconUserTint = mInstance.getSettingsHelper().getNavigationBarIconTint(
+										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
+
+								int statusBarTint, statusBarIconTint, navBarTint, navBarIconTint;
 
 								if (statusBarUserTint != null) {
 									try {
@@ -87,8 +92,30 @@ public class StatusBarViewHook {
 									statusBarIconTint = mInstance.getSettingsHelper().getDefaultTint(Tint.ICON);
 								}
 
+								if (navBarUserTint != null) {
+									try {
+										navBarTint = Color.parseColor(navBarUserTint);
+									} catch (Throwable t) {
+										navBarTint = mInstance.getSettingsHelper().getDefaultTint(Tint.NAV_BAR);
+									}
+								} else {
+									navBarTint = mInstance.getSettingsHelper().getDefaultTint(Tint.NAV_BAR);
+								}
+
+								if (navBarIconUserTint != null) {
+									try {
+										navBarIconTint = Color.parseColor(navBarIconUserTint);
+									} catch (Throwable t) {
+										navBarIconTint = mInstance.getSettingsHelper().getDefaultTint(Tint.NAV_BAR_ICON);
+									}
+								} else {
+									navBarIconTint = mInstance.getSettingsHelper().getDefaultTint(Tint.NAV_BAR_ICON);
+								}
+
 								mInstance.setStatusBarTint(statusBarTint);
 								mInstance.setStatusBarIconsTint(statusBarIconTint);
+								mInstance.setNavigationBarTint(navBarTint);
+								mInstance.setNavigationBarIconTint(navBarIconTint);
 							}
 						}
 

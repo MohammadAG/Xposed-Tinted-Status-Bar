@@ -495,7 +495,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
 			return;
 		}
-		
 
 		final View view = (View) XposedHelpers.getObjectField(mNavigationBarView, "mCurrentView");
 
@@ -532,7 +531,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		mLastSetNavBarTint = tintColor;
 	}
 
-	private void setNavigationBarTint(final int tintColor) {
+	public void setNavigationBarTint(final int tintColor) {
 		setNavigationBarTint(tintColor, false);
 	}
 
@@ -621,7 +620,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		}
 	}
 
-	private void setNavigationBarIconTint(final int tintColor) {
+	public void setNavigationBarIconTint(final int tintColor) {
 		setNavigationBarIconTint(tintColor, false);
 	}
 
