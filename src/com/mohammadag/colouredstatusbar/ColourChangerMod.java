@@ -422,14 +422,14 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				});
 				colorAnimation.start();
 			} else {
-				mStatusBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+				Utils.setViewBackground(mStatusBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
 						mResources, R.drawable.status_background));
 			}
 		} else {
 			mStatusBarView.setAlpha(1f);
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
 				mStatusBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
-				mStatusBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+				Utils.setViewBackground(mStatusBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
 						mResources, R.drawable.status_background));
 			} else {
 				mStatusBarView.setBackgroundColor(tintColor);
@@ -516,13 +516,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				colorAnimation.start();
 			} else {
 				mNavigationBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
-				mNavigationBarView.setBackground(new BarBackgroundDrawable(mStatusBarView.getContext(),
+				Utils.setViewBackground(mNavigationBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
 						mResources, R.drawable.nav_background));
 			}
 		} else {
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
 				mNavigationBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
-				mNavigationBarView.setBackground(new BarBackgroundDrawable(mNavigationBarView.getContext(),
+				Utils.setViewBackground(mNavigationBarView, new BarBackgroundDrawable(mNavigationBarView.getContext(),
 						mResources, R.drawable.nav_background));
 			} else {
 				mNavigationBarView.setBackgroundColor(tintColor);

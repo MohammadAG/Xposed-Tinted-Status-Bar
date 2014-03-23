@@ -19,6 +19,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.ImageView;
 
 public class Utils {
@@ -208,7 +209,7 @@ public class Utils {
 
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
-	public static void setImageViewBackground(ImageView view, Drawable drawable) {
+	public static void setViewBackground(View view, Drawable drawable) {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
 			view.setBackground(drawable);
 		} else {

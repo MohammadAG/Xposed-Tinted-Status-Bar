@@ -49,7 +49,7 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 			Toast.makeText(view.getContext(), R.string.invalid_color, Toast.LENGTH_SHORT).show();
 		}
 		ColorDrawable background = new ColorDrawable(color);
-		Utils.setImageViewBackground(mImageView, background);
+		Utils.setViewBackground(mImageView, background);
 	}
 
 	public ColorPreference setSettingsHelper(SettingsHelper settingsHelper) {
@@ -109,6 +109,6 @@ public class ColorPreference extends Preference implements Preference.OnPreferen
 
 	public void refresh() {
 		ColorDrawable drawable = new ColorDrawable(Color.parseColor(Utils.addHashIfNeeded(getCurrentColor())));
-		Utils.setImageViewBackground(mImageView, drawable);
+		Utils.setViewBackground(mImageView, drawable);
 	}
 }
