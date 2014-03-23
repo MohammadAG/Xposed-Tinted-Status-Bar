@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,6 +62,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static View mNavigationBarView;
 	private static View mKitKatBatteryView;
 	private static ArrayList<ImageView> mSystemIconViews = new ArrayList<ImageView>();
+	private static ArrayList<ImageView> mNavBarIconViews = new ArrayList<ImageView>();
 	private static ArrayList<ImageView> mNotificationIconViews = new ArrayList<ImageView>();
 	private static ArrayList<TextView> mTextLabels = new ArrayList<TextView>();
 	private static int mColorForStatusIcons = 0;
@@ -551,74 +553,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			return;
 		}
 		
-		ImageView recentsButton = null;
-		ImageView menuButton = null;
-		ImageView backButton = null;
-		ImageView homeButton = null;
-		
-		Class<?> NavbarEditor = null;
-
-		try {
-			recentsButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getRecentsButton");
-		} catch (NoSuchMethodError e) {
-			try {
-				NavbarEditor = getObjectField(mNavigationBarView, "mEditBar").getClass();
-				recentsButton =
-						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_RECENT"));
-			} catch (NoSuchMethodError e1) {
-				e1.printStackTrace();
-			} catch (NoSuchFieldError e2) {
-				e2.printStackTrace();
-			}
-		}
-		
-		try {
-			menuButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getMenuButton");
-		} catch (NoSuchMethodError e) {
-			try {
-				if (NavbarEditor != null) {
-					menuButton =
-							(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-									"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_ALWAYS_MENU"));
+		if (mNavBarIconViews.isEmpty()) {
+			findNavigationBarIconsViews((ViewGroup) mNavigationBarView, true);
+		} else {
+			for (ImageView view : mNavBarIconViews) {
+				if (view != null) {
+					view.setColorFilter(tintColor);
+				} else {
+					mNavBarIconViews.remove(view);
 				}
-			} catch (NoSuchMethodError e1) {
-				e1.printStackTrace();
 			}
 		}
-		
-		try {
-			backButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getBackButton");
-		} catch (NoSuchMethodError e) {
-			try {
-				backButton =
-						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_BACK"));
-			} catch (NoSuchMethodError e1) {
-				e1.printStackTrace();
-			}
-		}
-		
-		try {
-			homeButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getHomeButton");
-		} catch (NoSuchMethodError e) {
-			try {
-				homeButton =
-						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_HOME"));
-			} catch (NoSuchMethodError e1) {
-				e1.printStackTrace();
-			}
-		}
-
-		if (recentsButton != null)
-			recentsButton.setColorFilter(tintColor);
-		if (menuButton != null)
-			menuButton.setColorFilter(tintColor);
-		if (backButton != null)
-			backButton.setColorFilter(tintColor);
-		if (homeButton != null)
-			homeButton.setColorFilter(tintColor);
 		
 		if (mNavigationBarView != null) {
 			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
@@ -642,6 +587,15 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		if (applyColor) {
 			imageView.setColorFilter(mColorForStatusIcons, mSettingsHelper.getSystemIconCfType());
+		}
+	}
+
+	public void addNavBarIconView(ImageView imageView, boolean applyColor) {
+		if (!mNavBarIconViews.contains(imageView))
+			mNavBarIconViews.add(imageView);
+
+		if (applyColor) {
+			imageView.setColorFilter(mColorForStatusIcons);
 		}
 	}
 
@@ -688,6 +642,21 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 	public void setNavigationBarView(View navBarView) {
 		mNavigationBarView = navBarView;
+		findNavigationBarIconsViews((ViewGroup) navBarView, false);
+	}
+	
+	private void findNavigationBarIconsViews(ViewGroup group, boolean applyColor) {
+		for (int i = 0; i < group.getChildCount(); i++) {
+			View view = group.getChildAt(i);
+			if (view == null) {
+				continue;
+			} else if (view instanceof ImageView) {
+				addNavBarIconView((ImageView) view, applyColor);
+			} else if (view instanceof ViewGroup) {
+				findNavigationBarIconsViews((ViewGroup) view, applyColor);
+			}
+		}
+		return;
 	}
 
 	public void refreshStatusIconColors() {
