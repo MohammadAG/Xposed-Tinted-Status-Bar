@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,14 +26,17 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
@@ -41,6 +46,10 @@ public class MainActivity extends Activity {
 	private ListView mListView = null;
 	private ArrayList<ApplicationInfo> mAppList = new ArrayList<ApplicationInfo>();
 	private ArrayList<ApplicationInfo> mFilteredAppList = new ArrayList<ApplicationInfo>();
+
+	private MenuItem mSearchItem;
+	private AppListAdaptor mAppListAdaptor;
+	private String mNameFilter;
 
 	public int mGoogleSearchPosition;
 
@@ -126,7 +135,49 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+
+		mSearchItem = menu.findItem(R.id.action_search);
+		final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+		searchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+		mSearchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem menuItem) {
+			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+					@Override
+					public boolean onQueryTextSubmit(String query) {
+						mNameFilter = query;
+						mAppListAdaptor.getFilter().filter(mNameFilter);
+						findViewById(R.id.action_search).clearFocus();
+						return false;
+					}
+
+					@Override
+					public boolean onQueryTextChange(String newText) {
+						mNameFilter = newText;
+						mAppListAdaptor.getFilter().filter(mNameFilter);
+						return false;
+					}
+
+				});
+				return true;
+			}
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+				mAppListAdaptor.getFilter().filter("");
+				return true;
+			}
+		});
+
 		return true;
+	}
+
+	@Override
+	public boolean onSearchRequested() {
+		mSearchItem.expandActionView();
+		return super.onSearchRequested();
 	}
 
 	@Override
@@ -177,10 +228,8 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(final AppListAdaptor result) {
-			AppListAdaptor appListAdaptor = new AppListAdaptor(MainActivity.this, mAppList);
-			mListView.setAdapter(appListAdaptor);
-			mListView.setFastScrollEnabled(true);
-			mListView.setFastScrollAlwaysVisible(true);
+			mAppListAdaptor = new AppListAdaptor(MainActivity.this, mAppList);
+			mListView.setAdapter(mAppListAdaptor);
 
 			try {
 				dialog.dismiss();
@@ -195,12 +244,14 @@ public class MainActivity extends Activity {
 
 		private Map<String, Integer> alphaIndexer;
 		private String[] sections;
+		private Filter filter;
 
 		@SuppressLint("DefaultLocale")
 		public AppListAdaptor(Context context, List<ApplicationInfo> items) {
 			super(context, R.layout.app_list_item, new ArrayList<ApplicationInfo>(items));
 
 			mFilteredAppList.addAll(items);
+			filter = new AppListFilter(this);
 			alphaIndexer = new HashMap<String, Integer>();
 			for(int i = mFilteredAppList.size() - 1; i >= 0; i--)
 			{
@@ -309,7 +360,62 @@ public class MainActivity extends Activity {
 		public Object[] getSections() {
 			return sections;
 		}
+
+		@Override
+		public Filter getFilter() {
+			return filter;
+		}
 	}
+
+	private class AppListFilter extends Filter {
+
+		private AppListAdaptor adaptor;
+
+		AppListFilter(AppListAdaptor adaptor) {
+			super();
+			this.adaptor = adaptor;
+		}
+
+		@SuppressLint("WorldReadableFiles")
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			// NOTE: this function is *always* called from a background thread, and
+			// not the UI thread.
+
+			ArrayList<ApplicationInfo> items = new ArrayList<ApplicationInfo>();
+			synchronized (this) {
+				items.addAll(mAppList);
+			}
+
+			FilterResults result = new FilterResults();
+			if (constraint != null && constraint.length() > 0) {
+				Pattern regexp = Pattern.compile(constraint.toString(), Pattern.LITERAL | Pattern.CASE_INSENSITIVE);
+				for (Iterator<ApplicationInfo> i = items.iterator(); i.hasNext(); ) {
+					ApplicationInfo app = i.next();
+					if (!regexp.matcher(app.name == null ? "" : app.name).find()
+							&& !regexp.matcher(app.packageName).find()) {
+						i.remove();
+					}
+				}
+			}
+
+			result.values = items;
+			result.count = items.size();
+
+			return result;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
+			// NOTE: this function is *always* called from the UI thread.
+			mFilteredAppList = (ArrayList<ApplicationInfo>) results.values;
+			adaptor.clear();
+			adaptor.addAll(mFilteredAppList);
+			adaptor.notifyDataSetInvalidated();
+		}
+	}
+
 
 	@SuppressLint("DefaultLocale")
 	private void loadApps(ProgressDialog dialog) {

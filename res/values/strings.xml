@@ -4,6 +4,7 @@
     <string name="app_name">Tinted Status Bar</string>
     <string name="app_name_donate_version">Tinted Status Bar (Donate version)</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
     <string name="menu_save">Save</string>
     <string name="title_activity_applications_settings">Tinted Status Bar Settings</string>
     <string name="menu_launch">Launch</string>
