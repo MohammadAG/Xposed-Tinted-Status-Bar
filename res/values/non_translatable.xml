@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="my_apps" translatable="false">
+        <item>@string/menu_playstore</item>
+        <item>@string/menu_xposed</item>
+    </string-array>
+    <string-array name="colorfilter_entries" translatable="false">
+        <item>MULTIPLY</item>
+        <item>SRC_ATOP</item>
+    </string-array>
+
+</resources>
