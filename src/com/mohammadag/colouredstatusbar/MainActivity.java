@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
 		mSearchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem menuItem) {
-			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+				searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 					@Override
 					public boolean onQueryTextSubmit(String query) {
