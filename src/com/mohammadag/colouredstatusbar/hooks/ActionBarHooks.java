@@ -31,6 +31,9 @@ public class ActionBarHooks {
 				@Override
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
+					if (!mSettingsHelper.isEnabled(actionBar.getThemedContext().getPackageName(), null))
+						return;
+
 					Drawable drawable = (Drawable) param.args[0];
 					if (drawable != null) {
 						int color = Utils.getMainColorFromActionBarDrawable(drawable);
@@ -45,6 +48,9 @@ public class ActionBarHooks {
 			findAndHookMethod(ActionBarImpl, "hide", new XC_MethodHook() {
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
+					if (!mSettingsHelper.isEnabled(actionBar.getThemedContext().getPackageName(), null))
+						return;
+
 					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
 
 					int statusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR);
@@ -65,6 +71,9 @@ public class ActionBarHooks {
 				@Override
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
+					if (!mSettingsHelper.isEnabled(actionBar.getThemedContext().getPackageName(), null))
+						return;
+
 					Object actionBarContainer = getObjectField(actionBar, "mContainerView");
 					int actionBarTextColor = -2;
 					try {
