@@ -10,7 +10,11 @@ public class HtcTransparencyHook {
 		if (!android.os.Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("htc"))
 			return;
 
-		XposedHelpers.findAndHookMethod("com.android.systemui.statusbar.phone.PhoneStatusBar", classLoader,
-				"setStatusBarBackground", int.class, XC_MethodReplacement.DO_NOTHING);
+		try {
+			XposedHelpers.findAndHookMethod("com.android.systemui.statusbar.phone.PhoneStatusBar", classLoader,
+					"setStatusBarBackground", int.class, XC_MethodReplacement.DO_NOTHING);
+		} catch (Throwable t) {
+			de.robv.android.xposed.XposedBridge.log("Failed to do HTC-specific hook: " + t.getMessage());
+		}
 	}
 }
