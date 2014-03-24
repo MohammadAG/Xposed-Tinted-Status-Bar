@@ -62,7 +62,7 @@
     <string name="react_actionbar_description">Das Aktivieren dieser Funktion bewirkt, dass die Färbung der Statusleiste sich bei Veränderung der Sichtbarkeit der Aktionsliste verändert</string>
     <string name="system_cf_mode_title">Systemsymbole Farbfilter-Modus</string>
     <string name="notification_cf_mode_title">Benachrichtigungssymbole Farbfilter-Modus</string>
-    <string name="cf_mode_explanation">Das Verändern des Farbfilter-Modus' ermöglicht dir mehr Kontrolle darüber, wie Symbolfarben verändert werden, MULTIPLY erhält womöglich die Farben des ürsprünglichen Symbols, während SRC_ATOP garantiert, dass deine ausgewählte Farbe angewendet wird.</string>
+    <string name="cf_mode_explanation">Das Verändern des Farbfilter-Modus\' ermöglicht dir mehr Kontrolle darüber, wie Symbolfarben verändert werden, MULTIPLY erhält womöglich die Farben des ursprünglichen Symbols, während SRC_ATOP garantiert, dass deine ausgewählte Farbe angewendet wird.</string>
     <string name="default_colors">Standardfärbungen</string>
     <string name="default_colors_summary">Ändere die verwendeten Standardfärbungen</string>
     <string name="cf_mode">Farbfilter-Modi</string>
@@ -72,7 +72,7 @@
     <string name="animate_tint_title">Animiere Farbänderungen</string>
     <string name="animate_tint_summary">Ändere die Farben der Status- und Navigationsleiste schrittweise</string>
     <string name="link_panel_views_title">Verknüpfe die Farben von Status- und Navigationsleiste</string>
-    <string name="link_panel_views_summary">Die Navigationsleiste wird die selben Farben haben wie die Statusleiste</string>
+    <string name="link_panel_views_summary">Die Navigationsleiste wird dieselben Farben haben wie die Statusleiste</string>
     <string name="default_navigation_bar_icon_im_tint_title">Färbung der Navigationsleistensymbole (IM)</string>
     <string name="default_navigation_bar_im_tint_title">Färbung der Navigationsleiste (IM)</string>
     <string name="default_summary_keyboard">Wähle die Standardfarbe, wenn die Tastatur sichtbar ist</string>
