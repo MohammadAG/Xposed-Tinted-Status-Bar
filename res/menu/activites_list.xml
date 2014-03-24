@@ -5,5 +5,11 @@
         android:actionLayout="@layout/color_switch"
         android:showAsAction="always"
         android:title=""/>
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:actionViewClass="android.widget.SearchView"/>
 
 </menu>
