@@ -71,5 +71,8 @@
     <string name="default_navigation_bar_icon_im_tint_title">ナビバーアイコンの色(IM)</string>
     <string name="default_navigation_bar_im_tint_title">ナビバーの色(IM)</string>
     <string name="default_summary_keyboard">キーボードを表示しているときのデフォルトの色を選んでください。</string>
-
+    <string name="debug_mode_title">デバッグモード</string>
+    <string name="debug_mode_summary">logcatやXposedのログへの記録をするようにします。</string>
+    <string name="react_lightsout_title">Lights outに対応する</string>
+    <string name="react_lightsout_summary">Lights outモード(ステータスバーを暗くするモード)の時にアイテムの色を変えるようにします。</string>
 </resources>
