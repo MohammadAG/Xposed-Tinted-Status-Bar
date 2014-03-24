@@ -43,12 +43,6 @@
     <string name="no_activities_error">Keine Activities, diese App sollte nicht in der Liste zu sehen sein.</string>
     <string name="loading_title">Lädt…</string>
     <string name="donate_summary">Unterstütze die Entwicklung. Zustätzliche Funktionen werden eventuell in Zukunft freigeschaltet</string>
-
-    <string-array name="my_apps" translatable="false">
-        <item>@string/menu_playstore</item>
-        <item>@string/menu_xposed</item>
-    </string-array>
-
     <string name="toast_activity_names_title">Toast Activity Titel</string>
     <string name="toast_activity_names_summary">Toasts werden angezeigt, wenn eine Activity gestartet wird, dies kann dir helfen, die Namen für die Activities zu finden</string>
     <string name="toast_text_package_name">Paketname: %s</string>
