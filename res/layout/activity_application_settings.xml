@@ -15,7 +15,14 @@
         android:id="@+id/currentActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:gravity="center"
+        android:text="@string/all_activities_title" />
+
+    <CheckBox
+        android:id="@+id/link_panels_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/link_panel_views_title" />
 
     <LinearLayout
         android:layout_width="match_parent"

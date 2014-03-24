@@ -56,6 +56,20 @@ public class SettingsHelper {
 		}
 	}
 
+	public boolean shouldLinkPanels(String packageName, String activityName) {
+		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS);
+		if (activityName == null) {
+			return getBoolean(keyName, shouldLinkStatusBarAndNavBar());
+		} else {
+			return getBoolean(keyName, shouldLinkPanels(packageName, null));
+		}
+	}
+
+	public void setShouldLinkPanels(String packageName, String activityName, boolean link) {
+		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
+				Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS), link).commit();
+	}
+
 	public String getTintColor(String packageName, String activityName, boolean withHash) {
 		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_STATUS_BAR_TINT);
 		String defaultValue = getDefaultTintColor(packageName, activityName);
@@ -445,7 +459,7 @@ public class SettingsHelper {
 	}
 
 	public boolean shouldReactToLightsOut() {
-		return getBoolean(Common.SETTINGS_KEY_REACT_LIGHTS_OUT, true);
+		return getBoolean(Common.SETTINGS_KEY_REACT_LIGHTS_OUT, false);
 	}
 
 	public boolean shouldRespectKitKatApi() {

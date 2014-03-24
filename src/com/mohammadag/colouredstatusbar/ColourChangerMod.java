@@ -104,6 +104,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (Common.INTENT_CHANGE_COLOR_NAME.equals(intent.getAction())) {
+				boolean link = intent.getBooleanExtra("link_panels", false);
+
 				if (intent.hasExtra("time")) {
 					long time = intent.getLongExtra("time", -1);
 					if (time != -1) {
@@ -129,18 +131,20 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					setStatusBarIconsTint(mLastIconTint);
 				}
 
-				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT)) {
-					if (!mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
-						mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
-						setNavigationBarTint(mNavigationBarTint);
-					}
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT) && !link) {
+					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
+					setNavigationBarTint(mNavigationBarTint);
+				} else if (link) {
+					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);setNavigationBarTint(mNavigationBarTint);
+					setNavigationBarTint(mNavigationBarTint);
 				}
 
-				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT)) {
-					if (!mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
-						mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
-						setNavigationBarIconTint(mNavigationBarIconTint);
-					}
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link) {
+					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
+					setNavigationBarIconTint(mNavigationBarIconTint);
+				} else {
+					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, -1);
+					setNavigationBarIconTint(mNavigationBarIconTint);
 				}
 			} else if (Common.INTENT_SETTINGS_UPDATED.equals(intent.getAction())) {
 				Log.d("Xposed", "TintedStatusBar settings updated, reloading...");
@@ -314,6 +318,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, overridingNavBar ? Color.WHITE : navigationBarIconTintColor);
 
 				intent.putExtra("time", System.currentTimeMillis());
+				intent.putExtra("link_panels", mSettingsHelper.shouldLinkPanels(packageName, null));
 				activity.sendBroadcast(intent);
 			}
 		});
@@ -328,6 +333,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconColorTint);
 
 		intent.putExtra("time", System.currentTimeMillis());
+		intent.putExtra("link_panels", mSettingsHelper.shouldLinkPanels(context.getPackageName(), null));
 
 		context.sendBroadcast(intent);
 	}
@@ -433,6 +439,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mLastSetColor == tintColor)
 			return;
 
+		log("Setting statusbar color to " + tintColor);
+
 		if (mSettingsHelper.animateStatusBarTintChange()) {			
 			if (tintColor != KITKAT_TRANSPARENT_COLOR) {
 				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), mLastSetColor, tintColor);
@@ -523,8 +531,11 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			return;
 
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
+			log("Ignoring manual navigation bar color change cause we're linked");
 			return;
 		}
+
+		log("Setting navigation bar color to " + tintColor);
 
 		if (mSettingsHelper.animateStatusBarTintChange()) {
 			if (tintColor != KITKAT_TRANSPARENT_COLOR) {
@@ -780,6 +791,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	public void onKeyboardVisible(boolean keyboardUp) {
+		log("Keyboard visibility changed, isUp? " + keyboardUp);
+
 		if (keyboardUp) {
 			setNavigationBarTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_IM), true);
 			setNavigationBarIconTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_ICON_IM), true);
@@ -792,6 +805,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	public void onLightsOutChanged(boolean lightsOut) {
 		if (!mSettingsHelper.shouldReactToLightsOut())
 			return;
+
+		log("Lights out changed, isOn? " + lightsOut);
 
 		int transparent = Color.parseColor("#c3121212");
 		if (lightsOut) {

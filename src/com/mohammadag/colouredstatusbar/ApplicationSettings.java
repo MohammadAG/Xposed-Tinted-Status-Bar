@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,8 @@ public class ApplicationSettings extends Activity {
 	private SettingsHelper mSettingsHelper = null;
 
 	private Button mResetToAutoDetectButton;
+	private CheckBox mLinkPanelsCheckbox;
+
 	private String mNavigationBarTint;
 	private String mNavigationBarIconTint;
 
@@ -151,6 +155,18 @@ public class ApplicationSettings extends Activity {
 				resetToAutoDetect();
 			}
 		});
+
+		mLinkPanelsCheckbox = (CheckBox) findViewById(R.id.link_panels_checkbox);
+		mLinkPanelsCheckbox.setChecked(mSettingsHelper.shouldLinkPanels(mPackageName, mActivityName));
+		mLinkPanelsCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSettingsHelper.setShouldLinkPanels(mPackageName, mActivityName, isChecked);
+			}
+		});
+
+		if (mActivityName != null)
+			mLinkPanelsCheckbox.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -286,7 +302,8 @@ public class ApplicationSettings extends Activity {
 
 		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_STATUS_BAR_TINT));
 		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT));
-		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT));
+		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_NAVIGATION_BAR_TINT));
+		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT));
 		editor.commit();
 
 		mStatusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);
