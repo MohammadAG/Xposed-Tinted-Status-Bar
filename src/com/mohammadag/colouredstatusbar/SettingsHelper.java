@@ -447,4 +447,8 @@ public class SettingsHelper {
 	public boolean shouldReactToLightsOut() {
 		return getBoolean(Common.SETTINGS_KEY_REACT_LIGHTS_OUT, true);
 	}
+
+	public boolean shouldRespectKitKatApi() {
+		return getBoolean(Common.SETTINGS_KEY_RESPECT_KITKAT_API, true);
+	}
 }

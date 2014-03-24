@@ -39,6 +39,11 @@
         android:summary="@string/link_panel_views_summary"
         android:title="@string/link_panel_views_title" />
     <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_respect_kitkat_api"
+        android:summary="@string/respect_kitkat_api_summary"
+        android:title="@string/respect_kitkat_api_title" />
+    <CheckBoxPreference
         android:key="pref_debug_mode"
         android:summary="@string/debug_mode_summary"
         android:title="@string/debug_mode_title" />

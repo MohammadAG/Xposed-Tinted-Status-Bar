@@ -80,5 +80,7 @@
     <string name="debug_mode_summary">Enables logging to logcat and/or Xposed logs</string>
     <string name="react_lightsout_title">React to lights out</string>
     <string name="react_lightsout_summary">Changes color of elements according to lights out mode</string>
+    <string name="respect_kitkat_api_title">Respect KitKat APIs</string>
+    <string name="respect_kitkat_api_summary">Settings for apps that request translucency will be ignored</string>
 
 </resources>

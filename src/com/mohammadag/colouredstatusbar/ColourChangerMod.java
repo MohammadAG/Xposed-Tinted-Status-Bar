@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -77,7 +78,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private int mLastSetColor;
 	private int mLastSetNavBarTint;
 	private long mLastReceivedTime;
-	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor("#66000000");
+	private static final String KK_TRANSPARENT_COLOR_STRING = "#66000000";
+	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor(KK_TRANSPARENT_COLOR_STRING);
 
 	/* Wokraround for Samsung UX */
 	@SuppressWarnings("unused")
@@ -195,6 +197,26 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				String navigationBarTint = mSettingsHelper.getNavigationBarTint(packageName, activityName, false);
 				String navBarIconTint = mSettingsHelper.getNavigationBarIconTint(packageName, activityName, false);
 
+				boolean overridingStatusBar = false;
+				boolean overridingNavBar = false;
+				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT
+						&& mSettingsHelper.shouldRespectKitKatApi()) {
+					int flags = activity.getWindow().getAttributes().flags;
+					if ((flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+							== WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) {
+						log("Activity has status bar transclucency, overriding color to 66000000");
+						statusBarTint = KK_TRANSPARENT_COLOR_STRING;
+						overridingStatusBar = true;
+					}
+
+					if ((flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+							== WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) {
+						log("Activity has nav bar transclucency, overriding color to 66000000");
+						navigationBarTint = KK_TRANSPARENT_COLOR_STRING;
+						overridingNavBar = true;
+					}
+				}
+
 				int navigationBarTintColor = 0;
 				int navigationBarIconTintColor = 0;
 
@@ -210,7 +232,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				int actionBarTextColor = -2;
 				boolean colorHandled = false;				
 
-				if (Utils.hasActionBar()) {
+				if (Utils.hasActionBar() && !overridingStatusBar) {
 					ActionBar actionBar = activity.getActionBar();
 					if (actionBar != null) {
 						// If it's not showing, we shouldn't detect it.
@@ -277,19 +299,19 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				if (colorHandled == true) {
 					if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT))
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, color);
+						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, overridingStatusBar ? KITKAT_TRANSPARENT_COLOR : color);
 					if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT))
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconTintColor);
+						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, overridingStatusBar ? Color.WHITE : iconTintColor);
 				}
 
 				/* We failed to get a colour, fall back to the defaults */
 				if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT))
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, mSettingsHelper.getDefaultTint(Tint.STATUS_BAR));
+					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, overridingStatusBar ? KITKAT_TRANSPARENT_COLOR : mSettingsHelper.getDefaultTint(Tint.STATUS_BAR));
 				if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT))
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, defaultNormal);
+					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, overridingStatusBar ? Color.WHITE : defaultNormal);
 
-				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, navigationBarTintColor);
-				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, navigationBarIconTintColor);
+				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, overridingNavBar ? KITKAT_TRANSPARENT_COLOR : navigationBarTintColor);
+				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, overridingNavBar ? Color.WHITE : navigationBarIconTintColor);
 
 				intent.putExtra("time", System.currentTimeMillis());
 				activity.sendBroadcast(intent);
