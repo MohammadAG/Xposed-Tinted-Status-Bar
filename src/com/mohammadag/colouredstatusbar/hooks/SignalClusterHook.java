@@ -19,6 +19,15 @@ public class SignalClusterHook {
 		"mEthernet", "mEthernetActivity", "mAirplane"
 	};
 
+	private static final String[] MOTO_G_ICON_NAMES = {
+		"mMobileActivityView", "mMobileActivityView2",
+		"mMobileRoamingView", "mMobileRoamingView2",
+		"mMobileSimView", "mMobileSimView2",
+		"mMobileStrengthView", "mMobileStrengthView2",
+		"mMobileTypeView", "mMobileTypeView2",
+		"mWifiActivityView", "mWifiStrengthView"
+	};
+
 	private ColourChangerMod mInstance;
 	private XC_MethodHook mSignalClusterHook = new XC_MethodHook() {
 		@Override
@@ -30,6 +39,13 @@ public class SignalClusterHook {
 				} catch (NoSuchFieldError e) {
 					mInstance.log("Couldn't find field " + name + "in class " + param.method.getClass().getName());
 				}
+			}
+
+			for (String name : MOTO_G_ICON_NAMES) {
+				try {
+					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
+					mInstance.addSystemIconView(view);
+				} catch (NoSuchFieldError e) { }
 			}
 		}
 	};
@@ -53,6 +69,14 @@ public class SignalClusterHook {
 		} catch (ClassNotFoundError e) {
 			// Really shouldn't happen, but we can't afford a crash here.
 			mInstance.log("Not hooking class: " + className);
+		}
+
+		try {
+			Class<?> MSimSignalClusterView = XposedHelpers.findClass("com.android.systemui.statusbar.MSimSignalClusterView",
+					classLoader);
+			findAndHookMethod(MSimSignalClusterView, methodName, mSignalClusterHook);
+		} catch (Throwable t) {
+			// Not a Moto G
 		}
 
 		/* HTC Specific hook */
