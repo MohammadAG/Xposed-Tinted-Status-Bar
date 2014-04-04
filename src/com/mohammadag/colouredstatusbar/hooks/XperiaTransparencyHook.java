@@ -50,16 +50,17 @@ public class XperiaTransparencyHook extends XC_MethodHook {
 		int outViewId = (Integer) param.args[1];
 		int inViewId = (Integer) param.args[2];
 
-		View outView = (View)layout.findViewById(outViewId);
-		View inView = (View)layout.findViewById(inViewId);
+		View outView = (View) layout.findViewById(outViewId);
+		View inView = (View) layout.findViewById(inViewId);
 
-		if(outView != null)
+		if (outView != null)
 			outView.setAlpha(0f);
-		if(inView != null)
+		if (inView != null)
 			inView.setAlpha(0f);
 
 		boolean isOpaque = (Boolean) XposedHelpers.callMethod(param.thisObject, "isOpaque", inViewId);
 
-		if (isOpaque) param.setResult(null);
+		if (isOpaque)
+			param.setResult(null);
 	}
 }
