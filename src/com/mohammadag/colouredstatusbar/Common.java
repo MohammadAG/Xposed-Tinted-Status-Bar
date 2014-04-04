@@ -12,12 +12,6 @@ public class Common {
 	public static final String INTENT_CHANGE_COLOR_NAME = "com.mohammadag.colouredstatusbar.ChangeStatusBarColor";
 	public static final String INTENT_SETTINGS_UPDATED = "com.mohammadag.colouredstatusbar.SETTINGS_UPDATED";
 
-	public static final String[] SIGNAL_CLUSTER_ICON_NAMES = {
-		"mMobile", "mMobileActivity", "mMobileType",
-		"mMobileRoaming", "mWifi", "mWifiActivity",
-		"mEthernet", "mEthernetActivity", "mAirplane"	
-	};
-
 	public static final String INTENT_SAMSUNG_SVIEW_COVER = "com.samsung.cover.OPEN";
 	public static final String KEY_SVIEW_COVER_OPENED = "coverOpen";
 

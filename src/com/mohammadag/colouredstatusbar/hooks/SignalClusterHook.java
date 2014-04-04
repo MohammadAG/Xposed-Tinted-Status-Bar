@@ -7,18 +7,23 @@ import java.util.Locale;
 import android.widget.ImageView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.Common;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 
 public class SignalClusterHook {
+	private static final String[] SIGNAL_CLUSTER_ICON_NAMES = {
+		"mMobile", "mMobileActivity", "mMobileType",
+		"mMobileRoaming", "mWifi", "mWifiActivity",
+		"mEthernet", "mEthernetActivity", "mAirplane"
+	};
+
 	private ColourChangerMod mInstance;
 	private XC_MethodHook mSignalClusterHook = new XC_MethodHook() {
 		@Override
 		protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-			for (String name : Common.SIGNAL_CLUSTER_ICON_NAMES) {
+			for (String name : SIGNAL_CLUSTER_ICON_NAMES) {
 				try {
 					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
 					mInstance.addSystemIconView(view);
