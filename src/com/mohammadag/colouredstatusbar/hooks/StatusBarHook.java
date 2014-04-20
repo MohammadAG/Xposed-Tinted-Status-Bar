@@ -18,7 +18,8 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class StatusBarHook {
 	private ColourChangerMod mInstance;
-	private boolean mWasLightsOut = false;
+	private static boolean mWasLightsOut = false;
+	private static boolean mWasImmersiveMode = false;
 
 	public StatusBarHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
@@ -67,6 +68,18 @@ public class StatusBarHook {
 					} else {
 						mWasLightsOut = lightsOut;
 						mInstance.onLightsOutChanged(lightsOut);
+					}
+
+					if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT)
+						return;
+
+					final boolean immersiveMode = (vis & View.SYSTEM_UI_FLAG_IMMERSIVE) != 0
+							|| (vis & View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) != 0;
+
+					if (immersiveMode == mWasImmersiveMode) {
+						return;
+					} else {
+						mWasImmersiveMode = immersiveMode;
 					}
 				};
 			});
