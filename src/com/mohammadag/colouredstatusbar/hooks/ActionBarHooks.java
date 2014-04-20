@@ -2,9 +2,12 @@ package com.mohammadag.colouredstatusbar.hooks;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import com.mohammadag.colouredstatusbar.StatusBarTintApi;
 import com.mohammadag.colouredstatusbar.Utils;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 
 public class ActionBarHooks {
@@ -105,6 +109,36 @@ public class ActionBarHooks {
 
 					if (mSettingsHelper.shouldReactToActionBarVisibility())
 						ColourChangerMod.sendColorChangeIntent(color, iconTint, actionBar.getThemedContext());
+				}
+			});
+
+			Class<?> ActionModeImpl = findClass("com.android.internal.app.ActionBarImpl$ActionModeImpl", null);
+			findAndHookMethod(ActionModeImpl, "finish", new XC_MethodHook() {
+				@Override
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+					Context context = (Context) getObjectField(XposedHelpers.getSurroundingThis(param.thisObject), "mContext");
+					ColourChangerMod.sendResetActionBarColorsIntent(context);
+				}
+			});
+
+			findAndHookMethod(ActionModeImpl, "dispatchOnCreate", new XC_MethodHook() {
+				@Override
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+					Context context = (Context) getObjectField(XposedHelpers.getSurroundingThis(param.thisObject), "mContext");
+					int contextDisplayMode = getIntField(XposedHelpers.getSurroundingThis(param.thisObject), "mContextDisplayMode");
+					int[] attributes = new int [] {android.R.attr.actionModeBackground, android.R.attr.actionModeSplitBackground};
+					TypedArray styledAttributes = context.obtainStyledAttributes(attributes);
+					Drawable drawable;
+					if (contextDisplayMode == 0)
+						drawable = styledAttributes.getDrawable(0);
+					else
+						drawable = styledAttributes.getDrawable(1);
+					styledAttributes.recycle();
+					int color = Utils.getMainColorFromActionBarDrawable(drawable);
+					int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
+					int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
+					ColourChangerMod.sendColorSaveAndChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
+							invertedIconTint, mSettingsHelper.getHsvMax()), context);
 				}
 			});
 		} catch (ClassNotFoundError e) {
