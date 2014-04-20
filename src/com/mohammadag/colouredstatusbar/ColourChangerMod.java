@@ -728,13 +728,15 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				layout = Utils.hasGeminiSupport() ? "gemini_super_status_bar" : "super_status_bar";
 			}
 
+			StatusBarLayoutInflationHook hook = new StatusBarLayoutInflationHook(this);
+
 			try {
 				int resourceId = resparam.res.getIdentifier("msim_super_status_bar", "layout", "com.android.systemui");
 				if (resourceId != 0)
-					layout = "msim_super_status_bar";
+					resparam.res.hookLayout("com.android.systemui", "layout", "msim_super_status_bar", hook);
 			} catch (Throwable t) { }
 
-			resparam.res.hookLayout("com.android.systemui", "layout", layout, new StatusBarLayoutInflationHook(this));
+			resparam.res.hookLayout("com.android.systemui", "layout", layout, hook);
 		} catch (Throwable t) {
 			log(t.getMessage());
 		}
