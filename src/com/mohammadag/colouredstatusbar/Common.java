@@ -10,6 +10,8 @@ public class Common {
 	public static final String PACKAGE_NAME_LOCKSCREEN_STUB = "com.mohammadag.tintedstatusbarlockscreenstub";
 
 	public static final String INTENT_CHANGE_COLOR_NAME = "com.mohammadag.colouredstatusbar.ChangeStatusBarColor";
+	public static final String INTENT_SAVE_ACTIONBAR_COLOR_NAME = "com.mohammadag.colouredstatusbar.SaveActionBarColor";
+	public static final String INTENT_RESET_ACTIONBAR_COLOR_NAME = "com.mohammadag.colouredstatusbar.ResetActionBarColor";
 	public static final String INTENT_SETTINGS_UPDATED = "com.mohammadag.colouredstatusbar.SETTINGS_UPDATED";
 
 	public static final String INTENT_SAMSUNG_SVIEW_COVER = "com.samsung.cover.OPEN";
