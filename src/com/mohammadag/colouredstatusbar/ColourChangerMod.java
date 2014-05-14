@@ -76,6 +76,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static LinearLayout mStatusIcons = null;
 
 	private int mLastSetColor;
+	// This holds the action bar's background color when we explicitly call sendActionBarColorSaveIntent,
+	// so that we can later get it back. Used when changing the status bar's color for ActionModes,
+	// since we can't access the ActionBar directly from within ActionBarContextView.
+	private int mActionBarColor;
 	private int mLastSetNavBarTint;
 	private long mLastReceivedTime;
 	private static final String KK_TRANSPARENT_COLOR_STRING = "#66000000";
@@ -121,6 +125,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					}
 				}
 
+				if( intent.hasExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME))
+					mActionBarColor = mLastTint;
+
 				if (intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT)) {
 					mLastTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);
 					setStatusBarTint(mLastTint);
@@ -142,10 +149,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint);
-				} else {
+				} else if (link) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint);
 				}
+			} else if (Common.INTENT_RESET_ACTIONBAR_COLOR_NAME.equals(intent.getAction())) {
+				mLastTint = mActionBarColor;
+				setStatusBarTint(mActionBarColor);
 			} else if (Common.INTENT_SETTINGS_UPDATED.equals(intent.getAction())) {
 				Log.d("Xposed", "TintedStatusBar settings updated, reloading...");
 				mSettingsHelper.reload();
@@ -338,6 +348,23 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		context.sendBroadcast(intent);
 	}
 
+	public static void sendColorSaveAndChangeIntent(int statusBarTint, int iconColorTint, Context context) {
+		Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTint);
+		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconColorTint);
+		intent.putExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME, 0);
+
+		intent.putExtra("time", System.currentTimeMillis());
+		intent.putExtra("link_panels", mSettingsHelper.shouldLinkPanels(context.getPackageName(), null));
+
+		context.sendBroadcast(intent);
+	}
+
+	public static void sendResetActionBarColorsIntent(Context context) {
+		Intent intent = new Intent(Common.INTENT_RESET_ACTIONBAR_COLOR_NAME);
+		context.sendBroadcast(intent);
+	}
+
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
 		if (lpparam.packageName.equals("android")) {
@@ -465,7 +492,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				mStatusBarView.setBackgroundColor(tintColor);
 			}
 		}
-		
+
 		mLastSetColor = tintColor;
 
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {

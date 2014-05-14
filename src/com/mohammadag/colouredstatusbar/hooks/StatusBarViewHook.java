@@ -31,6 +31,7 @@ public class StatusBarViewHook {
 					Context context = (Context) param.args[0];
 					IntentFilter iF = new IntentFilter();
 					iF.addAction(Common.INTENT_CHANGE_COLOR_NAME);
+					iF.addAction(Common.INTENT_RESET_ACTIONBAR_COLOR_NAME);
 					iF.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF);
 					
