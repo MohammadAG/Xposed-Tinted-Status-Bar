@@ -78,10 +78,10 @@ public class MainActivity extends Activity {
 				final String pkgName = ((TextView) view.findViewById(R.id.app_package)).getText().toString();
 				final String friendlyName = ((TextView) view.findViewById(R.id.app_name)).getText().toString();
 				Intent i;
-				if (pkgName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB)) {
+				if (pkgName.equals(PackageNames.LOCKSCREEN_STUB)) {
 					i = new Intent(getApplicationContext(), ApplicationSettings.class);
 					i.putExtra(Common.EXTRA_KEY_ACTIVITY_NAME, "NONE");
-				} else if (pkgName.equals(Common.PACKAGE_NAME_GEL_STUB)) {
+				} else if (pkgName.equals(PackageNames.GEL_STUB)) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 					builder.setTitle(R.string.warning);
 					builder.setMessage(R.string.gel_stub_warning);
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 										@Override
 										public void run() {
 											Intent i = new Intent(getApplicationContext(), ActivitesListActivity.class);
-											i.putExtra(Common.EXTRA_KEY_PACKAGE_NAME, Common.PACKAGE_NAME_GOOGLE_SEARCH);
+											i.putExtra(Common.EXTRA_KEY_PACKAGE_NAME, PackageNames.GOOGLE_SEARCH);
 											i.putExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME, "Google Search");
 
 											startActivityForResult(i, 0);
@@ -271,7 +271,7 @@ public class MainActivity extends Activity {
 
 			for (int i = 0; i < mFilteredAppList.size(); i++) {
 				ApplicationInfo info = mFilteredAppList.get(i);
-				if (info.packageName.equals(Common.PACKAGE_NAME_GOOGLE_SEARCH)) {
+				if (info.packageName.equals(PackageNames.GOOGLE_SEARCH)) {
 					mGoogleSearchPosition = i;
 					break;
 				}
@@ -446,7 +446,7 @@ public class MainActivity extends Activity {
 
 		ApplicationInfo lockscreenStub = new ApplicationInfo();
 		lockscreenStub.name = getString(R.string.android_lockscreen_stub_name);
-		lockscreenStub.packageName = Common.PACKAGE_NAME_LOCKSCREEN_STUB;
+		lockscreenStub.packageName = PackageNames.LOCKSCREEN_STUB;
 		mAppList.add(lockscreenStub);
 
 		Collections.sort(mAppList, new Comparator<ApplicationInfo>() {
@@ -476,7 +476,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected Drawable doInBackground(Object... params) {
 			ApplicationInfo info = (ApplicationInfo) params[0];
-			if (info.packageName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB))
+			if (info.packageName.equals(PackageNames.LOCKSCREEN_STUB))
 				return getResources().getDrawable(R.drawable.ic_lock);
 			return getPackageManager().getApplicationIcon(info);
 		}

@@ -80,7 +80,7 @@ public class ApplicationSettings extends Activity {
 
 		try {
 			String packageName = i.getStringExtra(Common.EXTRA_KEY_PACKAGE_NAME);
-			if (packageName.equals(Common.PACKAGE_NAME_LOCKSCREEN_STUB)) {
+			if (packageName.equals(PackageNames.LOCKSCREEN_STUB)) {
 				mPackageName = packageName;
 				if (Utils.hasActionBar())
 					getActionBar().setIcon(getResources().getDrawable(R.drawable.ic_lock));
@@ -185,7 +185,7 @@ public class ApplicationSettings extends Activity {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					mDirty = true;
 					Editor editor = mSettingsHelper.getSharedPreferences().edit();
-					String keyName = SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_IS_ACTIVE);
+					String keyName = SettingsHelper.getKeyName(mPackageName, mActivityName, SettingsKeys.IS_ACTIVE);
 
 					editor.putBoolean(keyName, isChecked);
 					editor.commit();
@@ -253,7 +253,7 @@ public class ApplicationSettings extends Activity {
 		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("title", getString(R.string.status_bar_tint_text));
-		bundle.putString("key", Common.SETTINGS_KEY_STATUS_BAR_TINT);
+		bundle.putString("key", SettingsKeys.STATUS_BAR_TINT);
 		String mOldColor = mSettingsHelper.getTintColor(mPackageName, mActivityName, false);
 		if (mOldColor == null) mOldColor = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);
 		bundle.putString("color", mOldColor);
@@ -265,7 +265,7 @@ public class ApplicationSettings extends Activity {
 		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("title", getString(R.string.status_bar_icon_tint_text));
-		bundle.putString("key", Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT);
+		bundle.putString("key", SettingsKeys.STATUS_BAR_ICON_TINT);
 		String mOldColor = mSettingsHelper.getIconColors(mPackageName, mActivityName, false);
 		if (mOldColor == null) mOldColor = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);
 		boolean isEnabled = mSettingsHelper.isEnabled(mPackageName, mActivityName);
@@ -279,7 +279,7 @@ public class ApplicationSettings extends Activity {
 		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("title", getString(R.string.navigation_bar_tint_text));
-		bundle.putString("key", Common.SETTINGS_KEY_NAVIGATION_BAR_TINT);
+		bundle.putString("key", SettingsKeys.NAVIGATION_BAR_TINT);
 		String mOldColor = mSettingsHelper.getNavigationBarTint(mPackageName, mActivityName, false);
 		bundle.putString("color", mOldColor);
 		colorIntent.putExtras(bundle);
@@ -290,7 +290,7 @@ public class ApplicationSettings extends Activity {
 		Intent colorIntent = new Intent(this, ColorPickerActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("title", getString(R.string.navigation_bar_icon_tint_text));
-		bundle.putString("key", Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT);
+		bundle.putString("key", SettingsKeys.NAVIGATION_BAR_ICON_TINT);
 		String mOldColor = mSettingsHelper.getNavigationBarTint(mPackageName, mActivityName, false);
 		bundle.putString("color", mOldColor);
 		colorIntent.putExtras(bundle);
@@ -300,10 +300,10 @@ public class ApplicationSettings extends Activity {
 	private void resetToAutoDetect() {
 		Editor editor = mSettingsHelper.getSharedPreferences().edit();
 
-		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_STATUS_BAR_TINT));
-		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT));
-		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_NAVIGATION_BAR_TINT));
-		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT));
+		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, SettingsKeys.STATUS_BAR_TINT));
+		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, SettingsKeys.STATUS_BAR_ICON_TINT));
+		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, SettingsKeys.NAVIGATION_BAR_TINT));
+		editor.remove(SettingsHelper.getKeyName(mPackageName, mActivityName, SettingsKeys.NAVIGATION_BAR_ICON_TINT));
 		editor.commit();
 
 		mStatusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR, false);

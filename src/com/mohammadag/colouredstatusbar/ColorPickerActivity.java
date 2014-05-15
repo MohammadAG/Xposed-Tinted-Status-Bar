@@ -77,7 +77,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 
 					ColorDrawable previewDrawable = new ColorDrawable(colourHex);
 
-					if (Common.SETTINGS_KEY_STATUS_BAR_TINT.equals(prefKey)
+					if (SettingsKeys.STATUS_BAR_TINT.equals(prefKey)
 							&& Utils.hasActionBar()) {
 						getActionBar().setBackgroundDrawable(previewDrawable);
 
@@ -91,19 +91,19 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 					String previewKey;
 
 					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
-					if (Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT.equals(prefKey)
-							|| Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT.equals(prefKey)) {
-						previewKey = Common.SETTINGS_KEY_NAVIGATION_BAR_TINT;
-					} else if (Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT.equals(prefKey)) {
-						previewKey = Common.SETTINGS_KEY_STATUS_BAR_TINT;
-					} else if (Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT.equals(prefKey)
-							|| Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT.equals(prefKey)) {
-						previewKey = Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT;
-					} else if (Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT.equals(prefKey)
-							|| Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT.equals(prefKey)) {
-						if (Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT.equals(prefKey))
-							intent.putExtra(Common.SETTINGS_KEY_STATUS_BAR_TINT, Color.WHITE);
-						previewKey = Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT;
+					if (SettingsKeys.DEFAULT_NAV_BAR_IM_TINT.equals(prefKey)
+							|| SettingsKeys.DEFAULT_NAV_BAR_TINT.equals(prefKey)) {
+						previewKey = SettingsKeys.NAVIGATION_BAR_TINT;
+					} else if (SettingsKeys.DEFAULT_STATUS_BAR_TINT.equals(prefKey)) {
+						previewKey = SettingsKeys.STATUS_BAR_TINT;
+					} else if (SettingsKeys.DEFAULT_NAV_BAR_ICON_TINT.equals(prefKey)
+							|| SettingsKeys.DEFAULT_NAV_BAR_ICON_IM_TINT.equals(prefKey)) {
+						previewKey = SettingsKeys.NAVIGATION_BAR_ICON_TINT;
+					} else if (SettingsKeys.DEFAULT_STATUS_BAR_ICON_TINT.equals(prefKey)
+							|| SettingsKeys.DEFAULT_STATUS_BAR_INVERTED_ICON_TINT.equals(prefKey)) {
+						if (SettingsKeys.DEFAULT_STATUS_BAR_INVERTED_ICON_TINT.equals(prefKey))
+							intent.putExtra(SettingsKeys.STATUS_BAR_TINT, Color.WHITE);
+						previewKey = SettingsKeys.STATUS_BAR_ICON_TINT;
 					} else {
 						previewKey = prefKey;
 					}

@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.PackageNames;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
 import com.mohammadag.colouredstatusbar.Utils;
 
@@ -51,16 +52,16 @@ public class StatusBarViewHook {
 
 							if (Utils.isKeyguardLocked(context)) {
 								String statusBarUserTint = mInstance.getSettingsHelper().getTintColor(
-										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
+										PackageNames.LOCKSCREEN_STUB, null, true);
 
 								String statusBarUserIconTint = mInstance.getSettingsHelper().getIconColors(
-										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
+										PackageNames.LOCKSCREEN_STUB, null, true);
 
 								String navBarUserTint = mInstance.getSettingsHelper().getNavigationBarTint(
-										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
+										PackageNames.LOCKSCREEN_STUB, null, true);
 
 								String navBarIconUserTint = mInstance.getSettingsHelper().getNavigationBarIconTint(
-										Common.PACKAGE_NAME_LOCKSCREEN_STUB, null, true);
+										PackageNames.LOCKSCREEN_STUB, null, true);
 
 								int statusBarTint, statusBarIconTint, navBarTint, navBarIconTint;
 

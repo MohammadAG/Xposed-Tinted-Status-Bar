@@ -1,5 +1,6 @@
 package com.mohammadag.colouredstatusbar;
 
+import android.annotation.SuppressLint;
 import android.app.AndroidAppHelper;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ public class SettingsHelper {
 	private XSharedPreferences mXPreferences = null;
 	private SharedPreferences mPreferences = null;
 	private Context mContext = null;
+	public static final String PREFS = "preferences";
 
 	@SuppressWarnings("unused")
 	private static final boolean DEBUG = true;
@@ -29,7 +31,7 @@ public class SettingsHelper {
 	}
 
 	private SettingsHelper(Context context) {
-		mPreferences = Utils.getSharedPreferences(context);
+		mPreferences = getWritableSharedPreferences(context);
 		mContext = context;
 	}
 
@@ -44,20 +46,26 @@ public class SettingsHelper {
 		return mPreferences;
 	}
 
+	@SuppressLint("WorldReadableFiles")
+	@SuppressWarnings("deprecation")
+	public static final SharedPreferences getWritableSharedPreferences(Context context) {
+		return context.getSharedPreferences(PREFS, Context.MODE_WORLD_READABLE);
+	}
+
 	// This returns whether the activity is enabled in our settings
 	// not in Android's package manager.
 	public boolean isEnabled(String packageName, String activityName) {
 		if (activityName == null) {
-			String keyName = getKeyName(packageName, null, Common.SETTINGS_KEY_IS_ACTIVE);
+			String keyName = getKeyName(packageName, null, SettingsKeys.IS_ACTIVE);
 			return getBoolean(keyName, true);
 		} else {
-			String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_IS_ACTIVE);
+			String keyName = getKeyName(packageName, activityName, SettingsKeys.IS_ACTIVE);
 			return getBoolean(keyName, isEnabled(packageName, null));
 		}
 	}
 
 	public boolean shouldLinkPanels(String packageName, String activityName) {
-		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS);
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.LINK_PANEL_VIEW_COLORS);
 		if (activityName == null) {
 			return getBoolean(keyName, shouldLinkStatusBarAndNavBar());
 		} else {
@@ -67,11 +75,11 @@ public class SettingsHelper {
 
 	public void setShouldLinkPanels(String packageName, String activityName, boolean link) {
 		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
-				Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS), link).commit();
+				SettingsKeys.LINK_PANEL_VIEW_COLORS), link).commit();
 	}
 
 	public String getTintColor(String packageName, String activityName, boolean withHash) {
-		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_STATUS_BAR_TINT);
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.STATUS_BAR_TINT);
 		String defaultValue = getDefaultTintColor(packageName, activityName);
 		String hexColor = getString(keyName, defaultValue);
 		if (hexColor != null) {
@@ -85,7 +93,7 @@ public class SettingsHelper {
 
 
 	public String getNavigationBarTint(String packageName, String activityName, boolean withHash) {
-		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_NAVIGATION_BAR_TINT);
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.NAVIGATION_BAR_TINT);
 		String defaultValue;
 
 		if (activityName == null)
@@ -104,7 +112,7 @@ public class SettingsHelper {
 	}
 
 	public String getNavigationBarIconTint(String packageName, String activityName, boolean withHash) {
-		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT);
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.NAVIGATION_BAR_ICON_TINT);
 		String defaultValue;
 
 		if (activityName == null)
@@ -124,7 +132,7 @@ public class SettingsHelper {
 
 	public String getIconColors(String packageName, String activityName, boolean withHash) {
 		String keyName = getKeyName(packageName, activityName,
-				Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT);
+				SettingsKeys.STATUS_BAR_ICON_TINT);
 
 		String defaultValue;
 
@@ -135,7 +143,7 @@ public class SettingsHelper {
 			 * is using the main override, if they are, we shouldn't provide our own default
 			 * value since that collides with what the user expects.
 			 */
-			String overrideKey = getKeyName(packageName, null, Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT);
+			String overrideKey = getKeyName(packageName, null, SettingsKeys.STATUS_BAR_ICON_TINT);
 			String overrideValue = getString(overrideKey, null);
 			if (overrideValue == null) {
 				defaultValue = getDefaultIconTintColorForActivity(packageName, activityName);
@@ -162,7 +170,7 @@ public class SettingsHelper {
 		}
 
 		mPreferences.edit().putString(getKeyName(packageName, activityName,
-				Common.SETTINGS_KEY_STATUS_BAR_TINT), color).commit();
+				SettingsKeys.STATUS_BAR_TINT), color).commit();
 
 		mContext.sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
 	}
@@ -174,16 +182,16 @@ public class SettingsHelper {
 		String key = null;
 		switch (tintType) {
 		case STATUS_BAR:
-			key = Common.SETTINGS_KEY_STATUS_BAR_TINT;
+			key = SettingsKeys.STATUS_BAR_TINT;
 			break;
 		case ICON:
-			key = Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT;
+			key = SettingsKeys.STATUS_BAR_ICON_TINT;
 			break;
 		case NAV_BAR:
-			key = Common.SETTINGS_KEY_NAVIGATION_BAR_TINT;
+			key = SettingsKeys.NAVIGATION_BAR_TINT;
 			break;
 		case NAV_BAR_ICON:
-			key = Common.SETTINGS_KEY_NAVIGATION_BAR_ICON_TINT;
+			key = SettingsKeys.NAVIGATION_BAR_ICON_TINT;
 			break;
 		case ICON_INVERTED:
 		default:
@@ -204,13 +212,13 @@ public class SettingsHelper {
 			return;
 
 		mPreferences.edit().putString(getKeyName(packageName, activityName,
-				Common.SETTINGS_KEY_STATUS_BAR_ICON_TINT), color).commit();
+				SettingsKeys.STATUS_BAR_ICON_TINT), color).commit();
 
 		mContext.sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
 	}
 
 	public void setEnabled(String packageName, String activityName, boolean shouldEnable) {
-		String keyName = getKeyName(packageName, activityName, Common.SETTINGS_KEY_IS_ACTIVE);
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.IS_ACTIVE);
 		mPreferences.edit().putBoolean(keyName, shouldEnable).commit();
 	}
 
@@ -249,7 +257,7 @@ public class SettingsHelper {
 		}
 		
 		/* TODO: Support Android 4.4 API */
-		if (activityName.equals(Common.GEL_ACTIVITY_NAME)) {
+		if (activityName.equals(PackageNames.GEL_ACTIVITY_NAME)) {
 			return "66000000";
 		}
 
@@ -314,19 +322,19 @@ public class SettingsHelper {
 	public String getDefaultTint(Tint tintType, boolean withHash) {
 		switch (tintType) {
 		case STATUS_BAR:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT, Common.COLOR_BLACK, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_STATUS_BAR_TINT, Common.COLOR_BLACK, withHash);
 		case NAV_BAR:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT, Common.COLOR_BLACK, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_TINT, Common.COLOR_BLACK, withHash);
 		case NAV_BAR_ICON:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
 		case ICON:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_STATUS_BAR_ICON_TINT, Common.COLOR_WHITE, withHash);
 		case ICON_INVERTED:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Common.COLOR_BLACK, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Common.COLOR_BLACK, withHash);
 		case NAV_BAR_ICON_IM:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT, Common.COLOR_WHITE, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_ICON_IM_TINT, Common.COLOR_WHITE, withHash);
 		case NAV_BAR_IM:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT, Common.COLOR_BLACK, withHash);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_IM_TINT, Common.COLOR_BLACK, withHash);
 		}
 
 		if (withHash)
@@ -338,38 +346,38 @@ public class SettingsHelper {
 	public int getDefaultTint(Tint tintType) {
 		switch (tintType) {
 		case STATUS_BAR:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT, Color.BLACK);
+			return getColorForKey(SettingsKeys.DEFAULT_STATUS_BAR_TINT, Color.BLACK);
 		case NAV_BAR:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT, Color.BLACK);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_TINT, Color.BLACK);
 		case NAV_BAR_ICON:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT, Color.WHITE);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_ICON_TINT, Color.WHITE);
 		case ICON:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT, Color.WHITE);
+			return getColorForKey(SettingsKeys.DEFAULT_STATUS_BAR_ICON_TINT, Color.WHITE);
 		case ICON_INVERTED:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Color.BLACK);
+			return getColorForKey(SettingsKeys.DEFAULT_STATUS_BAR_INVERTED_ICON_TINT, Color.BLACK);
 		case NAV_BAR_ICON_IM:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT, Color.WHITE);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_ICON_IM_TINT, Color.WHITE);
 		case NAV_BAR_IM:
-			return getColorForKey(Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT, Color.BLACK);
+			return getColorForKey(SettingsKeys.DEFAULT_NAV_BAR_IM_TINT, Color.BLACK);
 		}
 
 		return Color.BLACK;
 	}
 
 	public boolean shouldReactToActionBarVisibility() {
-		return getBoolean(Common.SETTINGS_KEY_REACT_TO_ACTION_BAR_VISIBILITY, true);
+		return getBoolean(SettingsKeys.REACT_TO_ACTION_BAR_VISIBILITY, true);
 	}
 
 	public boolean animateStatusBarTintChange() {
-		return getBoolean(Common.SETTINGS_KEY_ANIMATE_TINT_CHANGE, true);
+		return getBoolean(SettingsKeys.ANIMATE_TINT_CHANGE, true);
 	}
 
 	public PorterDuff.Mode getSystemIconCfType() {
-		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_SYSTEM_ICON_CF_MODE, "MULTIPLY"));
+		return Utils.stringToPorterDuffMode(getString(SettingsKeys.SYSTEM_ICON_CF_MODE, "MULTIPLY"));
 	}
 
 	public PorterDuff.Mode getNotificationIconCfType() {
-		return Utils.stringToPorterDuffMode(getString(Common.SETTINGS_KEY_NOTIFICATION_ICON_CF_MODE	, "MULTIPLY"));
+		return Utils.stringToPorterDuffMode(getString(SettingsKeys.NOTIFICATION_ICON_CF_MODE	, "MULTIPLY"));
 	}
 
 	private int getColorForKey(String key, int defaultColor) {
@@ -447,22 +455,22 @@ public class SettingsHelper {
 	}
 	
 	public boolean shouldLinkStatusBarAndNavBar() {
-		return getBoolean(Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS, false);
+		return getBoolean(SettingsKeys.LINK_PANEL_VIEW_COLORS, false);
 	}
 
 	public float getHsvMax() {
-		return getFloat(Common.SETTINGS_KEY_HSV_VALUE, 0.7f);
+		return getFloat(SettingsKeys.HSV_VALUE, 0.7f);
 	}
 
 	public boolean isDebugMode() {
-		return getBoolean(Common.SETTINGS_KEY_DEBUG_MODE, false);
+		return getBoolean(SettingsKeys.DEBUG_MODE, false);
 	}
 
 	public boolean shouldReactToLightsOut() {
-		return getBoolean(Common.SETTINGS_KEY_REACT_LIGHTS_OUT, false);
+		return getBoolean(SettingsKeys.REACT_LIGHTS_OUT, false);
 	}
 
 	public boolean shouldRespectKitKatApi() {
-		return getBoolean(Common.SETTINGS_KEY_RESPECT_KITKAT_API, true);
+		return getBoolean(SettingsKeys.RESPECT_KITKAT_API, true);
 	}
 }

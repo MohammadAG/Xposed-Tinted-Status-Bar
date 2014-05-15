@@ -18,7 +18,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 	@Override
 	public SharedPreferences getSharedPreferences(String name, int mode) {
-		return Utils.getSharedPreferences(getApplicationContext());
+		return SettingsHelper.getWritableSharedPreferences(getApplicationContext());
 	}
 
 	@Override
@@ -97,18 +97,18 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 
 		String[] colorKeys = {
-				Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_TINT,
-				Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_ICON_TINT,
-				Common.SETTINGS_KEY_DEFAULT_STATUS_BAR_INVERTED_ICON_TINT,
-				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_TINT,
-				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_TINT,
-				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_IM_TINT,
-				Common.SETTINGS_KEY_DEFAULT_NAV_BAR_ICON_IM_TINT
+				SettingsKeys.DEFAULT_STATUS_BAR_TINT,
+				SettingsKeys.DEFAULT_STATUS_BAR_ICON_TINT,
+				SettingsKeys.DEFAULT_STATUS_BAR_INVERTED_ICON_TINT,
+				SettingsKeys.DEFAULT_NAV_BAR_TINT,
+				SettingsKeys.DEFAULT_NAV_BAR_ICON_TINT,
+				SettingsKeys.DEFAULT_NAV_BAR_IM_TINT,
+				SettingsKeys.DEFAULT_NAV_BAR_ICON_IM_TINT
 		};
 
 		intializeColorPreferences(colorKeys);
 		
-		findPreference(Common.SETTINGS_KEY_LINK_PANEL_VIEW_COLORS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		findPreference(SettingsKeys.LINK_PANEL_VIEW_COLORS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));

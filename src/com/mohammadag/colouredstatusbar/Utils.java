@@ -5,7 +5,6 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -139,12 +138,6 @@ public class Utils {
 		return string.replace("#", "");
 	}
 
-	@SuppressLint("WorldReadableFiles")
-	@SuppressWarnings("deprecation")
-	public static final SharedPreferences getSharedPreferences(Context context) {
-		return context.getSharedPreferences(Common.PREFS, Context.MODE_WORLD_READABLE);
-	}
-
 	public static boolean isPackageInstalled(Context context, String targetPackage) {
 		PackageManager pm = context.getPackageManager();
 		try {
@@ -156,7 +149,7 @@ public class Utils {
 	}
 
 	public static boolean isDonateVersionInstalled(Context context) {
-		return isPackageInstalled(context, Common.PACKAGE_NAME_DONATE);
+		return isPackageInstalled(context, PackageNames.DONATION);
 	}
 
 	public static boolean hasGeminiSupport() {

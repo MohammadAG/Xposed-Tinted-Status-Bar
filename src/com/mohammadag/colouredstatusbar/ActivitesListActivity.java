@@ -121,7 +121,7 @@ public class ActivitesListActivity extends ListActivity {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					mDirty = true;
-					String keyName = SettingsHelper.getKeyName(mPackageName, null, Common.SETTINGS_KEY_IS_ACTIVE);
+					String keyName = SettingsHelper.getKeyName(mPackageName, null, SettingsKeys.IS_ACTIVE);
 					mSettingsHelper.getSharedPreferences().edit().putBoolean(keyName, isChecked).commit();
 					getListView().invalidateViews();
 				}
@@ -168,11 +168,11 @@ public class ActivitesListActivity extends ListActivity {
 			}
 
 			/* Workaround for GEL not showing in the activity list */
-			if (packageName.equals(Common.PACKAGE_NAME_GOOGLE_SEARCH)) {
+			if (packageName.equals(PackageNames.GOOGLE_SEARCH)) {
 				/* Version code from APK on the intenret */
 				if (info.versionCode >= Common.GOOGLE_SEARCH_VERSION_CODE_WITH_GEL) {
-					if (!mActivityList.contains(Common.GEL_ACTIVITY_NAME)) {
-						mActivityList.add(Common.GEL_ACTIVITY_NAME);
+					if (!mActivityList.contains(PackageNames.GEL_ACTIVITY_NAME)) {
+						mActivityList.add(PackageNames.GEL_ACTIVITY_NAME);
 					}
 				}
 			}

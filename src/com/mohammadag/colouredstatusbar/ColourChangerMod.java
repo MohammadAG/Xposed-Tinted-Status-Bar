@@ -166,7 +166,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
 		mStatusBarView = null;
-		mSettingsHelper = new SettingsHelper(new XSharedPreferences(Common.PACKAGE_NAME, Common.PREFS));
+		mSettingsHelper = new SettingsHelper(new XSharedPreferences(PackageNames.OURS, SettingsHelper.PREFS));
 
 		mResources = XModuleResources.createInstance(startupParam.modulePath, null);
 
@@ -181,7 +181,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				mSettingsHelper.reload();
 
-				if (mSettingsHelper.getBoolean(Common.SETTINGS_KEY_TOAST_ACTIVITY_NAMES, false)) {
+				if (mSettingsHelper.getBoolean(SettingsKeys.TOAST_ACTIVITY_NAMES, false)) {
 					String tosatText = mResources.getString(R.string.toast_text_package_name, packageName);
 					tosatText += "\n";
 					tosatText += mResources.getString(R.string.toast_text_activity_name, activityName);
@@ -194,7 +194,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				if ((activityIntent.getFlags() & FLAG_FLOATING_WINDOW) == FLAG_FLOATING_WINDOW)
 					return;
 
-				if (mSettingsHelper.getBoolean(Common.SETTINGS_KEY_ALLOW_API_CHANGES, true)) {
+				if (mSettingsHelper.getBoolean(SettingsKeys.ALLOW_API_CHANGES, true)) {
 					PackageManager pm = activity.getPackageManager();
 					ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
 					if (info.metaData != null) {
