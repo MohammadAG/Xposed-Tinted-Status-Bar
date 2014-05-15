@@ -16,6 +16,10 @@ import android.widget.Toast;
 public class SettingsActivity extends PreferenceActivity {
 	private SettingsHelper mSettingsHelper = null;
 
+	private static final String URL_MY_MODULES = "http://repo.xposed.info/module-overview?combine=MohammadAG&sort_by=title";
+	private static final String URL_MY_APPS = "market://search?q=pub:Mohammad Abu-Garbeyyeh";
+	private static final String URL_DONATION_PACKAGE = "market://details?id=" + PackageNames.DONATION;
+
 	@Override
 	public SharedPreferences getSharedPreferences(String name, int mode) {
 		return SettingsHelper.getWritableSharedPreferences(getApplicationContext());
@@ -52,11 +56,11 @@ public class SettingsActivity extends PreferenceActivity {
 						Intent intent = new Intent(Intent.ACTION_VIEW);
 						switch (which) {
 						case 0:
-							uri = Uri.parse(Common.URL_MY_APPS);
+							uri = Uri.parse(URL_MY_APPS);
 							intent.setPackage("com.android.vending");
 							break;
 						case 1:
-							uri = Uri.parse(Common.URL_MY_MODULES);
+							uri = Uri.parse(URL_MY_MODULES);
 							break;
 						case 2:
 							uri = Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KGGZ5C3AVC8ZU");
@@ -74,7 +78,7 @@ public class SettingsActivity extends PreferenceActivity {
 		donatePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference arg0) {
-				Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(Common.URL_DONATION_PACKAGE));
+				Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(URL_DONATION_PACKAGE));
 				intent.setPackage("com.android.vending");
 				startActivity(intent);
 				return false;

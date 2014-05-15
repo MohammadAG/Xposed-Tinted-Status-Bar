@@ -21,6 +21,10 @@ import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 
 public class StatusBarViewHook {
 	private ColourChangerMod mInstance;
+
+	public static final String INTENT_SAMSUNG_SVIEW_COVER = "com.samsung.cover.OPEN";
+	public static final String KEY_SVIEW_COVER_OPENED = "coverOpen";
+
 	public StatusBarViewHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
 		try {
@@ -37,7 +41,7 @@ public class StatusBarViewHook {
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF);
 					
 					IntentFilter iF2 = new IntentFilter();
-					iF2.addAction(Common.INTENT_SAMSUNG_SVIEW_COVER);
+					iF2.addAction(INTENT_SAMSUNG_SVIEW_COVER);
 					iF2.addAction(Common.INTENT_SETTINGS_UPDATED);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF2);
 					

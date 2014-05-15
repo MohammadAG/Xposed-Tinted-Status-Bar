@@ -46,6 +46,8 @@ public class ActivitesListActivity extends ListActivity {
 	private ActivityListAdapter mActivityListAdapter;
 	private String mNameFilter;
 
+	private static final int GOOGLE_SEARCH_VERSION_CODE_WITH_GEL = 300300170;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -170,7 +172,7 @@ public class ActivitesListActivity extends ListActivity {
 			/* Workaround for GEL not showing in the activity list */
 			if (packageName.equals(PackageNames.GOOGLE_SEARCH)) {
 				/* Version code from APK on the intenret */
-				if (info.versionCode >= Common.GOOGLE_SEARCH_VERSION_CODE_WITH_GEL) {
+				if (info.versionCode >= GOOGLE_SEARCH_VERSION_CODE_WITH_GEL) {
 					if (!mActivityList.contains(PackageNames.GEL_ACTIVITY_NAME)) {
 						mActivityList.add(PackageNames.GEL_ACTIVITY_NAME);
 					}
