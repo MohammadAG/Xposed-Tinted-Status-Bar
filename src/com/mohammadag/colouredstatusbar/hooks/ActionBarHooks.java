@@ -141,6 +141,31 @@ public class ActionBarHooks {
 							invertedIconTint, mSettingsHelper.getHsvMax()), context);
 				}
 			});
+
+			Class<?> SearchManager = findClass("android.app.SearchDialog", null);
+			findAndHookMethod(SearchManager, "onStart", new XC_MethodHook() {
+				@Override
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+					Context context = (Context) getObjectField(param.thisObject, "mContext");
+					int[] attributes = new int[]{android.R.attr.actionModeBackground};
+					TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(attributes);
+					Drawable drawable = styledAttributes.getDrawable(0);
+					styledAttributes.recycle();
+					int color = Utils.getMainColorFromActionBarDrawable(drawable);
+					int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
+					int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
+					ColourChangerMod.sendColorSaveAndChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
+							invertedIconTint, mSettingsHelper.getHsvMax()), context);
+				}
+			});
+
+			findAndHookMethod(SearchManager, "onStop", new XC_MethodHook() {
+				@Override
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+					Context context = (Context) getObjectField(param.thisObject, "mContext");
+					ColourChangerMod.sendResetActionBarColorsIntent(context);
+				}
+			});
 		} catch (ClassNotFoundError e) {
 
 		} catch (NoSuchMethodError e) {
