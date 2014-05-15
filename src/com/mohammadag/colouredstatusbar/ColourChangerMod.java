@@ -372,6 +372,14 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				new SViewHooks(this, lpparam.classLoader);
 		}
 
+		if (lpparam.packageName.equals("com.htc.launcher")) {
+			HtcTransparencyHook.doBlinkFeedHooks(lpparam.classLoader);
+		}
+
+		if (lpparam.packageName.equals("com.htc.lockscreen")) {
+			HtcTransparencyHook.doLockscreenHooks(lpparam.classLoader);
+		}
+
 		if (!lpparam.packageName.equals("com.android.systemui"))
 			return;
 

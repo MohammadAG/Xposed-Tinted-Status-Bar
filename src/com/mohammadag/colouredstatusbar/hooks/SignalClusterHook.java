@@ -16,7 +16,8 @@ public class SignalClusterHook {
 	private static final String[] SIGNAL_CLUSTER_ICON_NAMES = {
 		"mMobile", "mMobileActivity", "mMobileType",
 		"mMobileRoaming", "mWifi", "mWifiActivity",
-		"mEthernet", "mEthernetActivity", "mAirplane"
+		"mEthernet", "mEthernetActivity", "mAirplane",
+		"mPhoneSignal"
 	};
 
 	private static final String[] MOTO_G_ICON_NAMES = {
