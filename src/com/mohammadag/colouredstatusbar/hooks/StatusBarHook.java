@@ -80,6 +80,7 @@ public class StatusBarHook {
 						return;
 					} else {
 						mWasImmersiveMode = immersiveMode;
+						mInstance.onImmersiveModeChanged(immersiveMode);
 					}
 				};
 			});

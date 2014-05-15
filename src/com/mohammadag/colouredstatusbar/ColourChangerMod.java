@@ -866,4 +866,23 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			setNavigationBarIconTint(mNavigationBarIconTint, true);
 		}
 	}
+
+	public void onImmersiveModeChanged(boolean immersiveMode) {
+		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT)
+			return;
+
+		log("Immersive mode changed, isImmersive? " + immersiveMode);
+
+		if (immersiveMode) {
+			setStatusBarTint(Color.parseColor("#65000000"));
+			setStatusBarIconsTint(Color.WHITE);
+			setNavigationBarTint(Color.parseColor("#65000000"), true);
+			setNavigationBarIconTint(Color.WHITE, true);
+		} else {
+			setStatusBarTint(mLastTint);
+			setStatusBarIconsTint(mLastIconTint);
+			setNavigationBarTint(mNavigationBarTint, true);
+			setNavigationBarIconTint(mNavigationBarIconTint, true);
+		}
+	}
 }
