@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 
@@ -34,6 +35,11 @@ public class StatusBarHook {
 					try {
 						View mNavigationBarView = (View) getObjectField(param.thisObject, "mNavigationBarView");
 						mInstance.setNavigationBarView(mNavigationBarView);
+					} catch (NoSuchFieldError e) {}
+
+					try {
+						TextView mBatteryText = (TextView) getObjectField(param.thisObject, "mBatteryText");
+						mInstance.addTextLabel(mBatteryText);
 					} catch (NoSuchFieldError e) {}
 				}
 			});
