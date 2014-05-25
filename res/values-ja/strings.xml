@@ -8,6 +8,7 @@
     <string name="title_activity_applications_settings">Tinted Status Bar設定</string>
     <string name="menu_launch">起動</string>
     <string name="menu_settings">設定</string>
+    <string name="action_search">検索</string>
     <string name="menu_playstore">Playストア</string>
     <string name="menu_xposed">Xposedモジュール</string>
     <string name="menu_donate">寄付</string>
@@ -75,4 +76,6 @@
     <string name="debug_mode_summary">logcatやXposedのログへの記録をするようにします。</string>
     <string name="react_lightsout_title">Lights outに対応する</string>
     <string name="react_lightsout_summary">Lights outモード(ステータスバーを暗くするモード)の時にアイテムの色を変えるようにします。</string>
+    <string name="respect_kitkat_api_title">KitKat APIを優先</string>
+    <string name="respect_kitkat_api_summary">KitKatのAPIに対応したアプリの設定を無視します。</string>
 </resources>
