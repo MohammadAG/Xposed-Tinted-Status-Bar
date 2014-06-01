@@ -48,6 +48,12 @@
     <string name="toast_activity_names_summary">Toasts will be shown whenever an activity is started, this can help you find activity names</string>
     <string name="toast_text_package_name">Package name: %s</string>
     <string name="toast_text_activity_name">Activity name: %s</string>
+    <string name="awesome_ab_color_picker_title">Notification color picker</string>
+    <string name="awesome_ab_color_picker_summary">Lets you dynamically set the color for the activity</string>
+    <string name="notification_add_app">Add app</string>
+    <string name="notification_add_activity">Add activity</string>
+    <string name="apply_touch_color">Apply touch color</string>
+    <string name="apply_general_color">Apply general color</string>
     <string name="thank_you">Thank you!</string>
     <string name="thank_you_summary">Thank you for your donation. I really appreciate it :)</string>
     <string name="android_lockscreen_stub_name">Android Lockscreen</string>
