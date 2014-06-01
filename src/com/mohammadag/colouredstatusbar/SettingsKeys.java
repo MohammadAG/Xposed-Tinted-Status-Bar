@@ -21,6 +21,7 @@ public class SettingsKeys {
 	public static final String HSV_VALUE = "pref_max_hsv_value_before_using_black_icons";
 
 	public static final String TOAST_ACTIVITY_NAMES = "pref_toast_activity_names";
+	public static final String ENABLE_AWESOME_AB_COLOR_PICKER = "pref_awesome_ab_color_picker";
 	public static final String REACT_TO_ACTION_BAR_VISIBILITY = "pref_react_action_bar_visibility";
 	public static final String ANIMATE_TINT_CHANGE = "pref_animate_tint";
 	public static final String SYSTEM_ICON_CF_MODE = "pref_system_icon_colorfilter_mode";

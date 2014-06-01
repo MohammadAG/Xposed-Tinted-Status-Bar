@@ -21,6 +21,11 @@
         android:summary="@string/toast_activity_names_summary"
         android:title="@string/toast_activity_names_title" />
     <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_awesome_ab_color_picker"
+        android:summary="@string/awesome_ab_color_picker_summary"
+        android:title="@string/awesome_ab_color_picker_title" />
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_animate_tint"
         android:summary="@string/animate_tint_summary"
