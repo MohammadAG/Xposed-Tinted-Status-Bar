@@ -13,9 +13,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.IgnoredColorDrawable;
 import com.mohammadag.colouredstatusbar.SettingsHelper;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+import com.mohammadag.colouredstatusbar.drawables.IgnoredColorDrawable;
 import com.mohammadag.colouredstatusbar.StatusBarTintApi;
 import com.mohammadag.colouredstatusbar.Utils;
 

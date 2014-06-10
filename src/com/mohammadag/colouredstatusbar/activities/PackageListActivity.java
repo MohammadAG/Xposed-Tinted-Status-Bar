@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +39,12 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.PackageNames;
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsHelper;
+import com.mohammadag.colouredstatusbar.Utils;
 
 public class PackageListActivity extends Activity {
 	private SettingsHelper mSettingsHelper;

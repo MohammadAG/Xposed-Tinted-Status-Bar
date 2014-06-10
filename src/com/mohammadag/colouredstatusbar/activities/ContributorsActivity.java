@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import java.lang.reflect.Field;
 
@@ -11,6 +11,9 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.view.MenuItem;
+
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.Utils;
 
 public class ContributorsActivity extends PreferenceActivity {
 	@Override

@@ -16,10 +16,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mohammadag.colouredstatusbar.IgnoredColorDrawable;
 import com.mohammadag.colouredstatusbar.R;
 import com.mohammadag.colouredstatusbar.SettingsHelper;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+import com.mohammadag.colouredstatusbar.drawables.IgnoredColorDrawable;
 import com.mohammadag.colouredstatusbar.SettingsKeys;
 import com.mohammadag.colouredstatusbar.StatusBarTintApi;
 import com.mohammadag.colouredstatusbar.Utils;

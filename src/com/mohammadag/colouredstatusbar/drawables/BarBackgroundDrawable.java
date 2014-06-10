@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.drawables;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;

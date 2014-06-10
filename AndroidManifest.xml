@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".PackageListActivity"
+            android:name="com.mohammadag.colouredstatusbar.activities.PackageListActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/per_app_tints_title" >
             <intent-filter>
@@ -24,12 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.mohammadag.colouredstatusbar.activities.SettingsActivity"
             android:label="@string/app_name" />
 
         <activity-alias
             android:name=".MainActivity"
-            android:targetActivity="com.mohammadag.colouredstatusbar.SettingsActivity" >
+            android:targetActivity="com.mohammadag.colouredstatusbar.activities.SettingsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +38,7 @@
         </activity-alias>
 
         <activity
-            android:name=".ContributorsActivity"
+            android:name="com.mohammadag.colouredstatusbar.activities.ContributorsActivity"
             android:label="@string/contributors" >
             <intent-filter>
                 <action android:name="com.mohammadag.colouredstatusbar.SHOW_CONTRIBUTORS" />
@@ -58,17 +58,17 @@
             android:value="Tint the status bar based on current activity" />
 
         <activity
-            android:name="com.mohammadag.colouredstatusbar.ApplicationSettings"
+            android:name="com.mohammadag.colouredstatusbar.activities.ApplicationSettings"
             android:label="@string/title_activity_applications_settings" >
         </activity>
-        <activity android:name=".ColorPickerActivity" >
+        <activity android:name="com.mohammadag.colouredstatusbar.activities.ColorPickerActivity" >
         </activity>
         <activity
-            android:name=".ScreenColorPickerActivity"
+            android:name="com.mohammadag.colouredstatusbar.activities.ScreenColorPickerActivity"
             android:exported="true" >
         </activity>
         <activity
-            android:name=".ActivitesListActivity"
+            android:name="com.mohammadag.colouredstatusbar.activities.ActivitesListActivity"
             android:configChanges="orientation|screenSize" >
         </activity>
     </application>
