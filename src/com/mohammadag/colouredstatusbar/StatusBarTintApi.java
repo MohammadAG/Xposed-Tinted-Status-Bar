@@ -35,7 +35,7 @@ public class StatusBarTintApi {
 	 *     intent.putExtra("navigation_bar_icon_color", Color.WHITE);
 	 *     context.sendOrderedBroadcast(intent, null);
 	 */
-	protected static final String METADATA_OVERRIDE_COLORS = "override_tinted_status_bar_defaults";
+	public static final String METADATA_OVERRIDE_COLORS = "override_tinted_status_bar_defaults";
 
 	/* Helper method, pass -1 for a colour you don't want to change */
 	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint,

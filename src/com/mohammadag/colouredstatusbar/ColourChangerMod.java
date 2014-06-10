@@ -4,7 +4,6 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -12,38 +11,22 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
 import android.content.res.XModuleResources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
 import com.mohammadag.colouredstatusbar.hooks.ActionBarHooks;
+import com.mohammadag.colouredstatusbar.hooks.ActivityOnResumeHook;
 import com.mohammadag.colouredstatusbar.hooks.BatteryHooks;
 import com.mohammadag.colouredstatusbar.hooks.BluetoothControllerHook;
 import com.mohammadag.colouredstatusbar.hooks.HtcTransparencyHook;
@@ -106,9 +89,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
-
-	/* Floating Window Intent ID */
-	public static final int FLAG_FLOATING_WINDOW = 0x00002000;
 
 	public void log(String text) {
 		if (mSettingsHelper.isDebugMode())
@@ -188,189 +168,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		findAndHookMethod(ActivityClass, "onWindowFocusChanged", boolean.class,
 				new OnWindowFocusedHook(mSettingsHelper, mResources));
 
-		findAndHookMethod(ActivityClass, "performResume", new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				Activity activity = (Activity) param.thisObject;
-				String packageName = activity.getPackageName();
-				String activityName = activity.getLocalClassName();
-				Intent activityIntent = activity.getIntent();
-
-				mSettingsHelper.reload();
-
-				if (mSettingsHelper.getBoolean(SettingsKeys.TOAST_ACTIVITY_NAMES, false)) {
-					String tosatText = mResources.getString(R.string.toast_text_package_name, packageName);
-					tosatText += "\n";
-					tosatText += mResources.getString(R.string.toast_text_activity_name, activityName);
-					Toast.makeText(activity, tosatText, Toast.LENGTH_SHORT).show();
-				}
-
-				if (!mSettingsHelper.isEnabled(packageName, activityName))
-					return;
-
-				if (activityIntent != null
-						&& (activityIntent.getFlags() & FLAG_FLOATING_WINDOW) == FLAG_FLOATING_WINDOW)
-					return;
-
-				if (activity.getWindow().isFloating())
-					return;
-
-				if (mSettingsHelper.getBoolean(SettingsKeys.ALLOW_API_CHANGES, true)) {
-					PackageManager pm = activity.getPackageManager();
-					ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-					if (info.metaData != null) {
-						Bundle metadata = info.metaData;
-						if (metadata.containsKey(StatusBarTintApi.METADATA_OVERRIDE_COLORS)) {
-							return;
-						}
-					}
-				}
-
-				String statusBarTint = mSettingsHelper.getTintColor(packageName, activityName, true);
-				String iconTint = mSettingsHelper.getIconColors(packageName, activityName, true);
-
-				String navigationBarTint = mSettingsHelper.getNavigationBarTint(packageName, activityName, false);
-				String navBarIconTint = mSettingsHelper.getNavigationBarIconTint(packageName, activityName, false);
-
-				boolean overridingStatusBar = false;
-				boolean overridingNavBar = false;
-				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT
-						&& mSettingsHelper.shouldRespectKitKatApi()) {
-					int flags = activity.getWindow().getAttributes().flags;
-					if ((flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-							== WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) {
-						log("Activity has status bar transclucency, overriding color to 66000000");
-						statusBarTint = KK_TRANSPARENT_COLOR_STRING;
-						overridingStatusBar = true;
-					}
-
-					if ((flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-							== WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) {
-						log("Activity has nav bar transclucency, overriding color to 66000000");
-						navigationBarTint = KK_TRANSPARENT_COLOR_STRING;
-						overridingNavBar = true;
-					}
-				}
-
-				int navigationBarTintColor = 0;
-				int navigationBarIconTintColor = 0;
-
-				try {
-					navigationBarTintColor = Color.parseColor(Utils.addHashIfNeeded(navigationBarTint));
-				} catch (Throwable t) {
-				}
-
-				try {
-					navigationBarIconTintColor = Color.parseColor(Utils.addHashIfNeeded(navBarIconTint));
-				} catch (Throwable t) {
-				}
-
-				int color = 0;
-				int actionBarTextColor = -2;
-				boolean colorHandled = false;
-
-				if (Utils.hasActionBar() && !overridingStatusBar) {
-					ActionBar actionBar = activity.getActionBar();
-					if (actionBar != null) {
-						// If it's not showing, we shouldn't detect it.
-						if (actionBar.isShowing()) {
-							FrameLayout container = (FrameLayout) XposedHelpers.getObjectField(actionBar, "mContainerView");
-							if (container != null) {
-								Drawable backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
-								if (backgroundDrawable != null) {
-									try {
-										color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
-										colorHandled = true;
-										if (!mSettingsHelper.shouldAlwaysReverseTint()
-												&& mSettingsHelper.shouldReverseTintAbColor(packageName)) {
-											actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
-										}
-									} catch (IllegalArgumentException e) {
-									}
-									container.invalidate();
-								}
-
-								try {
-									TextView mTitleView = (TextView) getObjectField(
-											getObjectField(container, "mActionBarView"), "mTitleView");
-									if (mTitleView != null) {
-										if (mTitleView.getVisibility() == View.VISIBLE) {
-											actionBarTextColor = mTitleView.getCurrentTextColor();
-										}
-									}
-								} catch (Throwable t) {
-
-								}
-							}
-						}
-					}
-				}
-
-				int statusBarTintColor = color;
-				int iconTintColor;
-
-				if (statusBarTint != null) {
-					try {
-						statusBarTintColor = Color.parseColor(statusBarTint);
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					}
-				}
-
-				int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
-				int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
-
-				if (iconTint == null) {
-					if (actionBarTextColor != -2) {
-						iconTintColor = actionBarTextColor;
-					} else {
-						iconTintColor = Utils.getIconColorForColor(statusBarTintColor,
-								defaultNormal, invertedIconTint, mSettingsHelper.getHsvMax());
-					}
-				} else {
-					iconTintColor = Color.parseColor(iconTint);
-				}
-
-				Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
-
-				if (statusBarTint != null)
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTintColor);
-
-				if (iconTint != null)
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconTintColor);
-
-				if (colorHandled == true) {
-					if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT))
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, overridingStatusBar ? KITKAT_TRANSPARENT_COLOR : color);
-					if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT))
-						intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, overridingStatusBar ? Color.WHITE : iconTintColor);
-				}
-
-				/* We failed to get a colour, fall back to the defaults */
-				if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT))
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, overridingStatusBar ? KITKAT_TRANSPARENT_COLOR : mSettingsHelper.getDefaultTint(Tint.STATUS_BAR));
-				if (!intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT))
-					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, overridingStatusBar ? Color.WHITE : defaultNormal);
-
-				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, overridingNavBar ? KITKAT_TRANSPARENT_COLOR : navigationBarTintColor);
-				intent.putExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, overridingNavBar ? Color.WHITE : navigationBarIconTintColor);
-
-				intent.putExtra("time", System.currentTimeMillis());
-				intent.putExtra("link_panels", mSettingsHelper.shouldLinkPanels(packageName, null));
-
-				if (mSettingsHelper.shouldAlwaysReverseTint()) {
-					ActionBar actionBar = activity.getActionBar();
-					if (actionBar != null) {
-						// Reverse tint
-						actionBar.setBackgroundDrawable(
-								new IgnoredColorDrawable(intent.getIntExtra(
-										StatusBarTintApi.KEY_STATUS_BAR_TINT, -1)));
-					}
-				}
-
-				activity.sendBroadcast(intent);
-			}
-		});
+		findAndHookMethod(ActivityClass, "performResume",
+				new ActivityOnResumeHook(mSettingsHelper, mResources));
 
 		if (Utils.hasActionBar())
 			new ActionBarHooks(mSettingsHelper);
