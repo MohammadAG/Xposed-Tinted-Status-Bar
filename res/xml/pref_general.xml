@@ -39,31 +39,31 @@
             <PreferenceCategory
                 android:summary="@string/default_colors_summary"
                 android:title="@string/default_colors" >
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_status_bar_tint"
                     android:summary="@string/default_summary"
                     android:title="@string/default_status_bar_tint_title" />
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_status_bar_icon_tint"
                     android:summary="@string/default_summary"
                     android:title="@string/default_status_bar_icon_tint_title" />
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_status_bar_inverted_icon_tint"
                     android:summary="@string/default_status_bar_inverted_icon_tint_summary"
                     android:title="@string/default_status_bar_inverted_icon_tint_title" />
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_nav_bar_tint"
                     android:summary="@string/default_summary"
                     android:title="@string/default_navigation_bar_tint_title" />
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_nav_bar_icon_tint"
                     android:summary="@string/default_summary"
                     android:title="@string/default_navigation_bar_icon_tint_title" />
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_nav_bar_im_tint"
                     android:summary="@string/default_summary_keyboard"
                     android:title="@string/default_navigation_bar_im_tint_title" />
-                <com.mohammadag.colouredstatusbar.ColorPreference
+                <com.mohammadag.colouredstatusbar.preferences.ColorPreference
                     android:key="pref_default_nav_bar_icon_im_tint"
                     android:summary="@string/default_summary_keyboard"
                     android:title="@string/default_navigation_bar_icon_im_tint_title" />
@@ -102,7 +102,7 @@
             android:title="@string/reverse_tint_actionbar_title" />
     </PreferenceCategory>
 
-    <com.mohammadag.colouredstatusbar.SliderPreference
+    <com.mohammadag.colouredstatusbar.preferences.SliderPreference
         android:defaultValue="0.7"
         android:key="pref_max_hsv_value_before_using_black_icons"
         android:summary="@string/max_hsv_summary"
