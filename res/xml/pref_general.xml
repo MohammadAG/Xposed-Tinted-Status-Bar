@@ -96,6 +96,10 @@
             android:key="pref_react_action_bar_visibility"
             android:summary="@string/react_actionbar_description"
             android:title="@string/react_actionbar_title" />
+        <CheckBoxPreference
+            android:key="pref_reverse_tint_action_bar"
+            android:summary="@string/reverse_tint_actionbar_summary"
+            android:title="@string/reverse_tint_actionbar_title" />
     </PreferenceCategory>
 
     <com.mohammadag.colouredstatusbar.SliderPreference

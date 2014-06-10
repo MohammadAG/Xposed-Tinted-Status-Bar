@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.IgnoredColorDrawable;
 import com.mohammadag.colouredstatusbar.SettingsHelper;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
 import com.mohammadag.colouredstatusbar.StatusBarTintApi;
@@ -35,12 +36,18 @@ public class ActionBarHooks {
 				@Override
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
-					if (!mSettingsHelper.isEnabled(actionBar.getThemedContext().getPackageName(), null))
+					String packageName = actionBar.getThemedContext().getPackageName();
+					if (!mSettingsHelper.isEnabled(packageName, null))
 						return;
 
 					Drawable drawable = (Drawable) param.args[0];
 					if (drawable != null) {
+						if (drawable instanceof IgnoredColorDrawable) {
+							return;
+						}
 						int color = Utils.getMainColorFromActionBarDrawable(drawable);
+						if (mSettingsHelper.shouldReverseTintAbColor(packageName))
+							actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
 						int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
 						int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
 						ColourChangerMod.sendColorChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
@@ -104,6 +111,8 @@ public class ActionBarHooks {
 						return;
 
 					int color = Utils.getMainColorFromActionBarDrawable(drawable);
+					if (mSettingsHelper.shouldReverseTintAbColor(packageName))
+						actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
 					int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
 					int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
 					int iconTint;

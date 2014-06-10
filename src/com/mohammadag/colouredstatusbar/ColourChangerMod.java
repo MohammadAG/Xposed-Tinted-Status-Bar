@@ -331,6 +331,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 									try {
 										color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
 										colorHandled = true;
+										if (!mSettingsHelper.shouldAlwaysReverseTint() && mSettingsHelper.shouldReverseTintAbColor(packageName)) {
+											actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
+										}
 									} catch (IllegalArgumentException e) {
 									}
 									container.invalidate();
@@ -403,6 +406,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				intent.putExtra("time", System.currentTimeMillis());
 				intent.putExtra("link_panels", mSettingsHelper.shouldLinkPanels(packageName, null));
+
+				if (mSettingsHelper.shouldAlwaysReverseTint()) {
+					ActionBar actionBar = activity.getActionBar();
+					if (actionBar != null) {
+						// Reverse tint
+						actionBar.setBackgroundDrawable(
+								new IgnoredColorDrawable(intent.getIntExtra(
+										StatusBarTintApi.KEY_STATUS_BAR_TINT, -1)));
+					}
+				}
+
 				activity.sendBroadcast(intent);
 			}
 		});

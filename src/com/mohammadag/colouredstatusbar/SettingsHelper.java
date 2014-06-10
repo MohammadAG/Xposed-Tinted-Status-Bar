@@ -479,4 +479,13 @@ public class SettingsHelper {
 	public boolean shouldFakeGradient() {
 		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, true);
 	}
+
+	public boolean shouldReverseTintAbColor(String packageName) {
+		String keyName = getKeyName(packageName, null, SettingsKeys.REVERSE_TINT_ACTION_BAR);
+		return getBoolean(keyName, shouldAlwaysReverseTint());
+	}
+
+	public boolean shouldAlwaysReverseTint() {
+		return getBoolean(SettingsKeys.REVERSE_TINT_ACTION_BAR, false);
+	}
 }
