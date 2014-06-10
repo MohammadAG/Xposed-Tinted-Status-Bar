@@ -78,6 +78,20 @@ public class SettingsHelper {
 				SettingsKeys.LINK_PANEL_VIEW_COLORS), link).commit();
 	}
 
+	public boolean shouldReactToActionBar(String packageName, String activityName) {
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.REACT_TO_ACTION_BAR_VISIBILITY);
+		if (activityName == null) {
+			return getBoolean(keyName, shouldReactToActionBarVisibility());
+		} else {
+			return getBoolean(keyName, shouldReactToActionBar(packageName, null));
+		}
+	}
+
+	public void setShouldReactToActionBar(String packageName, String activityName, boolean link) {
+		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
+				SettingsKeys.REACT_TO_ACTION_BAR_VISIBILITY), link).commit();
+	}
+
 	public String getTintColor(String packageName, String activityName, boolean withHash) {
 		String keyName = getKeyName(packageName, activityName, SettingsKeys.STATUS_BAR_TINT);
 		String defaultValue = getDefaultTintColor(packageName, activityName);
@@ -244,11 +258,6 @@ public class SettingsHelper {
 				return "ffffff";
 		}
 
-		if ("com.google.android.apps.plus".equals(packageName)) {
-			if ("phone.LocationPickerActivity".equals(activityName))
-				return "292929";
-		}
-		
 		if ("com.instagram.android".equals(packageName)) {
 			if ("creation.activity.MediaCaptureActivity".equals(activityName))
 				return "ff25292c";
@@ -278,7 +287,7 @@ public class SettingsHelper {
 		else if ("com.paypal.android.p2pmobile".equals(packageName))
 			return "50443d";
 		else if ("com.google.android.apps.plus".equals(packageName))
-			return "dddddd";
+			return "b9321f";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
 		else if ("com.pushbullet.android".equals(packageName))
@@ -288,11 +297,6 @@ public class SettingsHelper {
 	}
 
 	private static String getDefaultIconTintColorForActivity(String packageName, String activityName) {
-		if ("com.google.android.apps.plus".equals(packageName)) {
-			if ("phone.LocationPickerActivity".equals(activityName))
-				return Common.COLOR_WHITE;
-		}
-
 		if ("com.paypal.android.p2pmobile".equals(packageName)) {
 			if ("activity.LoginActivity".equals(activityName))
 				return Common.COLOR_WHITE;
@@ -306,8 +310,6 @@ public class SettingsHelper {
 	private static String getDefaultIconTintColorForPackage(String packageName) {
 		if ("com.chrome.beta".equals(packageName) || "com.android.chrome".equals(packageName))
 			return "090909";
-		else if ("com.google.android.apps.plus".equals(packageName))
-			return Common.COLOR_BLACK;
 		return null;
 	}
 

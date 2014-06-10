@@ -53,6 +53,7 @@ public class ApplicationSettings extends Activity {
 
 	private Button mResetToAutoDetectButton;
 	private CheckBox mLinkPanelsCheckbox;
+	private CheckBox mReactToActionBarCheckbox;
 
 	private String mNavigationBarTint;
 	private String mNavigationBarIconTint;
@@ -165,8 +166,17 @@ public class ApplicationSettings extends Activity {
 			}
 		});
 
+		mReactToActionBarCheckbox = (CheckBox) findViewById(R.id.react_actionbar_checkbox);
+		mReactToActionBarCheckbox.setChecked(mSettingsHelper.shouldReactToActionBar(mPackageName, mActivityName));
+		mReactToActionBarCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSettingsHelper.setShouldReactToActionBar(mPackageName, mActivityName, isChecked);
+			}
+		});
+
 		if (mActivityName != null)
-			mLinkPanelsCheckbox.setVisibility(View.GONE);
+			findViewById(R.id.package_specifc_options).setVisibility(View.GONE);
 	}
 
 	@Override

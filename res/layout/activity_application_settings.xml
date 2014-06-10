@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ApplicationSettings" 
+    tools:context=".ApplicationSettings"
     tools:ignore="contentDescription,NestedWeights" >
 
     <TextView
@@ -18,11 +18,25 @@
         android:gravity="center"
         android:text="@string/all_activities_title" />
 
-    <CheckBox
-        android:id="@+id/link_panels_checkbox"
+    <LinearLayout
+        android:id="@+id/package_specifc_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/link_panel_views_title" />
+        android:baselineAligned="false"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:id="@+id/link_panels_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/link_panel_views_title" />
+
+        <CheckBox
+            android:id="@+id/react_actionbar_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/react_actionbar_title" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +79,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
