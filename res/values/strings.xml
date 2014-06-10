@@ -10,6 +10,8 @@
     <string name="donate_summary">Support development. Extra features may be unlocked in the future</string>
     <string name="thank_you">Thank you!</string>
     <string name="thank_you_summary">Thank you for your donation. I really appreciate it :)</string>
+    <string name="android_lockscreen_stub_name">Android Lockscreen</string>
+    <string name="unlocked_secret_settings">You\'ve unlocked some secret settings, these may or may not work as intended</string>
 
     <!-- Contributors, don't forgot to add yourself in contributors.xml if you translated TSB -->
     <string name="contributors">Contributors</string>
@@ -18,6 +20,18 @@
     <string name="designers">Designers</string>
     <string name="libraries">Libraries</string>
     <string name="translators">Translators</string>
+
+    <!-- Contributor links text -->
+    <string name="link_facebook">Add me on Facebook</string>
+    <string name="link_twitter">Follow me on Twitter</string>
+    <string name="link_google_plus">Add me on Google+</string>
+    <string name="link_github">Follow me on Github</string>
+    <string name="link_github_library">Fork it on Github</string>
+    <string name="link_xda">View XDA Developers profile</string>
+    <string name="link_youtube">Subscribe to my YouTube channel</string>
+    <string name="link_linkedin">Connect with me on LinkedIn</string>
+    <string name="link_generic">View my website</string>
+    <string name="link_generic_library">View library website</string>
 
     <!-- Menu actions -->
     <string name="action_settings">Settings</string>
@@ -49,7 +63,17 @@
     <string name="navigation_bar_icon_tint_text">Navigation Bar Icon Tint</string>
     <string name="reset_to_auto_detect">Reset to auto-detect</string>
 
+    <!-- Preference categories -->
+    <string name="advanced">Advanced</string>
+    <string name="action_bar">Action Bar</string>
+    <string name="per_app_settings">Per app settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="reverse_tint_actionbar_title">Reverse tint action bar</string>
+    <string name="reverse_tint_actionbar_summary">Set the status bar color to the action bar</string>
+
     <!-- Preferences -->
+    <string name="per_app_tints_title">Per app tints</string>
+    <string name="per_app_tints_summary">Configure your status bar tint and Action Bar reverse tints here</string>
     <string name="api_override_title">Allow 3rd party interaction</string>
     <string name="api_override_summary">3rd party apps may use the API provided to change the status bar color in those apps</string>
     <string name="max_hsv_title">Max HS[V] for black icons</string>
@@ -80,6 +104,8 @@
     <string name="use_fake_gradient_summary">Emulate the KitKat look with a gradient</string>
 
     <!-- Defaults -->
+    <string name="default_settings_title">Default settings</string>
+    <string name="default_settings_summary">Defaults for some per app settings</string>
     <string name="default_colors">Default tints</string>
     <string name="default_colors_summary">Change the default tints used</string>
     <string name="default_status_bar_tint_title">Default status bar tint color</string>
@@ -108,7 +134,5 @@
     <string name="notification_add_activity">Add activity</string>
     <string name="apply_touch_color">Apply touch color</string>
     <string name="apply_general_color">Apply general color</string>
-    <string name="android_lockscreen_stub_name">Android Lockscreen</string>
-    <string name="unlocked_secret_settings">You\'ve unlocked some secret settings, these may or may not work as intended</string>
 
 </resources>

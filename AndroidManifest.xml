@@ -16,11 +16,20 @@
         <activity
             android:name=".PackageListActivity"
             android:configChanges="orientation|screenSize"
+            android:label="@string/per_app_tints_title" >
+            <intent-filter>
+                <action android:name="com.mohammadag.colouredstatusbar.PER_APP_SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
             android:label="@string/app_name" />
 
         <activity-alias
             android:name=".MainActivity"
-            android:targetActivity="com.mohammadag.colouredstatusbar.PackageListActivity" >
+            android:targetActivity="com.mohammadag.colouredstatusbar.SettingsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +37,9 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".ContributorsActivity" >
+        <activity
+            android:name=".ContributorsActivity"
+            android:label="@string/contributors" >
             <intent-filter>
                 <action android:name="com.mohammadag.colouredstatusbar.SHOW_CONTRIBUTORS" />
 
@@ -59,10 +70,6 @@
         <activity
             android:name=".ActivitesListActivity"
             android:configChanges="orientation|screenSize" >
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_applications_settings" >
         </activity>
     </application>
 

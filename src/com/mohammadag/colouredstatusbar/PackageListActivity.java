@@ -65,9 +65,8 @@ public class PackageListActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		if (Utils.isDonateVersionInstalled(this)) {
-			setTitle(R.string.app_name_donate_version);
-		}
+		if (Utils.hasActionBar())
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
 

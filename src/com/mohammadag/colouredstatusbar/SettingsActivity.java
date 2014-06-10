@@ -28,8 +28,10 @@ public class SettingsActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
-		if (Utils.hasActionBar())
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		if (Utils.isDonateVersionInstalled(this)) {
+			setTitle(R.string.app_name_donate_version);
+		}
 
 		if (mSettingsHelper == null)
 			mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
@@ -111,7 +113,7 @@ public class SettingsActivity extends PreferenceActivity {
 		};
 
 		intializeColorPreferences(colorKeys);
-		
+
 		findPreference(SettingsKeys.LINK_PANEL_VIEW_COLORS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -153,7 +155,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		mSettingsHelper.getSharedPreferences().edit().putString(key, data.getStringExtra("color")).commit();
 		findColorPreference(key).refresh();
-		
+
 		/* For most things, we don't need this since we reload settings each
 		 * time an activity is resumed, but it's needed for input method-specific
 		 * keys, since SettingsHelper is part of SystemUI there, not Zygote.

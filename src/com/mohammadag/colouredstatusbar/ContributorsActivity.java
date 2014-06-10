@@ -3,14 +3,28 @@ package com.mohammadag.colouredstatusbar;
 import java.lang.reflect.Field;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.view.MenuItem;
 
 public class ContributorsActivity extends PreferenceActivity {
+	@Override
+	public SharedPreferences getSharedPreferences(String name, int mode) {
+		return super.getSharedPreferences("contirubters", mode);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (Utils.hasActionBar())
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -69,31 +83,39 @@ public class ContributorsActivity extends PreferenceActivity {
 		}
 	}
 
-	private String getSummaryHelpfulText(String type, String link) {
+	private int getSummaryHelpfulText(String type, String link) {
 		if (link.contains("xda-developers.com")) {
-			return "Visit XDA developers profile";
+			return R.string.link_xda;
 		} else if (link.contains("github.com")) {
 			if ("LIBRARY".equals(type)) {
-				return "Fork me on Github";
+				return R.string.link_github_library;
 			} else {
-				return "Follow me on Github";
+				return R.string.link_github;
 			}
 		} else if (link.contains("facebook.com")) {
-			return "Add me on Facebook";
+			return R.string.link_facebook;
 		} else if (link.contains("plus.google.com")) {
-			return "Follow me on Google+";
+			return R.string.link_google_plus;
 		} else if (link.contains("twitter.com")) {
-			return "Follow me on Twitter";
+			return R.string.link_twitter;
 		} else if (link.contains("linkedin.com")) {
-			return "Connect with me on LinkedIn";
+			return R.string.link_linkedin;
 		} else if (link.contains("youtube")) {
-			return "Subscribe to my YouTube channel";
+			return R.string.link_youtube;
 		}
 
 		if ("LIBRARY".equals(type)) {
-			return "Visit library page";
+			return R.string.link_generic_library;
 		} else {
-			return "Visit website";
+			return R.string.link_generic;
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

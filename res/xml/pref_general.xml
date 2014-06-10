@@ -16,85 +16,87 @@
         android:summary="@string/donate_summary"
         android:title="@string/menu_donate" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="pref_allow_api_usage"
-        android:summary="@string/api_override_summary"
-        android:title="@string/api_override_title" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="pref_toast_activity_names"
-        android:summary="@string/toast_activity_names_summary"
-        android:title="@string/toast_activity_names_title" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="pref_awesome_ab_color_picker"
-        android:summary="@string/awesome_ab_color_picker_summary"
-        android:title="@string/awesome_ab_color_picker_title" />
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="pref_animate_tint"
-        android:summary="@string/animate_tint_summary"
-        android:title="@string/animate_tint_title" />
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="pref_react_action_bar_visibility"
-        android:summary="@string/react_actionbar_description"
-        android:title="@string/react_actionbar_title" />
-    <CheckBoxPreference
-        android:key="pref_react_lights_out"
-        android:summary="@string/react_lightsout_summary"
-        android:title="@string/react_lightsout_title" />
-    <CheckBoxPreference
-        android:key="pref_link_panel_view_colors"
-        android:summary="@string/link_panel_views_summary"
-        android:title="@string/link_panel_views_title" />
-    <CheckBoxPreference
-        android:key="pref_use_fake_gradient"
-        android:summary="@string/use_fake_gradient_summary"
-        android:title="@string/use_fake_gradient_title" />
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="pref_respect_kitkat_api"
-        android:summary="@string/respect_kitkat_api_summary"
-        android:title="@string/respect_kitkat_api_title" />
-    <CheckBoxPreference
-        android:key="pref_debug_mode"
-        android:summary="@string/debug_mode_summary"
-        android:title="@string/debug_mode_title" />
+    <PreferenceCategory android:title="@string/per_app_settings" >
+        <Preference
+            android:summary="@string/per_app_tints_summary"
+            android:title="@string/per_app_tints_title" >
+            <intent android:action="com.mohammadag.colouredstatusbar.PER_APP_SETTINGS" />
+        </Preference>
 
-    <PreferenceScreen
-        android:summary="@string/default_colors_summary"
-        android:title="@string/default_colors" >
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_status_bar_tint"
-            android:summary="@string/default_summary"
-            android:title="@string/default_status_bar_tint_title" />
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_status_bar_icon_tint"
-            android:summary="@string/default_summary"
-            android:title="@string/default_status_bar_icon_tint_title" />
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_status_bar_inverted_icon_tint"
-            android:summary="@string/default_status_bar_inverted_icon_tint_summary"
-            android:title="@string/default_status_bar_inverted_icon_tint_title" />
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_nav_bar_tint"
-            android:summary="@string/default_summary"
-            android:title="@string/default_navigation_bar_tint_title" />
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_nav_bar_icon_tint"
-            android:summary="@string/default_summary"
-            android:title="@string/default_navigation_bar_icon_tint_title" />
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_nav_bar_im_tint"
-            android:summary="@string/default_summary_keyboard"
-            android:title="@string/default_navigation_bar_im_tint_title" />
-        <com.mohammadag.colouredstatusbar.ColorPreference
-            android:key="pref_default_nav_bar_icon_im_tint"
-            android:summary="@string/default_summary_keyboard"
-            android:title="@string/default_navigation_bar_icon_im_tint_title" />
-    </PreferenceScreen>
+        <PreferenceScreen
+            android:summary="@string/default_settings_summary"
+            android:title="@string/default_settings_title" >
+            <CheckBoxPreference
+                android:key="pref_link_panel_view_colors"
+                android:summary="@string/link_panel_views_summary"
+                android:title="@string/link_panel_views_title" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="pref_respect_kitkat_api"
+                android:summary="@string/respect_kitkat_api_summary"
+                android:title="@string/respect_kitkat_api_title" />
+
+            <PreferenceCategory
+                android:summary="@string/default_colors_summary"
+                android:title="@string/default_colors" >
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_status_bar_tint"
+                    android:summary="@string/default_summary"
+                    android:title="@string/default_status_bar_tint_title" />
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_status_bar_icon_tint"
+                    android:summary="@string/default_summary"
+                    android:title="@string/default_status_bar_icon_tint_title" />
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_status_bar_inverted_icon_tint"
+                    android:summary="@string/default_status_bar_inverted_icon_tint_summary"
+                    android:title="@string/default_status_bar_inverted_icon_tint_title" />
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_nav_bar_tint"
+                    android:summary="@string/default_summary"
+                    android:title="@string/default_navigation_bar_tint_title" />
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_nav_bar_icon_tint"
+                    android:summary="@string/default_summary"
+                    android:title="@string/default_navigation_bar_icon_tint_title" />
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_nav_bar_im_tint"
+                    android:summary="@string/default_summary_keyboard"
+                    android:title="@string/default_navigation_bar_im_tint_title" />
+                <com.mohammadag.colouredstatusbar.ColorPreference
+                    android:key="pref_default_nav_bar_icon_im_tint"
+                    android:summary="@string/default_summary_keyboard"
+                    android:title="@string/default_navigation_bar_icon_im_tint_title" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/appearance" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_animate_tint"
+            android:summary="@string/animate_tint_summary"
+            android:title="@string/animate_tint_title" />
+        <CheckBoxPreference
+            android:key="pref_use_fake_gradient"
+            android:summary="@string/use_fake_gradient_summary"
+            android:title="@string/use_fake_gradient_title" />
+        <CheckBoxPreference
+            android:key="pref_react_lights_out"
+            android:summary="@string/react_lightsout_summary"
+            android:title="@string/react_lightsout_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/action_bar" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_awesome_ab_color_picker"
+            android:summary="@string/awesome_ab_color_picker_summary"
+            android:title="@string/awesome_ab_color_picker_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_react_action_bar_visibility"
+            android:summary="@string/react_actionbar_description"
+            android:title="@string/react_actionbar_title" />
+    </PreferenceCategory>
 
     <com.mohammadag.colouredstatusbar.SliderPreference
         android:defaultValue="0.7"
@@ -102,6 +104,22 @@
         android:summary="@string/max_hsv_summary"
         android:title="@string/max_hsv_title" />
 
+    <PreferenceCategory android:title="@string/advanced" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_allow_api_usage"
+            android:summary="@string/api_override_summary"
+            android:title="@string/api_override_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_toast_activity_names"
+            android:summary="@string/toast_activity_names_summary"
+            android:title="@string/toast_activity_names_title" />
+        <CheckBoxPreference
+            android:key="pref_debug_mode"
+            android:summary="@string/debug_mode_summary"
+            android:title="@string/debug_mode_title" />
+    </PreferenceCategory>
     <PreferenceCategory
         android:key="colorfilter_category"
         android:title="@string/cf_mode" >
