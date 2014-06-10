@@ -52,7 +52,11 @@ public class ActionBarHooks {
 			findAndHookMethod(ActionBarImpl, "hide", new XC_MethodHook() {
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
-					if (!mSettingsHelper.isEnabled(actionBar.getThemedContext().getPackageName(), null))
+					String packageName = actionBar.getThemedContext().getPackageName();
+					if (!mSettingsHelper.isEnabled(packageName, null))
+						return;
+
+					if (!mSettingsHelper.shouldReactToActionBar(packageName, null))
 						return;
 
 					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
@@ -75,7 +79,11 @@ public class ActionBarHooks {
 				@Override
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
-					if (!mSettingsHelper.isEnabled(actionBar.getThemedContext().getPackageName(), null))
+					String packageName = actionBar.getThemedContext().getPackageName();
+					if (!mSettingsHelper.isEnabled(packageName, null))
+						return;
+
+					if (!mSettingsHelper.shouldReactToActionBar(packageName, null))
 						return;
 
 					Object actionBarContainer = getObjectField(actionBar, "mContainerView");
