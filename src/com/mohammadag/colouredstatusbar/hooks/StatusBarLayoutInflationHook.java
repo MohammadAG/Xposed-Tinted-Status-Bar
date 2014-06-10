@@ -14,7 +14,7 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 	public StatusBarLayoutInflationHook(ColourChangerMod instance) {
 		mInstance = instance;
 	}
-	
+
 	@Override
 	public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
 		ViewGroup mSbContents = (ViewGroup) liparam.view.findViewById(liparam.res.getIdentifier(
@@ -29,6 +29,29 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 		if (clock == null) {
 			clock = (TextView) mSbContents.findViewById(
 					liparam.res.getIdentifier("clock", "id", "com.android.systemui"));
+		}
+
+		try {
+			ViewGroup centerClockLayout = (ViewGroup) liparam.view.findViewById(
+					liparam.res.getIdentifier("center_clock_layout", "id", "com.android.systemui"));
+
+			if (centerClockLayout != null) {
+				TextView centerClock = (TextView) centerClockLayout.findViewById(
+						liparam.res.getIdentifier("center_clock", "id", "com.android.systemui"));
+				if (centerClock != null)
+					mInstance.addTextLabel(centerClock);
+			}
+		} catch (Throwable t) {
+			// No sense in logging this, it'll happen on most ROMs
+		}
+
+		try {
+			TextView traffic = (TextView) mIconArea.findViewById(
+					liparam.res.getIdentifier("traffic", "id", "com.android.systemui"));
+			if (traffic != null)
+				mInstance.addTextLabel(traffic);
+		} catch (Throwable t) {
+
 		}
 
 		if (clock != null) {
