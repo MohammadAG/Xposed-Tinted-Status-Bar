@@ -219,7 +219,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				PendingIntent colorActivityPendingIntent = PendingIntent.getActivity(activity, 0,
 						colorPickerIntent.putExtra("title", activityName), PendingIntent.FLAG_UPDATE_CURRENT);
-				PendingIntent colorAllPendingIntent = PendingIntent.getActivity(activity, 0,
+				PendingIntent colorAllPendingIntent = PendingIntent.getActivity(activity, 1,
 						colorPickerIntent.putExtra("title", packageName), PendingIntent.FLAG_UPDATE_CURRENT);
 
 				NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
