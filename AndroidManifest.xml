@@ -28,6 +28,14 @@
             </intent-filter>
         </activity-alias>
 
+        <activity android:name=".ContributorsActivity" >
+            <intent-filter>
+                <action android:name="com.mohammadag.colouredstatusbar.SHOW_CONTRIBUTORS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <meta-data
             android:name="xposedmodule"
             android:value="true" />

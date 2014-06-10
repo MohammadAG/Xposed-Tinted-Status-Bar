@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Title / Misc -->
     <string name="app_name">Tinted Status Bar</string>
     <string name="app_name_donate_version">Tinted Status Bar (Donate version)</string>
+    <string name="title_activity_applications_settings">Tinted Status Bar Settings</string>
+    <string name="copyright_summary">Copyright © 2013-2014 – Mohammad Abu-Garbeyyeh\nView more apps and modules</string>
+    <string name="loading_title">Loading…</string>
+    <string name="donate_summary">Support development. Extra features may be unlocked in the future</string>
+    <string name="thank_you">Thank you!</string>
+    <string name="thank_you_summary">Thank you for your donation. I really appreciate it :)</string>
+
+    <!-- Contributors, don't forgot to add yourself in contributors.xml if you translated TSB -->
+    <string name="contributors">Contributors</string>
+    <string name="contributors_summary">See the helpful community behind Tinted Status Bar, thanks to everyone listed here!</string>
+    <string name="coders">Coders</string>
+    <string name="designers">Designers</string>
+    <string name="libraries">Libraries</string>
+    <string name="translators">Translators</string>
+
+    <!-- Menu actions -->
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="menu_save">Save</string>
-    <string name="title_activity_applications_settings">Tinted Status Bar Settings</string>
     <string name="menu_launch">Launch</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_playstore">Play Store</string>
     <string name="menu_xposed">Xposed modules</string>
     <string name="menu_donate">Donate</string>
-    <string name="status_bar_tint_text">Status Bar Tint</string>
-    <string name="status_bar_icon_tint_text">Status bar icons color</string>
-    <string name="navigation_bar_tint_text">Navigation Bar Tint</string>
-    <string name="navigation_bar_icon_tint_text">Navigation Bar Icon Tint</string>
+
+    <!-- Color picker -->
     <string name="enabled">Enabled</string>
     <string name="apply">Apply</string>
     <string name="saturation">Saturation</string>
@@ -25,58 +39,37 @@
     <string name="restore">Restore</string>
     <string name="save">Save</string>
     <string name="invalid_color">Invalid color</string>
+
+    <!-- Activity color settings -->
     <string name="all_activities_title">All activities</string>
-    <string name="all_the_wonderful_activities">"All activities, below settings override this"</string>
+    <string name="all_the_wonderful_activities">All activities, below settings override this</string>
+    <string name="status_bar_tint_text">Status Bar Tint</string>
+    <string name="status_bar_icon_tint_text">Status bar icons color</string>
+    <string name="navigation_bar_tint_text">Navigation Bar Tint</string>
+    <string name="navigation_bar_icon_tint_text">Navigation Bar Icon Tint</string>
     <string name="reset_to_auto_detect">Reset to auto-detect</string>
-    <string name="copyright_summary">Copyright © 2013 – Mohammad Abu-Garbeyyeh\nView more apps and modules</string>
+
+    <!-- Preferences -->
     <string name="api_override_title">Allow 3rd party interaction</string>
     <string name="api_override_summary">3rd party apps may use the API provided to change the status bar color in those apps</string>
-    <string name="default_status_bar_tint_title">Default status bar tint color</string>
-    <string name="default_status_bar_icon_tint_title">Default status bar icon tint color</string>
-    <string name="default_status_bar_inverted_icon_tint_title">Default inverted icon color</string>
-    <string name="default_status_bar_inverted_icon_tint_summary">Select the default color if a light background is determined</string>
-    <string name="default_navigation_bar_tint_title">Default navigation bar tint color</string>
-    <string name="default_navigation_bar_icon_tint_title">Default navigation bar icon tint color</string>
-    <string name="default_summary">Select the default color if no color can be determined</string>
     <string name="max_hsv_title">Max HS[V] for black icons</string>
     <string name="max_hsv_summary">Maximum HS[V] before auto-switching to black icons when action bar has no title text</string>
     <string name="current_hsv_value">Current value: %s</string>
-    <string name="no_activities_error">No activities, this app should not be showing in the list.</string>
-    <string name="loading_title">Loading…</string>
-    <string name="donate_summary">Support development. Extra features may be unlocked in the future</string>
     <string name="toast_activity_names_title">Toast activity titles</string>
     <string name="toast_activity_names_summary">Toasts will be shown whenever an activity is started, this can help you find activity names</string>
-    <string name="toast_text_package_name">Package name: %s</string>
-    <string name="toast_text_activity_name">Activity name: %s</string>
     <string name="awesome_ab_color_picker_title">Notification color picker</string>
     <string name="awesome_ab_color_picker_summary">Lets you dynamically set the color for the activity</string>
-    <string name="notification_add_app">Add app</string>
-    <string name="notification_add_activity">Add activity</string>
-    <string name="apply_touch_color">Apply touch color</string>
-    <string name="apply_general_color">Apply general color</string>
-    <string name="thank_you">Thank you!</string>
-    <string name="thank_you_summary">Thank you for your donation. I really appreciate it :)</string>
-    <string name="android_lockscreen_stub_name">Android Lockscreen</string>
-    <string name="gel_stub_warning">This app is a stub for the actual launcher. Go to actual package?</string>
-    <string name="gel_stub_toast">This app is a stub for the actual launcher, to make changes to that, edit Google Search\'s GEL settings</string>
     <string name="react_actionbar_title">React to Action Bar visiblity change</string>
     <string name="react_actionbar_description">Enabling this causes the status bar tint to change based on Action Bar visibility</string>
     <string name="system_cf_mode_title">System icon ColorFilter mode</string>
     <string name="notification_cf_mode_title">Notification icon ColorFilter mode</string>
-    <string name="cf_mode_explanation">Changing the ColorFilter mode allows you to have more control over how icon colors are changed, MULTIPLY may preserve colors of the original icon, while SRC_ATOP guarantees the color you selected to be set.</string>
-    <string name="default_colors">Default tints</string>
-    <string name="default_colors_summary">Change the default tints used</string>
     <string name="cf_mode">ColorFilter modes</string>
     <string name="explain_cf_mode_text">Explain the following settings</string>
-    <string name="unlocked_secret_settings">You\'ve unlocked some secret settings, these may or may not work as intended</string>
-    <string name="warning">Warning</string>
+    <string name="cf_mode_explanation">Changing the ColorFilter mode allows you to have more control over how icon colors are changed, MULTIPLY may preserve colors of the original icon, while SRC_ATOP guarantees the color you selected to be set.</string>
     <string name="animate_tint_title">Animate color changes</string>
     <string name="animate_tint_summary">Gradually change status bar and navigation bar colors</string>
     <string name="link_panel_views_title">Link status and nav bar colors</string>
     <string name="link_panel_views_summary">The navigation bar will follow the status bar colors</string>
-    <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
-    <string name="default_navigation_bar_im_tint_title">Navigation Bar Tint (IM)</string>
-    <string name="default_summary_keyboard">Select the default color when the keyboard is visible</string>
     <string name="debug_mode_title">Debug mode</string>
     <string name="debug_mode_summary">Enables logging to logcat and/or Xposed logs</string>
     <string name="react_lightsout_title">React to lights out</string>
@@ -85,5 +78,37 @@
     <string name="respect_kitkat_api_summary">Settings for apps that request translucency will be ignored</string>
     <string name="use_fake_gradient_title">Show a gradient over tint</string>
     <string name="use_fake_gradient_summary">Emulate the KitKat look with a gradient</string>
+
+    <!-- Defaults -->
+    <string name="default_colors">Default tints</string>
+    <string name="default_colors_summary">Change the default tints used</string>
+    <string name="default_status_bar_tint_title">Default status bar tint color</string>
+    <string name="default_status_bar_icon_tint_title">Default status bar icon tint color</string>
+    <string name="default_status_bar_inverted_icon_tint_title">Default inverted icon color</string>
+    <string name="default_status_bar_inverted_icon_tint_summary">Select the default color if a light background is determined</string>
+    <string name="default_navigation_bar_tint_title">Default navigation bar tint color</string>
+    <string name="default_navigation_bar_icon_tint_title">Default navigation bar icon tint color</string>
+    <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
+    <string name="default_navigation_bar_im_tint_title">Navigation Bar Tint (IM)</string>
+    <string name="default_summary">Select the default color if no color can be determined</string>
+    <string name="default_summary_keyboard">Select the default color when the keyboard is visible</string>
+
+    <!-- Errors / Notices -->
+    <string name="warning">Warning</string>
+    <string name="no_activities_error">No activities, this app should not be showing in the list.</string>
+    <string name="gel_stub_warning">This app is a stub for the actual launcher. Go to actual package?</string>
+    <string name="gel_stub_toast">This app is a stub for the actual launcher, to make changes to that, edit Google Search\'s GEL settings</string>
+
+    <!-- Toast activity text -->
+    <string name="toast_text_package_name">Package name: %s</string>
+    <string name="toast_text_activity_name">Activity name: %s</string>
+
+    <!-- Notification color picker -->
+    <string name="notification_add_app">Add app</string>
+    <string name="notification_add_activity">Add activity</string>
+    <string name="apply_touch_color">Apply touch color</string>
+    <string name="apply_general_color">Apply general color</string>
+    <string name="android_lockscreen_stub_name">Android Lockscreen</string>
+    <string name="unlocked_secret_settings">You\'ve unlocked some secret settings, these may or may not work as intended</string>
 
 </resources>

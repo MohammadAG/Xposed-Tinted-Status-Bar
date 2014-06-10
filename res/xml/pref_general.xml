@@ -6,6 +6,12 @@
         android:summary="@string/copyright_summary"
         android:title="@string/app_name" />
     <Preference
+        android:key="contributors"
+        android:summary="@string/contributors_summary"
+        android:title="@string/contributors" >
+        <intent android:action="com.mohammadag.colouredstatusbar.SHOW_CONTRIBUTORS" />
+    </Preference>
+    <Preference
         android:key="donate_key"
         android:summary="@string/donate_summary"
         android:title="@string/menu_donate" />
