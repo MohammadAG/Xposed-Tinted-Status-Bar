@@ -90,7 +90,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 					
 					String previewKey;
 
-					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+					Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 					if (SettingsKeys.DEFAULT_NAV_BAR_IM_TINT.equals(prefKey)
 							|| SettingsKeys.DEFAULT_NAV_BAR_TINT.equals(prefKey)) {
 						previewKey = SettingsKeys.NAVIGATION_BAR_TINT;

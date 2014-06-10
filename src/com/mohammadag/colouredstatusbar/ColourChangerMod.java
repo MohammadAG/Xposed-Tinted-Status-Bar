@@ -117,7 +117,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (Common.INTENT_CHANGE_COLOR_NAME.equals(intent.getAction())) {
+			if (StatusBarTintApi.INTENT_CHANGE_COLOR_NAME.equals(intent.getAction())) {
 				boolean link = intent.getBooleanExtra("link_panels", false);
 
 				if (intent.hasExtra("time")) {
@@ -331,7 +331,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 									try {
 										color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
 										colorHandled = true;
-										if (!mSettingsHelper.shouldAlwaysReverseTint() && mSettingsHelper.shouldReverseTintAbColor(packageName)) {
+										if (!mSettingsHelper.shouldAlwaysReverseTint()
+												&& mSettingsHelper.shouldReverseTintAbColor(packageName)) {
 											actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
 										}
 									} catch (IllegalArgumentException e) {
@@ -380,7 +381,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					iconTintColor = Color.parseColor(iconTint);
 				}
 
-				Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+				Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 
 				if (statusBarTint != null)
 					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTintColor);
@@ -426,7 +427,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint, Context context) {
-		Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+		Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTint);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconColorTint);
 
@@ -437,7 +438,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	public static void sendColorSaveAndChangeIntent(int statusBarTint, int iconColorTint, Context context) {
-		Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+		Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, statusBarTint);
 		intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, iconColorTint);
 		intent.putExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME, 0);

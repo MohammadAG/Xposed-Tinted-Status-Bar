@@ -1,10 +1,10 @@
 package com.mohammadag.colouredstatusbar.hooks;
 
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import android.view.View;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 
-import android.view.View;
 import de.robv.android.xposed.XC_MethodHook;
 
 public class TouchWizTransparencyHook extends XC_MethodHook {

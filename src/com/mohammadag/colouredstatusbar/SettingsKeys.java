@@ -29,4 +29,5 @@ public class SettingsKeys {
 	public static final String REACT_LIGHTS_OUT = "pref_react_lights_out";
 	public static final String RESPECT_KITKAT_API = "pref_respect_kitkat_api";
 	public static final String USE_FAKE_GRADIENT = "pref_use_fake_gradient";
+	public static final String REVERSE_TINT_ACTION_BAR = "pref_reverse_tint_action_bar";
 }

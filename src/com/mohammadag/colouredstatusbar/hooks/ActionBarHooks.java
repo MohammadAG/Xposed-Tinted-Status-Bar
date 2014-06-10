@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.IgnoredColorDrawable;
 import com.mohammadag.colouredstatusbar.SettingsHelper;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
@@ -66,7 +65,7 @@ public class ActionBarHooks {
 					if (!mSettingsHelper.shouldReactToActionBar(packageName, null))
 						return;
 
-					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+					Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 
 					int statusBarTint = mSettingsHelper.getDefaultTint(Tint.STATUS_BAR);
 					int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);

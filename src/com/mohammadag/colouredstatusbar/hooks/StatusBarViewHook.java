@@ -12,6 +12,7 @@ import android.view.View;
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.PackageNames;
+import com.mohammadag.colouredstatusbar.StatusBarTintApi;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
 import com.mohammadag.colouredstatusbar.Utils;
 
@@ -35,7 +36,7 @@ public class StatusBarViewHook {
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					Context context = (Context) param.args[0];
 					IntentFilter iF = new IntentFilter();
-					iF.addAction(Common.INTENT_CHANGE_COLOR_NAME);
+					iF.addAction(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 					iF.addAction(Common.INTENT_RESET_ACTIONBAR_COLOR_NAME);
 					iF.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF);
