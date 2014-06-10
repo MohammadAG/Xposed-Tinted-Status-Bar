@@ -40,7 +40,7 @@ import android.widget.SearchView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class PackageListActivity extends Activity {
 	private SettingsHelper mSettingsHelper;
 
 	private ListView mListView = null;
@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
 					i = new Intent(getApplicationContext(), ApplicationSettings.class);
 					i.putExtra(Common.EXTRA_KEY_ACTIVITY_NAME, "NONE");
 				} else if (pkgName.equals(PackageNames.GEL_STUB)) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+					AlertDialog.Builder builder = new AlertDialog.Builder(PackageListActivity.this);
 					builder.setTitle(R.string.warning);
 					builder.setMessage(R.string.gel_stub_warning);
 					builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -228,7 +228,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(final AppListAdaptor result) {
-			mAppListAdaptor = new AppListAdaptor(MainActivity.this, mAppList);
+			mAppListAdaptor = new AppListAdaptor(PackageListActivity.this, mAppList);
 			mListView.setAdapter(mAppListAdaptor);
 
 			try {
