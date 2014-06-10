@@ -59,7 +59,9 @@ public class ScreenColorPickerActivity extends Activity {
 				if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 					int x = (int) motionEvent.getX();
 					int y = (int) motionEvent.getY();
-					touchPreview.setBackgroundColor(bitmap.getPixel(x, y));
+					int color = bitmap.getPixel(x, y);
+					touchPreview.setBackgroundColor(color);
+					touchColor = color;
 					return true;
 				}
 				return false;
