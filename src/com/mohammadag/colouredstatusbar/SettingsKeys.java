@@ -1,8 +1,6 @@
 package com.mohammadag.colouredstatusbar;
 
 public class SettingsKeys {
-	public static final String PREFS = "preferences";
-
 	public static final String STATUS_BAR_TINT = "status_bar_color";
 	public static final String STATUS_BAR_ICON_TINT = "status_bar_icons_color";
 	public static final String NAVIGATION_BAR_TINT = "navigation_bar_color";
@@ -29,4 +27,5 @@ public class SettingsKeys {
 	public static final String DEBUG_MODE = "pref_debug_mode";
 	public static final String REACT_LIGHTS_OUT = "pref_react_lights_out";
 	public static final String RESPECT_KITKAT_API = "pref_respect_kitkat_api";
+	public static final String USE_FAKE_GRADIENT = "pref_use_fake_gradient";
 }

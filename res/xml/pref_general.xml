@@ -39,6 +39,10 @@
         android:summary="@string/link_panel_views_summary"
         android:title="@string/link_panel_views_title" />
     <CheckBoxPreference
+        android:key="pref_use_fake_gradient"
+        android:summary="@string/use_fake_gradient_summary"
+        android:title="@string/use_fake_gradient_title" />
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_respect_kitkat_api"
         android:summary="@string/respect_kitkat_api_summary"

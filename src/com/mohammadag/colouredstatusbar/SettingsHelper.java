@@ -475,4 +475,8 @@ public class SettingsHelper {
 	public boolean shouldRespectKitKatApi() {
 		return getBoolean(SettingsKeys.RESPECT_KITKAT_API, true);
 	}
+
+	public boolean shouldFakeGradient() {
+		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, true);
+	}
 }

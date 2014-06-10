@@ -77,5 +77,7 @@
     <string name="react_lightsout_summary">Changes color of elements according to lights out mode</string>
     <string name="respect_kitkat_api_title">Respect KitKat APIs</string>
     <string name="respect_kitkat_api_summary">Settings for apps that request translucency will be ignored</string>
+    <string name="use_fake_gradient_title">Show a gradient over tint</string>
+    <string name="use_fake_gradient_summary">Emulate the KitKat look with a gradient</string>
 
 </resources>
