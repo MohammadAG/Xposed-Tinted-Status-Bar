@@ -4,6 +4,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -13,17 +14,25 @@ import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.content.res.XModuleResources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -128,7 +137,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					}
 				}
 
-				if( intent.hasExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME))
+				if (intent.hasExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME))
 					mActionBarColor = mLastTint;
 
 				if (intent.hasExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT)) {
@@ -145,7 +154,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
 					setNavigationBarTint(mNavigationBarTint);
 				} else if (link) {
-					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);setNavigationBarTint(mNavigationBarTint);
+					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);
+					setNavigationBarTint(mNavigationBarTint);
 					setNavigationBarTint(mNavigationBarTint);
 				}
 
@@ -174,6 +184,63 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		mResources = XModuleResources.createInstance(startupParam.modulePath, null);
 
 		Class<?> ActivityClass = XposedHelpers.findClass("android.app.Activity", null);
+		findAndHookMethod(ActivityClass, "onWindowFocusChanged", boolean.class, new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+				mSettingsHelper.reload();
+				if (!mSettingsHelper.getBoolean(SettingsKeys.ENABLE_AWESOME_AB_COLOR_PICKER, false))
+					return;
+
+				Activity activity = (Activity) param.thisObject;
+				String packageName = activity.getPackageName();
+				String activityName = activity.getLocalClassName();
+
+				final TypedArray typedArray = activity.obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
+				int actionBarSize = (int) typedArray.getDimension(0, 0);
+				typedArray.recycle();
+
+				// Get the top of the window, so we can crop the status bar out.
+				Rect rect = new Rect();
+				activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+				int top = rect.top;
+
+				View view = activity.getWindow().getDecorView();
+				view.setDrawingCacheEnabled(true);
+				Bitmap bitmap1 = view.getDrawingCache();
+				if (bitmap1 == null) return;
+				// Crop and compress the image so that we don't get a TransactionTooLargeException.
+				Bitmap bitmap = Bitmap.createBitmap(bitmap1, 0, top, bitmap1.getWidth(), actionBarSize);
+				ByteArrayOutputStream compressedBitmap = new ByteArrayOutputStream();
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 80, compressedBitmap);
+
+				ComponentName cn = new ComponentName("com.mohammadag.colouredstatusbar",
+						"com.mohammadag.colouredstatusbar.ScreenColorPickerActivity");
+				Intent colorPickerIntent = new Intent().setComponent(cn);
+				colorPickerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				colorPickerIntent.putExtra("bitmap", compressedBitmap.toByteArray());
+				colorPickerIntent.putExtra("pkg", packageName);
+
+				PendingIntent colorActivityPendingIntent = PendingIntent.getActivity(activity, 0,
+						colorPickerIntent.putExtra("title", activityName), PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent colorAllPendingIntent = PendingIntent.getActivity(activity, 0,
+						colorPickerIntent.putExtra("title", packageName), PendingIntent.FLAG_UPDATE_CURRENT);
+
+				NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+				Notification notification = new NotificationCompat.Builder(activity)
+						.setContentTitle(packageName)
+						.setContentText(activityName)
+						.setSmallIcon(android.R.drawable.sym_def_app_icon)
+						.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap))
+						.addAction(android.R.drawable.ic_menu_add,
+								mResources.getString(R.string.notification_add_activity), colorActivityPendingIntent)
+						.addAction(android.R.drawable.ic_menu_add,
+								mResources.getString(R.string.notification_add_app), colorAllPendingIntent)
+						.build();
+				nm.notify(1240, notification);
+				view.setDrawingCacheEnabled(false);
+			}
+		});
+
 		findAndHookMethod(ActivityClass, "performResume", new XC_MethodHook() {
 			@Override
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -240,15 +307,17 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				try {
 					navigationBarTintColor = Color.parseColor(Utils.addHashIfNeeded(navigationBarTint));
-				} catch (Throwable t) { }
+				} catch (Throwable t) {
+				}
 
 				try {
 					navigationBarIconTintColor = Color.parseColor(Utils.addHashIfNeeded(navBarIconTint));
-				} catch (Throwable t) { }
+				} catch (Throwable t) {
+				}
 
 				int color = 0;
 				int actionBarTextColor = -2;
-				boolean colorHandled = false;				
+				boolean colorHandled = false;
 
 				if (Utils.hasActionBar() && !overridingStatusBar) {
 					ActionBar actionBar = activity.getActionBar();
@@ -262,7 +331,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 									try {
 										color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
 										colorHandled = true;
-									} catch (IllegalArgumentException e) {}
+									} catch (IllegalArgumentException e) {
+									}
 									container.invalidate();
 								}
 
@@ -420,7 +490,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		try {
 			final int[] colors = (int[]) XposedHelpers.getObjectField(mKitKatBatteryView, "mColors");
-			colors[colors.length-1] = iconColor;
+			colors[colors.length - 1] = iconColor;
 			XposedHelpers.setObjectField(mKitKatBatteryView, "mColors", colors);
 		} catch (NoSuchFieldError e) {
 			if (debug) e.printStackTrace();
@@ -448,7 +518,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			/* Beanstalk, not sure why the ROM changed this */
 			try {
 				XposedHelpers.setIntField(mKitKatBatteryView, "mBatteryColor", iconColor);
-			} catch (NoSuchFieldError e1) {}
+			} catch (NoSuchFieldError e1) {
+			}
 			if (debug) e.printStackTrace();
 		}
 
@@ -473,6 +544,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 	}
+
 	@SuppressLint("NewApi")
 	public void setStatusBarTint(final int tintColor) {
 		if (mStatusBarView == null)
@@ -604,7 +676,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
 					@Override
 					public void onAnimationUpdate(ValueAnimator animator) {
-						mNavigationBarView.setBackgroundColor((Integer)animator.getAnimatedValue());
+						mNavigationBarView.setBackgroundColor((Integer) animator.getAnimatedValue());
 					}
 				});
 				colorAnimation.start();
@@ -768,7 +840,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				int resourceId = resparam.res.getIdentifier("msim_super_status_bar", "layout", "com.android.systemui");
 				if (resourceId != 0)
 					resparam.res.hookLayout("com.android.systemui", "layout", "msim_super_status_bar", hook);
-			} catch (Throwable t) { }
+			} catch (Throwable t) {
+			}
 
 			resparam.res.hookLayout("com.android.systemui", "layout", layout, hook);
 		} catch (Throwable t) {
