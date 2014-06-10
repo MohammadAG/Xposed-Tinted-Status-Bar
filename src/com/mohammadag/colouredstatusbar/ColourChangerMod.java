@@ -49,6 +49,7 @@ import com.mohammadag.colouredstatusbar.hooks.BluetoothControllerHook;
 import com.mohammadag.colouredstatusbar.hooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.KitKatBatteryHook;
 import com.mohammadag.colouredstatusbar.hooks.NavigationBarHook;
+import com.mohammadag.colouredstatusbar.hooks.OnWindowFocusedHook;
 import com.mohammadag.colouredstatusbar.hooks.SViewHooks;
 import com.mohammadag.colouredstatusbar.hooks.SignalClusterHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
@@ -184,62 +185,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		mResources = XModuleResources.createInstance(startupParam.modulePath, null);
 
 		Class<?> ActivityClass = XposedHelpers.findClass("android.app.Activity", null);
-		findAndHookMethod(ActivityClass, "onWindowFocusChanged", boolean.class, new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				mSettingsHelper.reload();
-				if (!mSettingsHelper.getBoolean(SettingsKeys.ENABLE_AWESOME_AB_COLOR_PICKER, false))
-					return;
-
-				Activity activity = (Activity) param.thisObject;
-				String packageName = activity.getPackageName();
-				String activityName = activity.getLocalClassName();
-
-				final TypedArray typedArray = activity.obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
-				int actionBarSize = (int) typedArray.getDimension(0, 0);
-				typedArray.recycle();
-
-				// Get the top of the window, so we can crop the status bar out.
-				Rect rect = new Rect();
-				activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-				int top = rect.top;
-
-				View view = activity.getWindow().getDecorView();
-				view.setDrawingCacheEnabled(true);
-				Bitmap bitmap1 = view.getDrawingCache();
-				if (bitmap1 == null) return;
-				// Crop and compress the image so that we don't get a TransactionTooLargeException.
-				Bitmap bitmap = Bitmap.createBitmap(bitmap1, 0, top, bitmap1.getWidth(), actionBarSize);
-				ByteArrayOutputStream compressedBitmap = new ByteArrayOutputStream();
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 80, compressedBitmap);
-
-				ComponentName cn = new ComponentName("com.mohammadag.colouredstatusbar",
-						"com.mohammadag.colouredstatusbar.ScreenColorPickerActivity");
-				Intent colorPickerIntent = new Intent().setComponent(cn);
-				colorPickerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				colorPickerIntent.putExtra("bitmap", compressedBitmap.toByteArray());
-				colorPickerIntent.putExtra("pkg", packageName);
-
-				PendingIntent colorActivityPendingIntent = PendingIntent.getActivity(activity, 0,
-						colorPickerIntent.putExtra("title", activityName), PendingIntent.FLAG_UPDATE_CURRENT);
-				PendingIntent colorAllPendingIntent = PendingIntent.getActivity(activity, 0,
-						colorPickerIntent.putExtra("title", packageName), PendingIntent.FLAG_UPDATE_CURRENT);
-
-				NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-				Notification notification = new NotificationCompat.Builder(activity)
-						.setContentTitle(packageName)
-						.setContentText(activityName)
-						.setSmallIcon(android.R.drawable.sym_def_app_icon)
-						.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap))
-						.addAction(android.R.drawable.ic_menu_add,
-								mResources.getString(R.string.notification_add_activity), colorActivityPendingIntent)
-						.addAction(android.R.drawable.ic_menu_add,
-								mResources.getString(R.string.notification_add_app), colorAllPendingIntent)
-						.build();
-				nm.notify(1240, notification);
-				view.setDrawingCacheEnabled(false);
-			}
-		});
+		findAndHookMethod(ActivityClass, "onWindowFocusChanged", boolean.class,
+				new OnWindowFocusedHook(mSettingsHelper, mResources));
 
 		findAndHookMethod(ActivityClass, "performResume", new XC_MethodHook() {
 			@Override
