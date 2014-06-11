@@ -94,9 +94,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
 
-   /* LG BUTTON IDs */
-   private static int qmemoButtonRESID = 0;
-   private static int notificationButtonRESID = 0;
+	/* LG BUTTON IDs */
+	private static int qmemoButtonRESID = 0;
+	private static int notificationButtonRESID = 0;
 
 	public void log(String text) {
 		if (mSettingsHelper.isDebugMode())
@@ -504,7 +504,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		/* LG BUTTONS */ 
 		ImageView qmemoButton = null;
 		ImageView notificationButton = null;
-		 
+
 		Class<?> NavbarEditor = null;
 
 		try {
@@ -562,7 +562,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 
-	    /* LG BUTTONS*/
+		/* LG BUTTONS*/
 		if (qmemoButtonRESID > 0)
 			qmemoButton = (ImageView) mNavigationBarView.findViewById(qmemoButtonRESID);
 
@@ -578,9 +578,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (homeButton != null)
 			homeButton.setColorFilter(tintColor);
 		if (qmemoButton != null)
-			 qmemoButton.setColorFilter(tintColor);
+			qmemoButton.setColorFilter(tintColor);
 		if (notificationButton != null)
-			 notificationButton.setColorFilter(tintColor);
+			notificationButton.setColorFilter(tintColor);
 
 		if (mNavigationBarView != null) {
 			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
@@ -643,7 +643,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		} catch (Throwable t) {
 			log(t.getMessage());
 		}
-		
+
 		qmemoButtonRESID = resparam.res.getIdentifier("navigation_button_qmemo", "id", "com.android.systemui");
 		notificationButtonRESID = resparam.res.getIdentifier("navigation_button_notification", "id", "com.android.systemui");
 	}

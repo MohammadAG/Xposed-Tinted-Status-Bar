@@ -22,7 +22,7 @@ public class SettingsHelper {
 
 	/* TODO: Rework this class to use this enum for more consistent code */
 	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED,
-		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM };
+		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM }
 
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
@@ -264,7 +264,7 @@ public class SettingsHelper {
 			else
 				return "ff2d5b81";
 		}
-		
+
 		/* TODO: Support Android 4.4 API */
 		if (activityName.equals(PackageNames.GEL_ACTIVITY_NAME)) {
 			return "66000000";
@@ -453,7 +453,7 @@ public class SettingsHelper {
 			return packageName + "." + processedActivityName + "/" + keyName;
 		}
 	}
-	
+
 	public boolean shouldLinkStatusBarAndNavBar() {
 		return getBoolean(SettingsKeys.LINK_PANEL_VIEW_COLORS, false);
 	}

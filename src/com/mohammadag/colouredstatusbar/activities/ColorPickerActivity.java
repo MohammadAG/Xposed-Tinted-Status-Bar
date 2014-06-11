@@ -91,7 +91,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 						getActionBar().setDisplayShowTitleEnabled(false);
 						getActionBar().setDisplayShowTitleEnabled(true);
 					}
-					
+
 					String previewKey;
 
 					Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
@@ -111,7 +111,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 					} else {
 						previewKey = prefKey;
 					}
-					
+
 					intent.putExtra(previewKey, colourHex);
 					sendOrderedBroadcast(intent, null);
 				} catch (IllegalArgumentException e) {

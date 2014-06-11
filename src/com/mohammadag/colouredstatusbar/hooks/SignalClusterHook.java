@@ -28,7 +28,7 @@ public class SignalClusterHook {
 		"mMobileTypeView", "mMobileTypeView2",
 		"mWifiActivityView", "mWifiStrengthView"
 	};
-	
+
 	private static final String[] LG_ICON_NAMES = {
 		"mThirdType","mThirdType2","mThirdActivity"
 	};
@@ -52,7 +52,7 @@ public class SignalClusterHook {
 					mInstance.addSystemIconView(view);
 				} catch (NoSuchFieldError e) { }
 			}
-			
+
 			for (String name : LG_ICON_NAMES) {
 				try {
 					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
@@ -61,7 +61,7 @@ public class SignalClusterHook {
 			}
 		}
 	};
-	
+
 	public SignalClusterHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
 		doHooks(classLoader);

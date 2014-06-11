@@ -56,7 +56,7 @@ public class TickerHooks {
 					};
 				});
 			} catch (NoSuchMethodError e) {
-					mInstance.log("Not hooking method " + className + "." + addMethod);
+				mInstance.log("Not hooking method " + className + "." + addMethod);
 			}
 		} catch (ClassNotFoundError e) {
 			mInstance.log("Not hooking class: " + className);

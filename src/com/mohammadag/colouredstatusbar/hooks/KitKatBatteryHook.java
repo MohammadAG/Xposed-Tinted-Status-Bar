@@ -11,10 +11,10 @@ import de.robv.android.xposed.XposedBridge;
 
 public class KitKatBatteryHook {
 	private ColourChangerMod mInstance;
-	
+
 	public KitKatBatteryHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
-		
+
 		Class<?> BatteryMeterView = findClass("com.android.systemui.BatteryMeterView", classLoader);
 		XposedBridge.hookAllConstructors(BatteryMeterView, new XC_MethodHook() {
 			@Override

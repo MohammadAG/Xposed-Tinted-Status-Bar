@@ -30,7 +30,7 @@ public class OnWindowFocusedHook extends XC_MethodHook {
 		mSettingsHelper = helper;
 		mResources = resources;
 	}
-	
+
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 		mSettingsHelper.reload();
@@ -73,15 +73,15 @@ public class OnWindowFocusedHook extends XC_MethodHook {
 
 		NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = new NotificationCompat.Builder(activity)
-				.setContentTitle(packageName)
-				.setContentText(activityName)
-				.setSmallIcon(android.R.drawable.sym_def_app_icon)
-				.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap))
-				.addAction(android.R.drawable.ic_menu_add,
-						mResources.getString(R.string.notification_add_activity), colorActivityPendingIntent)
+		.setContentTitle(packageName)
+		.setContentText(activityName)
+		.setSmallIcon(android.R.drawable.sym_def_app_icon)
+		.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap))
+		.addAction(android.R.drawable.ic_menu_add,
+				mResources.getString(R.string.notification_add_activity), colorActivityPendingIntent)
 				.addAction(android.R.drawable.ic_menu_add,
 						mResources.getString(R.string.notification_add_app), colorAllPendingIntent)
-				.build();
+						.build();
 		nm.notify(1240, notification);
 		view.setDrawingCacheEnabled(false);
 	}

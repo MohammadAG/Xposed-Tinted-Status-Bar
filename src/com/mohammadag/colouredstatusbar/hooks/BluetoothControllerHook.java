@@ -13,7 +13,7 @@ public class BluetoothControllerHook {
 
 	public BluetoothControllerHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
-		
+
 		String className = "com.android.systemui.statusbar.policy.BluetoothController";
 		String methodName = "addIconView";
 		try {

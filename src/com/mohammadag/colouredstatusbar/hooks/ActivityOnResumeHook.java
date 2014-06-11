@@ -31,10 +31,10 @@ import de.robv.android.xposed.XposedHelpers;
 public class ActivityOnResumeHook extends XC_MethodHook {
 	private SettingsHelper mSettingsHelper;
 	private XModuleResources mResources;
-	
+
 	/* Floating Window Intent ID */
 	public static final int FLAG_FLOATING_WINDOW = 0x00002000;
-	
+
 	private static final String KK_TRANSPARENT_COLOR_STRING = "#66000000";
 	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor(KK_TRANSPARENT_COLOR_STRING);
 
@@ -42,12 +42,12 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 		if (mSettingsHelper.isDebugMode())
 			XposedBridge.log("TintedStatusBar: " + text);
 	}
-	
+
 	public ActivityOnResumeHook(SettingsHelper helper, XModuleResources resources) {
 		mSettingsHelper = helper;
 		mResources = resources;
 	}
-	
+
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 		Activity activity = (Activity) param.thisObject;

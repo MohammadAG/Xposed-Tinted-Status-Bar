@@ -40,12 +40,12 @@ public class StatusBarViewHook {
 					iF.addAction(Common.INTENT_RESET_ACTIONBAR_COLOR_NAME);
 					iF.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF);
-					
+
 					IntentFilter iF2 = new IntentFilter();
 					iF2.addAction(INTENT_SAMSUNG_SVIEW_COVER);
 					iF2.addAction(Common.INTENT_SETTINGS_UPDATED);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF2);
-					
+
 					IntentFilter lockscreenFilter = new IntentFilter();
 					lockscreenFilter.addAction(Intent.ACTION_SCREEN_ON);
 					lockscreenFilter.addAction(Intent.ACTION_SCREEN_OFF);

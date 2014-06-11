@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 
 import java.lang.reflect.Method;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,7 +44,7 @@ public class StatusBarHook {
 						TextView mBatteryText = (TextView) getObjectField(param.thisObject, "mBatteryText");
 						mInstance.addTextLabel(mBatteryText);
 					} catch (NoSuchFieldError e) {}
-					
+
 					try {
 						TextView mOperatorTextView = (TextView) getObjectField(param.thisObject, "mOperatorTextView");
 						mInstance.addTextLabel(mOperatorTextView);
@@ -69,9 +70,10 @@ public class StatusBarHook {
 		} catch (NoSuchMethodError e) {
 			// Not an S4
 		}
-		
+
 		try {
 			findAndHookMethod(PhoneStatusBar, "setSystemUiVisibility", int.class, int.class, new XC_MethodHook() {
+				@SuppressLint("InlinedApi")
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					int vis = (Integer) param.args[0];
 					final boolean lightsOut = (vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0;
@@ -117,7 +119,7 @@ public class StatusBarHook {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		
+
 		Class<?> StatusBarIconView = XposedHelpers.findClass("com.android.systemui.statusbar.StatusBarIconView", classLoader);
 		XposedBridge.hookAllConstructors(StatusBarIconView, new XC_MethodHook() {
 			@Override

@@ -9,11 +9,11 @@ import de.robv.android.xposed.XC_MethodHook;
 
 public class TouchWizTransparencyHook extends XC_MethodHook {
 	private ColourChangerMod mInstance = null;
-	
+
 	public TouchWizTransparencyHook(ColourChangerMod instance) {
 		mInstance = instance;
 	}
-	
+
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 		// This is casted internally from a boolean to an int, not sure why,

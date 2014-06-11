@@ -100,8 +100,8 @@ public class ScreenColorPickerActivity extends Activity {
 		int iconAuto = Utils.getIconColorForColor(generalColor, iconTint, iconInvertedTint, settingsHelper.getHsvMax());
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
 				new String[]{Utils.convertToARGB(iconTint), Utils.convertToARGB(iconInvertedTint),
-						Utils.convertToARGB(iconAuto)}
-		);
+				Utils.convertToARGB(iconAuto)}
+				);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		iconColor.setAdapter(adapter);
 		iconTintColor = iconAuto;

@@ -1,16 +1,16 @@
 package com.mohammadag.colouredstatusbar;
 
- /* Status Bar Tinting API v1
-  * (C) 2013 Mohammad Abu-Garbeyyeh
-  * Feel free to copy this class into your project as is, just change the package declaration above.
-  */
+/* Status Bar Tinting API v1
+ * (C) 2013 Mohammad Abu-Garbeyyeh
+ * Feel free to copy this class into your project as is, just change the package declaration above.
+ */
 
 import android.content.Context;
 import android.content.Intent;
 
 public class StatusBarTintApi {
 	public static final String INTENT_CHANGE_COLOR_NAME = "com.mohammadag.colouredstatusbar.ChangeStatusBarColor";
-	
+
 	public static final String KEY_STATUS_BAR_TINT = "status_bar_color";
 	public static final String KEY_STATUS_BAR_ICON_TINT = "status_bar_icons_color";
 	public static final String KEY_NAVIGATION_BAR_TINT = "navigation_bar_color";
