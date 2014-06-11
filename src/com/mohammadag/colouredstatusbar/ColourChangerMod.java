@@ -382,6 +382,11 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	}
 
 	public void setStatusBarIconsTint(int iconTint) {
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+			mNavigationBarIconTint = iconTint;
+			setNavigationBarIconTint(iconTint, true);
+		}
+
 		if (mSettingsHelper.shouldFakeGradient()) {
 			iconTint = Color.parseColor("#ccffffff");
 		}
@@ -430,10 +435,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		setColorForLayout(mStatusIcons, iconTint, mSettingsHelper.getNotificationIconCfType());
 		setKitKatBatteryColor(iconTint);
-		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
-			mNavigationBarIconTint = iconTint;
-			setNavigationBarIconTint(iconTint, true);
-		}
 	}
 
 	@SuppressLint("NewApi")
