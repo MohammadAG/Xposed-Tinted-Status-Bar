@@ -328,16 +328,19 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					@Override
 					public void onAnimationUpdate(ValueAnimator animator) {
 						if (mSettingsHelper.shouldFakeGradient()) {
-
 							mGradientDrawable.setColor((Integer)animator.getAnimatedValue());
 						} else {
 							mStatusBarView.setBackgroundColor((Integer)animator.getAnimatedValue());
 						}
 					}
 				});
+				if (mSettingsHelper.shouldFakeGradient()) {
+					mStatusBarView.setBackground(mGradientDrawable);
+				}
 				colorAnimation.start();
 			} else {
 				if (mSettingsHelper.shouldFakeGradient()) {
+					mStatusBarView.setBackground(mGradientDrawable);
 					mGradientDrawable.setColor(Color.TRANSPARENT);
 				} else {
 					Utils.setViewBackground(mStatusBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
@@ -348,6 +351,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			mStatusBarView.setAlpha(1f);
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
 				if (mSettingsHelper.shouldFakeGradient()) {
+					mStatusBarView.setBackground(mGradientDrawable);
 					mGradientDrawable.setColor(Color.TRANSPARENT);
 				} else {
 					Utils.setViewBackground(mStatusBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
@@ -355,6 +359,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				}
 			} else {
 				if (mSettingsHelper.shouldFakeGradient()) {
+					mStatusBarView.setBackground(mGradientDrawable);
 					mGradientDrawable.setColor(tintColor);
 				} else {
 					mStatusBarView.setBackgroundColor(tintColor);
