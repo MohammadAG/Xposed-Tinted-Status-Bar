@@ -327,8 +327,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		log("Setting statusbar color to " + tintColor);
 
 		if (mSettingsHelper.animateStatusBarTintChange()) {			
-			if ((tintColor != KITKAT_TRANSPARENT_COLOR || (mSettingsHelper.shouldFakeGradient())
-					&& !(mLastSetColor == KITKAT_TRANSPARENT_COLOR && tintColor == KITKAT_TRANSPARENT_COLOR))) {
+			if (mSettingsHelper.shouldFakeGradient() || tintColor != KITKAT_TRANSPARENT_COLOR) {
 				int animateFrom = mLastSetColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : mLastSetColor;
 				int animateTo = tintColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : tintColor;
 				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), animateFrom, animateTo);
@@ -509,13 +508,18 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		Class<?> NavbarEditor = null;
 
 		try {
+			NavbarEditor = getObjectField(mNavigationBarView, "mEditBar").getClass();
+		} catch (NoSuchFieldError e) { }
+
+		try {
 			recentsButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getRecentsButton");
 		} catch (NoSuchMethodError e) {
 			try {
-				NavbarEditor = getObjectField(mNavigationBarView, "mEditBar").getClass();
-				recentsButton =
-						(ImageView) mNavigationBarView.findViewWithTag(
-								getStaticObjectField(NavbarEditor, "NAVBAR_RECENT"));
+				if (NavbarEditor != null) {
+					recentsButton =
+							(ImageView) mNavigationBarView.findViewWithTag(
+									getStaticObjectField(NavbarEditor, "NAVBAR_RECENT"));
+				}
 			} catch (NoSuchFieldError e1) {
 				e1.printStackTrace();
 			}
