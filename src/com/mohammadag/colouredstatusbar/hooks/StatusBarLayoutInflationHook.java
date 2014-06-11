@@ -45,15 +45,6 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 			// No sense in logging this, it'll happen on most ROMs
 		}
 
-		try {
-			TextView traffic = (TextView) mIconArea.findViewById(
-					liparam.res.getIdentifier("traffic", "id", "com.android.systemui"));
-			if (traffic != null)
-				mInstance.addTextLabel(traffic);
-		} catch (Throwable t) {
-
-		}
-
 		if (clock != null) {
 			mInstance.setClockFound();
 			mInstance.addTextLabel(clock);

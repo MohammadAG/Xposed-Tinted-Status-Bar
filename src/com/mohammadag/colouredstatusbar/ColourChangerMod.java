@@ -39,6 +39,7 @@ import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarLayoutInflationHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarViewHook;
 import com.mohammadag.colouredstatusbar.hooks.TickerHooks;
+import com.mohammadag.colouredstatusbar.hooks.oemhooks.CustomRomHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.LGHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.SViewHooks;
@@ -247,6 +248,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			new KitKatBatteryHook(this, lpparam.classLoader);
 		}
 
+		CustomRomHooks.doHook(lpparam.classLoader, this);
 		HtcTransparencyHook.doHook(lpparam.classLoader);
 		LGHooks.doHook(lpparam.classLoader);
 	}
