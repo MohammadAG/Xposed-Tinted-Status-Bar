@@ -328,6 +328,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					@Override
 					public void onAnimationUpdate(ValueAnimator animator) {
 						if (mSettingsHelper.shouldFakeGradient()) {
+
 							mGradientDrawable.setColor((Integer)animator.getAnimatedValue());
 						} else {
 							mStatusBarView.setBackgroundColor((Integer)animator.getAnimatedValue());
@@ -496,12 +497,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			try {
 				NavbarEditor = getObjectField(mNavigationBarView, "mEditBar").getClass();
 				recentsButton =
-						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_RECENT"));
-			} catch (NoSuchMethodError e1) {
+						(ImageView) mNavigationBarView.findViewWithTag(
+								getStaticObjectField(NavbarEditor, "NAVBAR_RECENT"));
+			} catch (NoSuchFieldError e1) {
 				e1.printStackTrace();
-			} catch (NoSuchFieldError e2) {
-				e2.printStackTrace();
 			}
 		}
 
@@ -511,10 +510,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			try {
 				if (NavbarEditor != null) {
 					menuButton =
-							(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-									"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_ALWAYS_MENU"));
+							(ImageView) mNavigationBarView.findViewWithTag(
+									getStaticObjectField(NavbarEditor, "NAVBAR_ALWAYS_MENU"));
 				}
-			} catch (NoSuchMethodError e1) {
+			} catch (NoSuchFieldError e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -524,9 +523,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		} catch (NoSuchMethodError e) {
 			try {
 				backButton =
-						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_BACK"));
-			} catch (NoSuchMethodError e1) {
+						(ImageView) mNavigationBarView.findViewWithTag(
+								getStaticObjectField(NavbarEditor, "NAVBAR_BACK"));
+			} catch (NoSuchFieldError e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -535,10 +534,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			homeButton = (ImageView) XposedHelpers.callMethod(mNavigationBarView, "getHomeButton");
 		} catch (NoSuchMethodError e) {
 			try {
-				homeButton =
-						(ImageView) XposedHelpers.callMethod(mNavigationBarView,
-								"findViewWithTag", getStaticObjectField(NavbarEditor, "NAVBAR_HOME"));
-			} catch (NoSuchMethodError e1) {
+				homeButton = (ImageView) mNavigationBarView.findViewWithTag(
+						getStaticObjectField(NavbarEditor, "NAVBAR_HOME"));
+			} catch (NoSuchFieldError e1) {
 				e1.printStackTrace();
 			}
 		}
