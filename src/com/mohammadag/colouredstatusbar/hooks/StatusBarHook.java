@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
+import com.mohammadag.colouredstatusbar.hooks.oemhooks.TouchWizTransparencyHook;
+import com.mohammadag.colouredstatusbar.hooks.oemhooks.XperiaTransparencyHook;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;

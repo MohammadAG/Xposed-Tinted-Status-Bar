@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar.hooks;
+package com.mohammadag.colouredstatusbar.hooks.oemhooks;
 
 import java.util.Locale;
 

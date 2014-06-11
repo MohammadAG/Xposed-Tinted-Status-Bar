@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar.hooks;
+package com.mohammadag.colouredstatusbar.hooks.oemhooks;
 
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import android.view.View;
