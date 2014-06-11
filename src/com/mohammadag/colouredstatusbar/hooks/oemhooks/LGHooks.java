@@ -5,7 +5,9 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.view.View;
+import android.widget.ImageView;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -27,13 +29,15 @@ public class LGHooks {
 		try {
 			Class<?> StatusBarBackGroundClss = findClass("com.lge.systemui.StatusBarBackground", classLoader);
 			findAndHookMethod(StatusBarBackGroundClss, "applyMode", int.class, boolean.class, new XC_MethodHook() {
+				@SuppressLint("NewApi")
 				@Override
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					int i = (Integer) param.args[0];
 					if (i != 1 && i != 2) {
 						XposedHelpers.setIntField(param.thisObject, "mMode", i);
-						XposedHelpers.callMethod(param.thisObject,"setBackground",(Object)null);
-						XposedHelpers.callMethod(param.thisObject,"setVisibility", View.VISIBLE);
+						ImageView imageView = (ImageView) param.thisObject;
+						imageView.setBackground(null);
+						imageView.setVisibility(View.VISIBLE);
 						param.setResult(null);
 					}
 				}
@@ -47,9 +51,11 @@ public class LGHooks {
 		try {
 			Class<?> NavigationBackGroundClss = XposedHelpers.findClass("com.lge.systemui.navigationbar.NavigationBarBackground", classLoader);
 			findAndHookMethod(NavigationBackGroundClss, "updateThemeResource", new XC_MethodHook() {
+				@SuppressLint("NewApi")
 				@Override
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-					XposedHelpers.callMethod(param.thisObject,"setBackground", (Object) null);
+					ImageView imageView = (ImageView) param.thisObject;
+					imageView.setBackground(null);
 					param.setResult(null);
 				}
 			});
