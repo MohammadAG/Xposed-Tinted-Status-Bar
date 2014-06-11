@@ -60,7 +60,7 @@ public class OnWindowFocusedHook extends XC_MethodHook {
 		bitmap.compress(Bitmap.CompressFormat.JPEG, 80, compressedBitmap);
 
 		ComponentName cn = new ComponentName("com.mohammadag.colouredstatusbar",
-				"com.mohammadag.colouredstatusbar.ScreenColorPickerActivity");
+				"com.mohammadag.colouredstatusbar.activities.ScreenColorPickerActivity");
 		Intent colorPickerIntent = new Intent().setComponent(cn);
 		colorPickerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		colorPickerIntent.putExtra("bitmap", compressedBitmap.toByteArray());
