@@ -28,6 +28,10 @@ public class SignalClusterHook {
 		"mMobileTypeView", "mMobileTypeView2",
 		"mWifiActivityView", "mWifiStrengthView"
 	};
+	
+	private static final String[] LG_ICON_NAMES = {
+		"mThirdType","mThirdType2","mThirdActivity"
+	};
 
 	private ColourChangerMod mInstance;
 	private XC_MethodHook mSignalClusterHook = new XC_MethodHook() {
@@ -43,6 +47,13 @@ public class SignalClusterHook {
 			}
 
 			for (String name : MOTO_G_ICON_NAMES) {
+				try {
+					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
+					mInstance.addSystemIconView(view);
+				} catch (NoSuchFieldError e) { }
+			}
+			
+			for (String name : LG_ICON_NAMES) {
 				try {
 					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
 					mInstance.addSystemIconView(view);

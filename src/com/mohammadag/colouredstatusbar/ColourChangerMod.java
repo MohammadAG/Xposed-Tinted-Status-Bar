@@ -33,6 +33,7 @@ import com.mohammadag.colouredstatusbar.hooks.BatteryHooks;
 import com.mohammadag.colouredstatusbar.hooks.BluetoothControllerHook;
 import com.mohammadag.colouredstatusbar.hooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.KitKatBatteryHook;
+import com.mohammadag.colouredstatusbar.hooks.LGHooks;
 import com.mohammadag.colouredstatusbar.hooks.NavigationBarHook;
 import com.mohammadag.colouredstatusbar.hooks.OnWindowFocusedHook;
 import com.mohammadag.colouredstatusbar.hooks.SViewHooks;
@@ -92,6 +93,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
 
+   /* LG BUTTON IDs */
+   private static int qmemoButtonRESID = 0;
+   private static int notificationButtonRESID = 0;
+
 	public void log(String text) {
 		if (mSettingsHelper.isDebugMode())
 			XposedBridge.log("TintedStatusBar: " + text);
@@ -135,7 +140,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT) && !link) {
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
-					setNavigationBarTint(mNavigationBarTint);
+					setNavigationBarTint(mNavigationBarTint, true);
 				} else if (link) {
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);
 					setNavigationBarTint(mNavigationBarTint);
@@ -144,7 +149,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
-					setNavigationBarIconTint(mNavigationBarIconTint);
+					setNavigationBarIconTint(mNavigationBarIconTint, true);
 				} else if (link) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint);
@@ -243,6 +248,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		}
 
 		HtcTransparencyHook.doHook(lpparam.classLoader);
+		LGHooks.doHook(lpparam.classLoader);
 	}
 
 	private void setKitKatBatteryColor(int iconColor) {
@@ -494,6 +500,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		ImageView backButton = null;
 		ImageView homeButton = null;
 
+		/* LG BUTTONS */ 
+		ImageView qmemoButton = null;
+		ImageView notificationButton = null;
+		 
 		Class<?> NavbarEditor = null;
 
 		try {
@@ -546,6 +556,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 
+	    /* LG BUTTONS*/
+		if (qmemoButtonRESID > 0)
+			qmemoButton = (ImageView) mNavigationBarView.findViewById(qmemoButtonRESID);
+
+		if (notificationButtonRESID > 0)
+			notificationButton = (ImageView) mNavigationBarView.findViewById(notificationButtonRESID);
+
 		if (recentsButton != null)
 			recentsButton.setColorFilter(tintColor);
 		if (menuButton != null)
@@ -554,6 +571,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			backButton.setColorFilter(tintColor);
 		if (homeButton != null)
 			homeButton.setColorFilter(tintColor);
+		if (qmemoButton != null)
+			 qmemoButton.setColorFilter(tintColor);
+		if (notificationButton != null)
+			 notificationButton.setColorFilter(tintColor);
 
 		if (mNavigationBarView != null) {
 			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
@@ -616,6 +637,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		} catch (Throwable t) {
 			log(t.getMessage());
 		}
+		
+		qmemoButtonRESID = resparam.res.getIdentifier("navigation_button_qmemo", "id", "com.android.systemui");
+		notificationButtonRESID = resparam.res.getIdentifier("navigation_button_notification", "id", "com.android.systemui");
 	}
 
 	public int getLastStatusBarTint() {

@@ -41,6 +41,11 @@ public class StatusBarHook {
 						TextView mBatteryText = (TextView) getObjectField(param.thisObject, "mBatteryText");
 						mInstance.addTextLabel(mBatteryText);
 					} catch (NoSuchFieldError e) {}
+					
+					try {
+						TextView mOperatorTextView = (TextView) getObjectField(param.thisObject, "mOperatorTextView");
+						mInstance.addTextLabel(mOperatorTextView);
+					} catch (NoSuchFieldError e) {}
 				}
 			});
 		} catch (NoSuchMethodError e) {}
