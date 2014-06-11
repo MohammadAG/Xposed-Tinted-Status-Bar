@@ -11,6 +11,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -172,11 +173,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		mResources = XModuleResources.createInstance(startupParam.modulePath, null);
 
-		Class<?> ActivityClass = XposedHelpers.findClass("android.app.Activity", null);
-		findAndHookMethod(ActivityClass, "onWindowFocusChanged", boolean.class,
+		findAndHookMethod(Activity.class, "onWindowFocusChanged", boolean.class,
 				new OnWindowFocusedHook(mSettingsHelper, mResources));
-
-		findAndHookMethod(ActivityClass, "performResume",
+		findAndHookMethod(Activity.class, "performResume",
 				new ActivityOnResumeHook(mSettingsHelper, mResources));
 
 		if (Utils.hasActionBar())
