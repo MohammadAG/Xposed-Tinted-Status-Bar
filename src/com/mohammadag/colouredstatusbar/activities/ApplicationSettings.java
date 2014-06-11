@@ -60,6 +60,7 @@ public class ApplicationSettings extends Activity {
 	private Button mResetToAutoDetectButton;
 	private CheckBox mLinkPanelsCheckbox;
 	private CheckBox mReactToActionBarCheckbox;
+	private CheckBox mReverseTintActionBarChedkbox;
 
 	private String mNavigationBarTint;
 	private String mNavigationBarIconTint;
@@ -178,6 +179,15 @@ public class ApplicationSettings extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				mSettingsHelper.setShouldReactToActionBar(mPackageName, mActivityName, isChecked);
+			}
+		});
+
+		mReverseTintActionBarChedkbox = (CheckBox) findViewById(R.id.reverse_tint_actionbar_checkbox);
+		mReverseTintActionBarChedkbox.setChecked(mSettingsHelper.shouldReverseTintAbColor(mPackageName));
+		mReverseTintActionBarChedkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSettingsHelper.setShouldReverseTintActionBar(mPackageName, mActivityName, isChecked);
 			}
 		});
 

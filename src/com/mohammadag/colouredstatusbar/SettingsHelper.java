@@ -488,4 +488,10 @@ public class SettingsHelper {
 	public boolean shouldAlwaysReverseTint() {
 		return getBoolean(SettingsKeys.REVERSE_TINT_ACTION_BAR, false);
 	}
+
+	public void setShouldReverseTintActionBar(String packageName,
+			String activityName, boolean reverseTint) {
+		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
+				SettingsKeys.REVERSE_TINT_ACTION_BAR), reverseTint).commit();
+	}
 }
