@@ -475,7 +475,7 @@ public class SettingsHelper {
 	}
 
 	public boolean shouldFakeGradient() {
-		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, true);
+		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, false);
 	}
 
 	public boolean shouldReverseTintAbColor(String packageName) {
