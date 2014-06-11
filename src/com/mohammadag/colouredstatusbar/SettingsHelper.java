@@ -286,8 +286,6 @@ public class SettingsHelper {
 			return "990000";
 		else if ("com.paypal.android.p2pmobile".equals(packageName))
 			return "50443d";
-		else if ("com.google.android.apps.plus".equals(packageName))
-			return "b9321f";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
 		else if ("com.pushbullet.android".equals(packageName))
