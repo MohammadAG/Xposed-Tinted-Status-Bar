@@ -276,20 +276,12 @@ public class SettingsHelper {
 	private static String getDefaultTintColorForPackage(String packageName) {
 		if ("com.skype.raider".equals(packageName))
 			return "01aef0";
-		else if ("com.dropbox.android".equals(packageName))
-			return "007de3";
-		else if ("com.google.android.gm".equals(packageName))
-			return "dddddd";
 		else if ("com.chrome.beta".equals(packageName) || "com.android.chrome".equals(packageName))
 			return "e1e1e1";
-		else if ("bbc.mobile.news.ww".equals(packageName))
-			return "990000";
 		else if ("com.paypal.android.p2pmobile".equals(packageName))
 			return "50443d";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
-		else if ("com.pushbullet.android".equals(packageName))
-			return "23ae60";
 
 		return null;
 	}
