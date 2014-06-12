@@ -32,6 +32,7 @@ import com.mohammadag.colouredstatusbar.hooks.ActionBarHooks;
 import com.mohammadag.colouredstatusbar.hooks.ActivityOnResumeHook;
 import com.mohammadag.colouredstatusbar.hooks.BatteryHooks;
 import com.mohammadag.colouredstatusbar.hooks.BluetoothControllerHook;
+import com.mohammadag.colouredstatusbar.hooks.KeyButtonViewHook;
 import com.mohammadag.colouredstatusbar.hooks.KitKatBatteryHook;
 import com.mohammadag.colouredstatusbar.hooks.NavigationBarHook;
 import com.mohammadag.colouredstatusbar.hooks.OnWindowFocusedHook;
@@ -94,6 +95,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
+	private boolean mIgnoreNextKeyboardDownChange = false;
+	private boolean mKeyboardUp = false;
 
 	/* LG BUTTON IDs */
 	private static int qmemoButtonRESID = 0;
@@ -243,6 +246,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		new SignalClusterHook(this, lpparam.classLoader);
 		new BluetoothControllerHook(this, lpparam.classLoader);
 		new TickerHooks(this, lpparam.classLoader);
+		new KeyButtonViewHook(this, lpparam.classLoader);
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
 			new KitKatBatteryHook(this, lpparam.classLoader);
 		}
@@ -737,10 +741,16 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	public void onKeyboardVisible(boolean keyboardUp) {
 		log("Keyboard visibility changed, isUp? " + keyboardUp);
 
+		mKeyboardUp = keyboardUp;
+
 		if (keyboardUp) {
 			setNavigationBarTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_IM), true);
 			setNavigationBarIconTint(mSettingsHelper.getDefaultTint(Tint.NAV_BAR_ICON_IM), true);
 		} else {
+			if (mIgnoreNextKeyboardDownChange) {
+				mIgnoreNextKeyboardDownChange = false;
+				return;
+			}
 			setNavigationBarTint(mNavigationBarTint, true);
 			setNavigationBarIconTint(mNavigationBarIconTint, true);
 		}
@@ -784,6 +794,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			setStatusBarIconsTint(mLastIconTint);
 			setNavigationBarTint(mNavigationBarTint, true);
 			setNavigationBarIconTint(mNavigationBarIconTint, true);
+		}
+	}
+
+	public void onHomeKeyPressed() {
+		log("Home key pressed without keyboardUp? " + mKeyboardUp);
+		if (mKeyboardUp) {
+			mIgnoreNextKeyboardDownChange = true;
 		}
 	}
 }
