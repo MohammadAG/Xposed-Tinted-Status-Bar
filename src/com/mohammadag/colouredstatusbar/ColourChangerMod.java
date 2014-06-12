@@ -95,6 +95,13 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
+
+	/* 
+	 * Workaround for race condition when an app is closed with the keyboard open.
+	 * The broadcast and SystemUI will conflict, usually the broadcast would set the
+	 * color back for icons and nav bar, and in between, SystemUI resets the color
+	 * back to the old keyboard down one.
+	 */
 	private boolean mIgnoreNextKeyboardDownChange = false;
 	private boolean mKeyboardUp = false;
 
