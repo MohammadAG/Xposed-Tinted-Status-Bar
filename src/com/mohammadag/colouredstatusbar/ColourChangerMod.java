@@ -45,6 +45,7 @@ import com.mohammadag.colouredstatusbar.hooks.oemhooks.CustomRomHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.LGHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.SViewHooks;
+import com.mohammadag.colouredstatusbar.hooks.oemhooks.SamsungHook;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -257,6 +258,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		CustomRomHooks.doHook(lpparam.classLoader, this);
 		HtcTransparencyHook.doHook(lpparam.classLoader);
 		LGHooks.doHook(lpparam.classLoader);
+		SamsungHook.doHook(this, lpparam.classLoader);
 	}
 
 	private void setKitKatBatteryColor(int iconColor) {

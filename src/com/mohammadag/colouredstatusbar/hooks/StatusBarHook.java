@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.hooks.oemhooks.TouchWizTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.XperiaTransparencyHook;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -63,12 +62,6 @@ public class StatusBarHook {
 			// Not an Xperia
 		} catch (NoSuchFieldError e) {
 			// Whaaaa?
-		}
-
-		try {
-			findAndHookMethod(PhoneStatusBar, "transparentizeStatusBar", int.class, new TouchWizTransparencyHook(mInstance));
-		} catch (NoSuchMethodError e) {
-			// Not an S4
 		}
 
 		try {
