@@ -84,10 +84,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static final String KK_TRANSPARENT_COLOR_STRING = "#66000000";
 	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor(KK_TRANSPARENT_COLOR_STRING);
 
-	/* Wokraround for Samsung UX */
-	@SuppressWarnings("unused")
-	private static boolean mIsStatusBarNowTransparent = false;
-
 	private static XModuleResources mResources;
 	private GradientDrawable mGradientDrawable;
 
@@ -706,10 +702,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	public void setKitKatBatteryView(View batteryView) {
 		mKitKatBatteryView = batteryView;
 		setKitKatBatteryColor(mLastIconTint);
-	}
-
-	public void setTouchWizTransparentStatusBar(boolean transparent) {
-		mIsStatusBarNowTransparent = transparent;
 	}
 
 	public void setNoClockFound() {

@@ -21,12 +21,10 @@ public class TouchWizTransparencyHook extends XC_MethodHook {
 		int isTransparent = (Integer) param.args[0];
 
 		if (isTransparent == 0) {
-			mInstance.setTouchWizTransparentStatusBar(false);
-
 			View statusBarView = (View) getObjectField(param.thisObject, "mStatusBarView");
 			statusBarView.setBackgroundColor(mInstance.getLastStatusBarTint());
 		} else if (isTransparent == 1) {
-			mInstance.setTouchWizTransparentStatusBar(true);
+
 		}
 	}
 }
