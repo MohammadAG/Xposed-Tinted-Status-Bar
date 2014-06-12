@@ -26,11 +26,11 @@
         <PreferenceScreen
             android:summary="@string/default_settings_summary"
             android:title="@string/default_settings_title" >
-            <CheckBoxPreference
+            <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
                 android:key="pref_link_panel_view_colors"
                 android:summary="@string/link_panel_views_summary"
                 android:title="@string/link_panel_views_title" />
-            <CheckBoxPreference
+            <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
                 android:defaultValue="true"
                 android:key="pref_respect_kitkat_api"
                 android:summary="@string/respect_kitkat_api_summary"
@@ -71,32 +71,32 @@
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/appearance" >
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:defaultValue="true"
             android:key="pref_animate_tint"
             android:summary="@string/animate_tint_summary"
             android:title="@string/animate_tint_title" />
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_use_fake_gradient"
             android:summary="@string/use_fake_gradient_summary"
             android:title="@string/use_fake_gradient_title" />
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_react_lights_out"
             android:summary="@string/react_lightsout_summary"
             android:title="@string/react_lightsout_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/action_bar" >
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:defaultValue="false"
             android:key="pref_awesome_ab_color_picker"
             android:summary="@string/awesome_ab_color_picker_summary"
             android:title="@string/awesome_ab_color_picker_title" />
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:defaultValue="true"
             android:key="pref_react_action_bar_visibility"
             android:summary="@string/react_actionbar_description"
             android:title="@string/react_actionbar_title" />
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_reverse_tint_action_bar"
             android:summary="@string/reverse_tint_actionbar_summary"
             android:title="@string/reverse_tint_actionbar_title" />
@@ -109,17 +109,17 @@
         android:title="@string/max_hsv_title" />
 
     <PreferenceCategory android:title="@string/advanced" >
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:defaultValue="true"
             android:key="pref_allow_api_usage"
             android:summary="@string/api_override_summary"
             android:title="@string/api_override_title" />
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:defaultValue="false"
             android:key="pref_toast_activity_names"
             android:summary="@string/toast_activity_names_summary"
             android:title="@string/toast_activity_names_title" />
-        <CheckBoxPreference
+        <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_debug_mode"
             android:summary="@string/debug_mode_summary"
             android:title="@string/debug_mode_title" />

@@ -42,6 +42,11 @@
         <item>CODER</item>
         <item>https://github.com/greg2001</item>
     </string-array>
+    <string-array name="contributor_5">
+        <item>P_Toti</item>
+        <item>CODER</item>
+        <item>http://forum.xda-developers.com/member.php?u=4699410</item>
+    </string-array>
 
     <!-- Libraries -->
     <string-array name="library_1">
@@ -92,6 +97,11 @@
         <item>Schokonuss (German)</item>
         <item>TRANSLATOR</item>
         <item>http://forum.xda-developers.com/member.php?u=5510635</item>
+    </string-array>
+    <string-array name="translator_8">
+        <item>P_Toti(Italian)</item>
+        <item>TRANSLATOR</item>
+        <item>http://forum.xda-developers.com/member.php?u=4699410</item>
     </string-array>
 
 </resources>
