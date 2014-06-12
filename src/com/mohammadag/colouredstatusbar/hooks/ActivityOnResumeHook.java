@@ -217,7 +217,7 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 		intent.putExtra("time", System.currentTimeMillis());
 		intent.putExtra("link_panels", mSettingsHelper.shouldLinkPanels(packageName, null));
 
-		if (mSettingsHelper.shouldAlwaysReverseTint()) {
+		if (mSettingsHelper.shouldAlwaysReverseTint() && mSettingsHelper.shouldReverseTintAbColor(packageName)) {
 			ActionBar actionBar = activity.getActionBar();
 			if (actionBar != null && actionBar.isShowing()) {
 				// Reverse tint
