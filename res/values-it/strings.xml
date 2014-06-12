@@ -41,7 +41,7 @@
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_playstore">Play Store</string>
     <string name="menu_xposed">Moduli Xposed</string>
-    <string name="menu_donate">Dona</string>
+    <string name="menu_donate">Effettua una donazione</string>
 
     <!-- Color picker -->
     <string name="enabled">Abilitato</string>
@@ -97,7 +97,7 @@
     <string name="debug_mode_title">Modalità debugging</string>
     <string name="debug_mode_summary">Abilità il logging</string>
     <string name="react_lightsout_title">Reagisci alla modalità Lights out</string>
-    <string name="react_lightsout_summary">Cambia i colori in accordo con la modalità lights out mode</string>
+    <string name="react_lightsout_summary">Cambia i colori in accordo con la modalità lights out</string>
     <string name="respect_kitkat_api_title">Rispetta API KitKat</string>
     <string name="respect_kitkat_api_summary">TSB non interferirà con applicazioni che richiedono la translucenza</string>
     <string name="use_fake_gradient_title">Mostra ombra nelle applicazioni</string>
