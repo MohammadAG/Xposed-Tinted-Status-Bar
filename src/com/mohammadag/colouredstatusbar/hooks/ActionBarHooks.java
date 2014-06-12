@@ -45,7 +45,7 @@ public class ActionBarHooks {
 							return;
 						}
 						int color = Utils.getMainColorFromActionBarDrawable(drawable);
-						if (mSettingsHelper.shouldReverseTintAbColor(packageName))
+						if (mSettingsHelper.shouldReverseTintAbColor(packageName) && actionBar.isShowing())
 							actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
 						int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
 						int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
