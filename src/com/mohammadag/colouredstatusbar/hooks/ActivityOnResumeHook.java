@@ -219,7 +219,7 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 
 		if (mSettingsHelper.shouldAlwaysReverseTint()) {
 			ActionBar actionBar = activity.getActionBar();
-			if (actionBar != null) {
+			if (actionBar != null && actionBar.isShowing()) {
 				// Reverse tint
 				actionBar.setBackgroundDrawable(
 						new IgnoredColorDrawable(intent.getIntExtra(
