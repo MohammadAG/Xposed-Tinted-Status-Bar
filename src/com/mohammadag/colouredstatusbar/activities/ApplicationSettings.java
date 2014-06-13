@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,7 +24,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.PackageNames;
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsHelper;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
+import com.mohammadag.colouredstatusbar.SettingsKeys;
+import com.mohammadag.colouredstatusbar.Utils;
 
 public class ApplicationSettings extends Activity {
 
@@ -53,6 +59,8 @@ public class ApplicationSettings extends Activity {
 
 	private Button mResetToAutoDetectButton;
 	private CheckBox mLinkPanelsCheckbox;
+	private CheckBox mReactToActionBarCheckbox;
+	private CheckBox mReverseTintActionBarChedkbox;
 
 	private String mNavigationBarTint;
 	private String mNavigationBarIconTint;
@@ -165,8 +173,26 @@ public class ApplicationSettings extends Activity {
 			}
 		});
 
+		mReactToActionBarCheckbox = (CheckBox) findViewById(R.id.react_actionbar_checkbox);
+		mReactToActionBarCheckbox.setChecked(mSettingsHelper.shouldReactToActionBar(mPackageName, mActivityName));
+		mReactToActionBarCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSettingsHelper.setShouldReactToActionBar(mPackageName, mActivityName, isChecked);
+			}
+		});
+
+		mReverseTintActionBarChedkbox = (CheckBox) findViewById(R.id.reverse_tint_actionbar_checkbox);
+		mReverseTintActionBarChedkbox.setChecked(mSettingsHelper.shouldReverseTintAbColor(mPackageName));
+		mReverseTintActionBarChedkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSettingsHelper.setShouldReverseTintActionBar(mPackageName, mActivityName, isChecked);
+			}
+		});
+
 		if (mActivityName != null)
-			mLinkPanelsCheckbox.setVisibility(View.GONE);
+			findViewById(R.id.package_specifc_options).setVisibility(View.GONE);
 	}
 
 	@Override

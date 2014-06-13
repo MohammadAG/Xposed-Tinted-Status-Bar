@@ -13,7 +13,7 @@ public class NavigationBarHook {
 	private static final int STATUS_BAR_DISABLE_RECENT = 0x01000000;
 	private static boolean mWasKeyboardUp = false;
 	private ColourChangerMod mInstance;
-	
+
 	static {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
 			NAVIGATION_HINT_BACK_ALT = 1 << 0;

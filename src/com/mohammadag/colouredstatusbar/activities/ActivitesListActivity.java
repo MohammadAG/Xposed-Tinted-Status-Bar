@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +31,12 @@ import android.widget.Toast;
 
 import com.haarman.listviewanimations.ArrayAdapter;
 import com.haarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
+import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.PackageNames;
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsHelper;
+import com.mohammadag.colouredstatusbar.SettingsKeys;
+import com.mohammadag.colouredstatusbar.Utils;
 
 public class ActivitesListActivity extends ListActivity {
 	private String mPackageName;

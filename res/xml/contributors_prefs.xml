@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="coders"
+        android:title="@string/coders" >
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="designers"
+        android:title="@string/designers" >
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="translators"
+        android:title="@string/translators" >
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="libraries"
+        android:title="@string/libraries" >
+    </PreferenceCategory>
+
+</PreferenceScreen>

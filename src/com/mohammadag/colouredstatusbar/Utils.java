@@ -42,8 +42,8 @@ public class Utils {
 		Bitmap bitmap;
 
 		try {
-			bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-					drawable.getIntrinsicHeight(), Config.ARGB_8888);
+			bitmap = Bitmap.createBitmap(1, 80, Config.ARGB_8888);
+			bitmap.setDensity(480);
 			Canvas canvas = new Canvas(bitmap); 
 			drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
 			drawable.draw(canvas);
@@ -76,7 +76,7 @@ public class Utils {
 		}
 
 		Bitmap bitmap = drawableToBitmap(copyDrawable);
-		int pixel = bitmap.getPixel(0, 5);
+		int pixel = bitmap.getPixel(0, 40);
 		int red = Color.red(pixel);
 		int blue = Color.blue(pixel);
 		int green = Color.green(pixel);
@@ -103,28 +103,7 @@ public class Utils {
 	}
 
 	public static String convertToARGB(int color) {
-		String alpha = Integer.toHexString(Color.alpha(color));
-		String red = Integer.toHexString(Color.red(color));
-		String green = Integer.toHexString(Color.green(color));
-		String blue = Integer.toHexString(Color.blue(color));
-
-		if (alpha.length() == 1) {
-			alpha = "0" + alpha;
-		}
-
-		if (red.length() == 1) {
-			red = "0" + red;
-		}
-
-		if (green.length() == 1) {
-			green = "0" + green;
-		}
-
-		if (blue.length() == 1) {
-			blue = "0" + blue;
-		}
-
-		return "#" + alpha + red + green + blue;
+		return String.format("%08X", color);
 	}
 
 	public static String addHashIfNeeded(String string) {

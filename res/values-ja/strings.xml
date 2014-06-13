@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Title / Misc -->
     <string name="app_name">Tinted Status Bar</string>
     <string name="app_name_donate_version">Tinted Status Bar (寄付版)</string>
-    <string name="action_settings">設定</string>
-    <string name="menu_save">保存</string>
     <string name="title_activity_applications_settings">Tinted Status Bar設定</string>
+    <string name="copyright_summary">Copyright © 2013-2014 – Mohammad Abu-Garbeyyeh\nその他のアプリとモジュールを表示</string>
+    <string name="loading_title">読み込み中…</string>
+    <string name="donate_summary">開発をサポートします。寄付版には限定機能を追加する予定です。</string>
+    <string name="thank_you">ありがとう!</string>
+    <string name="thank_you_summary">寄付してくださってありがとうございます。本当に感謝しています :)</string>
+    <string name="android_lockscreen_stub_name">Androidロック画面</string>
+    <string name="unlocked_secret_settings">隠し設定を表示するようにしました。正しく動作しない場合もあるので注意してください。</string>
+
+    <!-- Contributors, don't forgot to add yourself in contributors.xml if you translated TSB -->
+    <string name="contributors">協力者</string>
+    <string name="contributors_summary">Tinted Status Barの開発に協力してくださった方々の名前を表示します。ご協力ありがとうございます!</string>
+    <string name="coders">コーダー</string>
+    <string name="designers">デザイナー</string>
+    <string name="libraries">ライブラリ</string>
+    <string name="translators">翻訳者</string>
+
+    <!-- Contributor links text -->
+    <string name="link_facebook">Facebookでフォローする</string>
+    <string name="link_twitter">Twitterでフォローする</string>
+    <string name="link_google_plus">Google+でフォローする</string>
+    <string name="link_github">Githubでフォローする</string>
+    <string name="link_github_library">Githubでフォークする</string>
+    <string name="link_xda">XDA Developersプロフィールを表示する</string>
+    <string name="link_youtube">YouTubeチャンネルを登録する</string>
+    <string name="link_linkedin">LinkedInでつながる</string>
+    <string name="link_generic">ウェブサイトを表示する</string>
+    <string name="link_generic_library">ライブラリのウェブサイトを表示する</string>
+
+    <!-- Menu actions -->
+    <string name="action_settings">設定</string>
+    <string name="action_search">検索</string>
+    <string name="menu_save">保存</string>
     <string name="menu_launch">起動</string>
     <string name="menu_settings">設定</string>
-    <string name="action_search">検索</string>
     <string name="menu_playstore">Playストア</string>
     <string name="menu_xposed">Xposedモジュール</string>
     <string name="menu_donate">寄付</string>
-    <string name="status_bar_tint_text">ステータスバーの色</string>
-    <string name="status_bar_icon_tint_text">ステータスバーアイコンの色</string>
-    <string name="navigation_bar_tint_text">ナビバーの色</string>
-    <string name="navigation_bar_icon_tint_text">ナビバーアイコンの色</string>
+
+    <!-- Color picker -->
     <string name="enabled">有効</string>
     <string name="apply">適用</string>
     <string name="saturation">彩度</string>
@@ -25,57 +53,86 @@
     <string name="restore">復元</string>
     <string name="save">保存</string>
     <string name="invalid_color">不正な色です</string>
+
+    <!-- Activity color settings -->
     <string name="all_activities_title">全てのアクティビティ</string>
-    <string name="all_the_wonderful_activities">"全てのアクティビティ(以下の設定を優先)"</string>
+    <string name="all_the_wonderful_activities">全てのアクティビティ\n（下で設定するとそちらを優先します）</string>
+    <string name="status_bar_tint_text">ステータスバーの色</string>
+    <string name="status_bar_icon_tint_text">ステータスバーアイコンの色</string>
+    <string name="navigation_bar_tint_text">ナビバーの色</string>
+    <string name="navigation_bar_icon_tint_text">ナビバーアイコンの色</string>
     <string name="reset_to_auto_detect">自動検出に戻す</string>
-    <string name="copyright_summary">Copyright (c) 2013 - Mohammad Abu-Garbeyyeh\nその他のアプリとモジュールを表示</string>
+
+    <!-- Preference categories -->
+    <string name="advanced">高度な設定</string>
+    <string name="action_bar">アクションバー</string>
+    <string name="per_app_settings">アプリ別設定</string>
+    <string name="appearance">表示設定</string>
+    <string name="reverse_tint_actionbar_title">アクションバーの色を反転させる</string>
+    <string name="reverse_tint_actionbar_summary">ステータスバーの色をアクションバーにセットします。</string>
+
+    <!-- Preferences -->
+    <string name="per_app_tints_title">アプリ別設定</string>
+    <string name="per_app_tints_summary">ステータスバーやアクションバーの色をアプリ毎に設定できます。</string>
     <string name="api_override_title">他のアプリと連携する</string>
     <string name="api_override_summary">他の開発者の作ったアプリがTSBのAPIを使って色を変更できるようにします。</string>
-    <string name="default_status_bar_tint_title">標準のステータスバー色</string>
-    <string name="default_status_bar_icon_tint_title">標準のステータスバーアイコン色</string>
-    <string name="default_status_bar_inverted_icon_tint_title">標準の反転時のアイコン色</string>
-    <string name="default_status_bar_inverted_icon_tint_summary">明るい背景を検出したときの色を選んでください。</string>
-    <string name="default_navigation_bar_tint_title">標準のナビバー色</string>
-    <string name="default_navigation_bar_icon_tint_title">標準のナビバーアイコン色</string>
-    <string name="default_summary">色を検出できなかったときに使う標準の色を選んでください。</string>
     <string name="max_hsv_title">黒アイコンにする最大HS[V]</string>
     <string name="max_hsv_summary">アクションバーにタイトル文字がないときにアイコンを黒にする最大HS[V]を指定します。</string>
     <string name="current_hsv_value">現在の値: %s</string>
-    <string name="no_activities_error">アクティビティなし、リストに表示されるべきではありません</string>
-    <string name="loading_title">読み込み中…</string>
-    <string name="donate_summary">開発をサポートします。寄付版限定機能を追加する予定です。</string>
-
     <string name="toast_activity_names_title">アクティビティ名を通知</string>
     <string name="toast_activity_names_summary">アクティビティを開始したときにトースト通知します。アクティビティ名を見つけるときに便利です。</string>
-    <string name="toast_text_package_name">パッケージ名: %s</string>
-    <string name="toast_text_activity_name">アクティビティ名: %s</string>
-    <string name="thank_you">ありがとう!</string>
-    <string name="thank_you_summary">寄付してくださってありがとうございます。本当に感謝しています :)</string>
-    <string name="android_lockscreen_stub_name">Androidロック画面</string>
-    <string name="gel_stub_warning">このアプリはホームアプリへのショートカットです。実際のパッケージに移動しますか?</string>
-    <string name="gel_stub_toast">このアプリはホームアプリへのショートカットです。変更するにはGoogle検索のGEL設定を変更してください。</string>
+    <string name="awesome_ab_color_picker_title">通知カラーピッカー</string>
+    <string name="awesome_ab_color_picker_summary">アクティビティを開いてすぐ色を変えられるよう通知を表示します。</string>
     <string name="react_actionbar_title">アクションバー表示の変更に対応</string>
     <string name="react_actionbar_description">アクションバーの表示に応じてステータスバーの色を変えるようにします。</string>
     <string name="system_cf_mode_title">システムアイコンのフィルタモード</string>
     <string name="notification_cf_mode_title">通知アイコンのフィルタモード</string>
-    <string name="cf_mode_explanation">カラーフィルタモードを変更するとアイコンの色の変更方法を詳細に制御できます。MULTIPLYを選ぶと元のアイコンのままの表示を優先し、SRC_ATOPを選ぶと選択した色を優先して使います。</string>
-    <string name="default_colors">デフォルトの色</string>
-    <string name="default_colors_summary">デフォルトの色を設定します。</string>
     <string name="cf_mode">カラーフィルタモード</string>
-    <string name="explain_cf_mode_text">以下の設定を説明します。</string>
-    <string name="unlocked_secret_settings">隠し設定を表示しました。動作するかどうかはわかりません。</string>
-    <string name="warning">警告</string>
+    <string name="explain_cf_mode_text">タップで以下の設定を説明します。</string>
+    <string name="cf_mode_explanation">カラーフィルタモードを変更するとアイコンの色の変更方法を詳細に制御できます。MULTIPLYを選ぶと元のアイコンのままの表示を優先し、SRC_ATOPを選ぶと選択した色を優先して使います。</string>
     <string name="animate_tint_title">色の変更をアニメーションする</string>
-    <string name="animate_tint_summary">ステータスバーとナビバーの色の変更をアニメーション表示します。</string>
-    <string name="link_panel_views_title">ステータスとナビバー色をリンクする</string>
+    <string name="animate_tint_summary">ステータス・ナビバーの色の変更をアニメーション表示します。</string>
+    <string name="link_panel_views_title">ステータス・ナビバー色をリンクする</string>
     <string name="link_panel_views_summary">ナビバーの色がステータスバーの色と同じになります。</string>
-    <string name="default_navigation_bar_icon_im_tint_title">ナビバーアイコンの色(IM)</string>
-    <string name="default_navigation_bar_im_tint_title">ナビバーの色(IM)</string>
-    <string name="default_summary_keyboard">キーボードを表示しているときのデフォルトの色を選んでください。</string>
     <string name="debug_mode_title">デバッグモード</string>
     <string name="debug_mode_summary">logcatやXposedのログへの記録をするようにします。</string>
     <string name="react_lightsout_title">Lights outに対応する</string>
     <string name="react_lightsout_summary">Lights outモード(ステータスバーを暗くするモード)の時にアイテムの色を変えるようにします。</string>
     <string name="respect_kitkat_api_title">KitKat APIを優先</string>
     <string name="respect_kitkat_api_summary">KitKatのAPIに対応したアプリの設定を無視します。</string>
+    <string name="use_fake_gradient_title">色の上にグラデーションを表示</string>
+    <string name="use_fake_gradient_summary">KitKatのようなグラデーションを重ねて表示します。</string>
+
+    <!-- Defaults -->
+    <string name="default_settings_title">デフォルト設定</string>
+    <string name="default_settings_summary">アプリ別設定のデフォルト値をセットします。</string>
+    <string name="default_colors">デフォルトの色</string>
+    <string name="default_colors_summary">デフォルトの色を設定します。</string>
+    <string name="default_status_bar_tint_title">デフォルトのステータスバー色</string>
+    <string name="default_status_bar_icon_tint_title">デフォルトのステータスバーアイコン色</string>
+    <string name="default_status_bar_inverted_icon_tint_title">反転時のデフォルトのアイコン色</string>
+    <string name="default_status_bar_inverted_icon_tint_summary">明るい背景を検出したときのデフォルトの色を選んでください。</string>
+    <string name="default_navigation_bar_tint_title">デフォルトのナビバー色</string>
+    <string name="default_navigation_bar_icon_tint_title">デフォルトのナビバーアイコン色</string>
+    <string name="default_navigation_bar_icon_im_tint_title">ナビバーアイコンの色(IM)</string>
+    <string name="default_navigation_bar_im_tint_title">ナビバーの色(IM)</string>
+    <string name="default_summary">色を検出できなかったときに使うデフォルトの色を選んでください。</string>
+    <string name="default_summary_keyboard">キーボードを表示しているときのデフォルトの色を選んでください。</string>
+
+    <!-- Errors / Notices -->
+    <string name="warning">警告</string>
+    <string name="no_activities_error">アクティビティなし、リストに表示されるべきではありません</string>
+    <string name="gel_stub_warning">このアプリはホームアプリへのショートカットです。実際のパッケージに移動しますか?</string>
+    <string name="gel_stub_toast">このアプリはホームアプリへのショートカットです。変更するにはGoogle検索のGEL設定を変更してください。</string>
+
+    <!-- Toast activity text -->
+    <string name="toast_text_package_name">パッケージ名: %s</string>
+    <string name="toast_text_activity_name">アクティビティ名: %s</string>
+
+    <!-- Notification color picker -->
+    <string name="notification_add_app">アプリを追加</string>
+    <string name="notification_add_activity">アクティビティを追加</string>
+    <string name="apply_touch_color">タッチ色を適用</string>
+    <string name="apply_general_color">一般色を適用</string>
+
 </resources>

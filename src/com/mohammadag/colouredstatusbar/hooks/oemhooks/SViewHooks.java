@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar.hooks;
+package com.mohammadag.colouredstatusbar.hooks.oemhooks;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.StatusBarTintApi;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -31,7 +30,7 @@ public class SViewHooks {
 						return;		
 
 					Context context = (Context) getObjectField(param.thisObject, "mContext");
-					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+					Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, Color.BLACK);
 					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, Color.WHITE);
 					intent.putExtra("time", System.currentTimeMillis());
@@ -48,7 +47,7 @@ public class SViewHooks {
 						return;
 
 					Context context = (Context) getObjectField(param.thisObject, "mContext");
-					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+					Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, mInstance.getLastStatusBarTint());
 					intent.putExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, mInstance.getLastIconTint());
 					intent.putExtra("time", System.currentTimeMillis());

@@ -1,7 +1,6 @@
 package com.mohammadag.colouredstatusbar;
 
 public class Common {
-	public static final String INTENT_CHANGE_COLOR_NAME = "com.mohammadag.colouredstatusbar.ChangeStatusBarColor";
 	public static final String INTENT_SAVE_ACTIONBAR_COLOR_NAME = "com.mohammadag.colouredstatusbar.SaveActionBarColor";
 	public static final String INTENT_RESET_ACTIONBAR_COLOR_NAME = "com.mohammadag.colouredstatusbar.ResetActionBarColor";
 	public static final String INTENT_SETTINGS_UPDATED = "com.mohammadag.colouredstatusbar.SETTINGS_UPDATED";

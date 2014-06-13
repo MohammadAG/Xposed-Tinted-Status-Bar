@@ -4,7 +4,7 @@
  * Licensed under the MIT License (see LICENSE.txt)
  */
 
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,6 +13,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.mohammadag.colouredstatusbar.R;
 
 /**
  * @author Jay Weisskopf

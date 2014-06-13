@@ -29,6 +29,10 @@ public class SignalClusterHook {
 		"mWifiActivityView", "mWifiStrengthView"
 	};
 
+	private static final String[] LG_ICON_NAMES = {
+		"mThirdType","mThirdType2","mThirdActivity"
+	};
+
 	private ColourChangerMod mInstance;
 	private XC_MethodHook mSignalClusterHook = new XC_MethodHook() {
 		@Override
@@ -48,9 +52,16 @@ public class SignalClusterHook {
 					mInstance.addSystemIconView(view);
 				} catch (NoSuchFieldError e) { }
 			}
+
+			for (String name : LG_ICON_NAMES) {
+				try {
+					ImageView view = (ImageView) XposedHelpers.getObjectField(param.thisObject, name);
+					mInstance.addSystemIconView(view);
+				} catch (NoSuchFieldError e) { }
+			}
 		}
 	};
-	
+
 	public SignalClusterHook(ColourChangerMod instance, ClassLoader classLoader) {
 		mInstance = instance;
 		doHooks(classLoader);

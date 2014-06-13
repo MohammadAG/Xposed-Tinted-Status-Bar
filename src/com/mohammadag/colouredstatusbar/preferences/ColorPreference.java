@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.preferences;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsHelper;
+import com.mohammadag.colouredstatusbar.SettingsKeys;
+import com.mohammadag.colouredstatusbar.Utils;
+import com.mohammadag.colouredstatusbar.activities.ColorPickerActivity;
+import com.mohammadag.colouredstatusbar.activities.SettingsActivity;
 
 public class ColorPreference extends Preference implements Preference.OnPreferenceClickListener {
 	private SettingsHelper mSettingsHelper;

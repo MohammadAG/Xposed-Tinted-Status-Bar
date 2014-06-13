@@ -22,7 +22,7 @@ public class SettingsHelper {
 
 	/* TODO: Rework this class to use this enum for more consistent code */
 	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED,
-		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM };
+		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM }
 
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
@@ -76,6 +76,20 @@ public class SettingsHelper {
 	public void setShouldLinkPanels(String packageName, String activityName, boolean link) {
 		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
 				SettingsKeys.LINK_PANEL_VIEW_COLORS), link).commit();
+	}
+
+	public boolean shouldReactToActionBar(String packageName, String activityName) {
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.REACT_TO_ACTION_BAR_VISIBILITY);
+		if (activityName == null) {
+			return getBoolean(keyName, shouldReactToActionBarVisibility());
+		} else {
+			return getBoolean(keyName, shouldReactToActionBar(packageName, null));
+		}
+	}
+
+	public void setShouldReactToActionBar(String packageName, String activityName, boolean link) {
+		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
+				SettingsKeys.REACT_TO_ACTION_BAR_VISIBILITY), link).commit();
 	}
 
 	public String getTintColor(String packageName, String activityName, boolean withHash) {
@@ -244,18 +258,13 @@ public class SettingsHelper {
 				return "ffffff";
 		}
 
-		if ("com.google.android.apps.plus".equals(packageName)) {
-			if ("phone.LocationPickerActivity".equals(activityName))
-				return "292929";
-		}
-		
 		if ("com.instagram.android".equals(packageName)) {
 			if ("creation.activity.MediaCaptureActivity".equals(activityName))
 				return "ff25292c";
 			else
 				return "ff2d5b81";
 		}
-		
+
 		/* TODO: Support Android 4.4 API */
 		if (activityName.equals(PackageNames.GEL_ACTIVITY_NAME)) {
 			return "66000000";
@@ -267,32 +276,17 @@ public class SettingsHelper {
 	private static String getDefaultTintColorForPackage(String packageName) {
 		if ("com.skype.raider".equals(packageName))
 			return "01aef0";
-		else if ("com.dropbox.android".equals(packageName))
-			return "007de3";
-		else if ("com.google.android.gm".equals(packageName))
-			return "dddddd";
 		else if ("com.chrome.beta".equals(packageName) || "com.android.chrome".equals(packageName))
 			return "e1e1e1";
-		else if ("bbc.mobile.news.ww".equals(packageName))
-			return "990000";
 		else if ("com.paypal.android.p2pmobile".equals(packageName))
 			return "50443d";
-		else if ("com.google.android.apps.plus".equals(packageName))
-			return "dddddd";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
-		else if ("com.pushbullet.android".equals(packageName))
-			return "23ae60";
 
 		return null;
 	}
 
 	private static String getDefaultIconTintColorForActivity(String packageName, String activityName) {
-		if ("com.google.android.apps.plus".equals(packageName)) {
-			if ("phone.LocationPickerActivity".equals(activityName))
-				return Common.COLOR_WHITE;
-		}
-
 		if ("com.paypal.android.p2pmobile".equals(packageName)) {
 			if ("activity.LoginActivity".equals(activityName))
 				return Common.COLOR_WHITE;
@@ -306,8 +300,6 @@ public class SettingsHelper {
 	private static String getDefaultIconTintColorForPackage(String packageName) {
 		if ("com.chrome.beta".equals(packageName) || "com.android.chrome".equals(packageName))
 			return "090909";
-		else if ("com.google.android.apps.plus".equals(packageName))
-			return Common.COLOR_BLACK;
 		return null;
 	}
 
@@ -453,7 +445,7 @@ public class SettingsHelper {
 			return packageName + "." + processedActivityName + "/" + keyName;
 		}
 	}
-	
+
 	public boolean shouldLinkStatusBarAndNavBar() {
 		return getBoolean(SettingsKeys.LINK_PANEL_VIEW_COLORS, false);
 	}
@@ -472,5 +464,24 @@ public class SettingsHelper {
 
 	public boolean shouldRespectKitKatApi() {
 		return getBoolean(SettingsKeys.RESPECT_KITKAT_API, true);
+	}
+
+	public boolean shouldFakeGradient() {
+		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, false);
+	}
+
+	public boolean shouldReverseTintAbColor(String packageName) {
+		String keyName = getKeyName(packageName, null, SettingsKeys.REVERSE_TINT_ACTION_BAR);
+		return getBoolean(keyName, shouldAlwaysReverseTint());
+	}
+
+	public boolean shouldAlwaysReverseTint() {
+		return getBoolean(SettingsKeys.REVERSE_TINT_ACTION_BAR, false);
+	}
+
+	public void setShouldReverseTintActionBar(String packageName,
+			String activityName, boolean reverseTint) {
+		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
+				SettingsKeys.REVERSE_TINT_ACTION_BAR), reverseTint).commit();
 	}
 }

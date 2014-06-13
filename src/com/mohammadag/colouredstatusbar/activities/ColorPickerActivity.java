@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +19,10 @@ import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsKeys;
+import com.mohammadag.colouredstatusbar.StatusBarTintApi;
+import com.mohammadag.colouredstatusbar.Utils;
 
 public class ColorPickerActivity extends Activity implements OnColorChangedListener {
 
@@ -87,10 +91,10 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 						getActionBar().setDisplayShowTitleEnabled(false);
 						getActionBar().setDisplayShowTitleEnabled(true);
 					}
-					
+
 					String previewKey;
 
-					Intent intent = new Intent(Common.INTENT_CHANGE_COLOR_NAME);
+					Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 					if (SettingsKeys.DEFAULT_NAV_BAR_IM_TINT.equals(prefKey)
 							|| SettingsKeys.DEFAULT_NAV_BAR_TINT.equals(prefKey)) {
 						previewKey = SettingsKeys.NAVIGATION_BAR_TINT;
@@ -107,7 +111,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 					} else {
 						previewKey = prefKey;
 					}
-					
+
 					intent.putExtra(previewKey, colourHex);
 					sendOrderedBroadcast(intent, null);
 				} catch (IllegalArgumentException e) {

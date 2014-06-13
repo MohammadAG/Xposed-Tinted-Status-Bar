@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,6 +12,14 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.PackageNames;
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsHelper;
+import com.mohammadag.colouredstatusbar.SettingsKeys;
+import com.mohammadag.colouredstatusbar.Utils;
+import com.mohammadag.colouredstatusbar.preferences.ColorPreference;
 
 public class SettingsActivity extends PreferenceActivity {
 	private SettingsHelper mSettingsHelper = null;
@@ -28,8 +36,10 @@ public class SettingsActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
-		if (Utils.hasActionBar())
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		if (Utils.isDonateVersionInstalled(this)) {
+			setTitle(R.string.app_name_donate_version);
+		}
 
 		if (mSettingsHelper == null)
 			mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
@@ -111,7 +121,7 @@ public class SettingsActivity extends PreferenceActivity {
 		};
 
 		intializeColorPreferences(colorKeys);
-		
+
 		findPreference(SettingsKeys.LINK_PANEL_VIEW_COLORS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -153,7 +163,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		mSettingsHelper.getSharedPreferences().edit().putString(key, data.getStringExtra("color")).commit();
 		findColorPreference(key).refresh();
-		
+
 		/* For most things, we don't need this since we reload settings each
 		 * time an activity is resumed, but it's needed for input method-specific
 		 * keys, since SettingsHelper is part of SystemUI there, not Zygote.

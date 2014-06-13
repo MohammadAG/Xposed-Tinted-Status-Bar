@@ -1,4 +1,4 @@
-package com.mohammadag.colouredstatusbar;
+package com.mohammadag.colouredstatusbar.activities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +40,13 @@ import android.widget.SearchView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.PackageNames;
+import com.mohammadag.colouredstatusbar.R;
+import com.mohammadag.colouredstatusbar.SettingsHelper;
+import com.mohammadag.colouredstatusbar.Utils;
+
+public class PackageListActivity extends Activity {
 	private SettingsHelper mSettingsHelper;
 
 	private ListView mListView = null;
@@ -65,9 +71,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		if (Utils.isDonateVersionInstalled(this)) {
-			setTitle(R.string.app_name_donate_version);
-		}
+		if (Utils.hasActionBar())
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mSettingsHelper = SettingsHelper.getInstance(getApplicationContext());
 
@@ -82,7 +87,7 @@ public class MainActivity extends Activity {
 					i = new Intent(getApplicationContext(), ApplicationSettings.class);
 					i.putExtra(Common.EXTRA_KEY_ACTIVITY_NAME, "NONE");
 				} else if (pkgName.equals(PackageNames.GEL_STUB)) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+					AlertDialog.Builder builder = new AlertDialog.Builder(PackageListActivity.this);
 					builder.setTitle(R.string.warning);
 					builder.setMessage(R.string.gel_stub_warning);
 					builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -228,7 +233,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(final AppListAdaptor result) {
-			mAppListAdaptor = new AppListAdaptor(MainActivity.this, mAppList);
+			mAppListAdaptor = new AppListAdaptor(PackageListActivity.this, mAppList);
 			mListView.setAdapter(mAppListAdaptor);
 
 			try {
