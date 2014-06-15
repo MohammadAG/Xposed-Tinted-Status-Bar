@@ -104,7 +104,7 @@
     <string name="use_fake_gradient_summary">Abilita l\'effetto ombreggiatura in stile KitKat nelle applicazioni</string>
 
     <!-- Defaults -->
-    <string name="default_settings_title">Impostazioni predefinite</string>
+    <string name="default_settings_title">Impostazioni generali</string>
     <string name="default_settings_summary">Impostazioni predefinite per la maggior parte delle applicazioni</string>
     <string name="default_colors">Colori predefiniti</string>
     <string name="default_colors_summary">Cambia i colori usati di default per colorare</string>

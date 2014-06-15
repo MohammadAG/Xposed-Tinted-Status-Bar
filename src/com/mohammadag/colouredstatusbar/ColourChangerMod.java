@@ -116,6 +116,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		public void onReceive(Context context, Intent intent) {
 			if (StatusBarTintApi.INTENT_CHANGE_COLOR_NAME.equals(intent.getAction())) {
 				boolean link = intent.getBooleanExtra("link_panels", false);
+				int keyboard_up = intent.getIntExtra("keyboard_up", -1);
 
 				if (intent.hasExtra("time")) {
 					long time = intent.getLongExtra("time", -1);
@@ -133,6 +134,14 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 						}
 					}
 				}
+				
+				if (keyboard_up == 1) {
+					onKeyboardVisible(true);
+					return;
+				} else if (keyboard_up == 0) {
+					onKeyboardVisible(false);
+					return;
+				}
 
 				if (intent.hasExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME))
 					mActionBarColor = mLastTint;
@@ -147,19 +156,19 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					setStatusBarIconsTint(mLastIconTint);
 				}
 
-				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT) && !link) {
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT) && !link && !mKeyboardUp) {
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
 					setNavigationBarTint(mNavigationBarTint, true);
-				} else if (link) {
+				} else if (link && !mKeyboardUp) {
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);
 					setNavigationBarTint(mNavigationBarTint);
 					setNavigationBarTint(mNavigationBarTint);
 				}
 
-				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link) {
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link && !mKeyboardUp) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint, true);
-				} else if (link) {
+				} else if (link && !mKeyboardUp) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint);
 				}
@@ -187,6 +196,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		if (Utils.hasActionBar())
 			new ActionBarHooks(mSettingsHelper);
+
+		LGHooks.doImeHook();
 	}
 
 	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint, Context context) {
@@ -384,14 +395,14 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		mLastSetColor = tintColor;
 
-		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !mKeyboardUp) {
 			mNavigationBarTint = tintColor;
 			setNavigationBarTint(tintColor, true);
 		}
 	}
 
 	public void setStatusBarIconsTint(int iconTint) {
-		if (mSettingsHelper.shouldLinkStatusBarAndNavBar()) {
+		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !mKeyboardUp) {
 			mNavigationBarIconTint = iconTint;
 			setNavigationBarIconTint(iconTint, true);
 		}
