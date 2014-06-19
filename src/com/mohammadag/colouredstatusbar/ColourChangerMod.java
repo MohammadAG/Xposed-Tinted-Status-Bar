@@ -734,7 +734,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			@Override
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 				TextView textView = (TextView) param.thisObject;
-				textView.setTextColor(mLastIconTint);
+				textView.setTextColor(mColorForStatusIcons);
 			}
 		});
 	}
