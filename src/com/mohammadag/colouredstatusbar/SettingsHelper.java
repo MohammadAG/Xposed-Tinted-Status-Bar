@@ -110,10 +110,16 @@ public class SettingsHelper {
 		String keyName = getKeyName(packageName, activityName, SettingsKeys.NAVIGATION_BAR_TINT);
 		String defaultValue;
 
-		if (activityName == null)
-			defaultValue = getDefaultTint(Tint.NAV_BAR, false);
-		else
-			defaultValue = getNavigationBarTint(packageName, null, false);
+		// People don't read
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT
+				&& PackageNames.LOCKSCREEN_STUB.equals(packageName)) {
+			defaultValue = "66000000";
+		} else {
+			if (activityName == null)
+				defaultValue = getDefaultTint(Tint.NAV_BAR, false);
+			else
+				defaultValue = getNavigationBarTint(packageName, null, false);
+		}
 
 		String hexColor = getString(keyName, defaultValue);
 		if (hexColor != null) {
@@ -282,6 +288,12 @@ public class SettingsHelper {
 			return "50443d";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
+
+		// People don't read
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			if (PackageNames.LOCKSCREEN_STUB.equals(packageName))
+				return "66000000";
+		}
 
 		return null;
 	}
