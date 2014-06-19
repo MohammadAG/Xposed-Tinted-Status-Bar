@@ -6,14 +6,15 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 
 import java.util.Locale;
 
-import com.mohammadag.colouredstatusbar.StatusBarTintApi;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.mohammadag.colouredstatusbar.Common;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -22,37 +23,37 @@ import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 public class LGHooks {
 	private static final int IME_ACTIVE = 0x1;
 	private static boolean mWasKeyboardUp = false;
-	
-	public static void doImeHook(){
+
+	public static void doImeHook() {
 		if (!isLGKitKatDevice())
 			return;
-		
+
 		try {
-			Class<?> inputMethodMgrClss = findClass("com.android.server.InputMethodManagerService",null);
-			findAndHookMethod(inputMethodMgrClss,"setImeWindowStatus",IBinder.class,int.class,int.class, new XC_MethodHook() {
+			Class<?> inputMethodMgrClss = findClass("com.android.server.InputMethodManagerService", null);
+			findAndHookMethod(inputMethodMgrClss, "setImeWindowStatus",
+					IBinder.class, int.class, int.class, new XC_MethodHook() {
 				@Override
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					int vis = (Integer) param.args[1];
 					Context mContext = (Context) getObjectField(param.thisObject, "mContext"); 
-					boolean isKeyboardUp = (vis & IME_ACTIVE) != 0 ;
+					boolean isKeyboardUp = (vis & IME_ACTIVE) != 0;
 					if (isKeyboardUp != mWasKeyboardUp && mContext != null) {
-						Intent intent = new Intent(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
-						intent.putExtra("keyboard_up", isKeyboardUp ? 1 : 0);
-						intent.putExtra("time", System.currentTimeMillis());
+						Intent intent = new Intent(Common.INTENT_KEYBOARD_VISIBLITY_CHANGED);
+						intent.putExtra(Common.EXTRA_KEY_KEYBOARD_UP, isKeyboardUp);
 						mContext.sendBroadcast(intent);
+						mWasKeyboardUp = isKeyboardUp;
 					}
-					mWasKeyboardUp = isKeyboardUp;
 				}
 			});
-		}catch (ClassNotFoundError e) {
+		} catch (ClassNotFoundError e) {
 			//DO NOTHING
 		}
 	}
-	
+
 	public static void doHook(ClassLoader classLoader) {
 		if (!isLGKitKatDevice())
 			return;
-		
+
 		hookStatusBar(classLoader);
 		hookNavigationBar(classLoader);
 	}
@@ -106,7 +107,7 @@ public class LGHooks {
 			});
 		}
 	} 
-	
+
 	private static boolean isLGKitKatDevice(){
 		return (android.os.Build.BRAND.toLowerCase(Locale.getDefault()).contains("lge") && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT);
 	}

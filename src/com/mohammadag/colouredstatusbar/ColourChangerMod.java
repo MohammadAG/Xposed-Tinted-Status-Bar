@@ -116,7 +116,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		public void onReceive(Context context, Intent intent) {
 			if (StatusBarTintApi.INTENT_CHANGE_COLOR_NAME.equals(intent.getAction())) {
 				boolean link = intent.getBooleanExtra("link_panels", false);
-				int keyboard_up = intent.getIntExtra("keyboard_up", -1);
 
 				if (intent.hasExtra("time")) {
 					long time = intent.getLongExtra("time", -1);
@@ -133,14 +132,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 							}
 						}
 					}
-				}
-				
-				if (keyboard_up == 1) {
-					onKeyboardVisible(true);
-					return;
-				} else if (keyboard_up == 0) {
-					onKeyboardVisible(false);
-					return;
 				}
 
 				if (intent.hasExtra(Common.INTENT_SAVE_ACTIONBAR_COLOR_NAME))
@@ -178,6 +169,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			} else if (Common.INTENT_SETTINGS_UPDATED.equals(intent.getAction())) {
 				Log.d("Xposed", "TintedStatusBar settings updated, reloading...");
 				mSettingsHelper.reload();
+			} else if (Common.INTENT_KEYBOARD_VISIBLITY_CHANGED.equals(intent.getAction())) {
+				if (intent.hasExtra(Common.EXTRA_KEY_KEYBOARD_UP))
+					onKeyboardVisible(intent.getBooleanExtra(Common.EXTRA_KEY_KEYBOARD_UP, false));
 			}
 		}
 	};
