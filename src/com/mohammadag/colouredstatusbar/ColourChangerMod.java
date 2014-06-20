@@ -147,19 +147,18 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 					setStatusBarIconsTint(mLastIconTint);
 				}
 
-				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT) && !link && !mKeyboardUp) {
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT) && !link) {
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_TINT, -1);
 					setNavigationBarTint(mNavigationBarTint, true);
-				} else if (link && !mKeyboardUp) {
+				} else if (link) {
 					mNavigationBarTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_TINT, -1);
-					setNavigationBarTint(mNavigationBarTint);
 					setNavigationBarTint(mNavigationBarTint);
 				}
 
-				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link && !mKeyboardUp) {
+				if (intent.hasExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT) && !link) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_NAVIGATION_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint, true);
-				} else if (link && !mKeyboardUp) {
+				} else if (link) {
 					mNavigationBarIconTint = intent.getIntExtra(StatusBarTintApi.KEY_STATUS_BAR_ICON_TINT, -1);
 					setNavigationBarIconTint(mNavigationBarIconTint);
 				}
