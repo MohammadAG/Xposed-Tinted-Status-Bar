@@ -16,7 +16,7 @@ public class PackageChangedReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)
+		if (Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())
 				&& intent.getBooleanExtra(Intent.EXTRA_REPLACING, false))
 			// Ignore existing packages being removed in order to be updated
 			// Thanks rovo89
@@ -26,7 +26,7 @@ public class PackageChangedReceiver extends BroadcastReceiver {
 		if (packageName == null)
 			return;
 
-		if (intent.getAction().equals(Intent.ACTION_PACKAGE_CHANGED)) {
+		if (Intent.ACTION_PACKAGE_CHANGED.equals(intent.getAction())) {
 			// make sure that the change is for the complete package, not only a component
 			String[] components = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST);
 			if (components != null) {
@@ -59,6 +59,9 @@ public class PackageChangedReceiver extends BroadcastReceiver {
 			pluginString = metadata.getString(StatusBarTintApi.METADATA_PLUGIN);
 		}
 
+		if (pluginString == null)
+			return;
+
 		HashSet<String> packages = new HashSet<String>();
 
 		if (pluginString.contains("#")) {
@@ -86,6 +89,9 @@ public class PackageChangedReceiver extends BroadcastReceiver {
 	}
 
 	private static String getPackageName(Intent intent) {
+		if (intent == null)
+			return null;
+
 		Uri uri = intent.getData();
 		return (uri != null) ? uri.getSchemeSpecificPart() : null;
 	}
