@@ -41,6 +41,7 @@ import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarLayoutInflationHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarViewHook;
 import com.mohammadag.colouredstatusbar.hooks.TickerHooks;
+import com.mohammadag.colouredstatusbar.hooks.WindowManagerServiceHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.CustomRomHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.LGHooks;
@@ -105,6 +106,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	/* LG BUTTON IDs */
 	private static int qmemoButtonRESID = 0;
 	private static int notificationButtonRESID = 0;
+
+	private float mDimLayerAlpha;
 
 	public void log(String text) {
 		if (mSettingsHelper.isDebugMode())
@@ -171,6 +174,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			} else if (Common.INTENT_KEYBOARD_VISIBLITY_CHANGED.equals(intent.getAction())) {
 				if (intent.hasExtra(Common.EXTRA_KEY_KEYBOARD_UP))
 					onKeyboardVisible(intent.getBooleanExtra(Common.EXTRA_KEY_KEYBOARD_UP, false));
+			} else if (WindowManagerServiceHooks.INTENT_DIM_CHANGED.equals(intent.getAction())) {
+				if (intent.hasExtra(WindowManagerServiceHooks.KEY_TARGET_ALPHA))
+					onDimLayerChanged(intent.getFloatExtra(WindowManagerServiceHooks.KEY_TARGET_ALPHA, -1));
 			}
 		}
 	};
@@ -190,6 +196,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (Utils.hasActionBar())
 			new ActionBarHooks(mSettingsHelper);
 
+		// TODO: Fix this
+		// WindowManagerServiceHooks.doHook(null);
 		LGHooks.doImeHook();
 	}
 
@@ -807,5 +815,12 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (mKeyboardUp) {
 			mIgnoreNextKeyboardDownChange = true;
 		}
+	}
+
+	private void onDimLayerChanged(float alpha) {
+		log("Dim changed");
+
+		mDimLayerAlpha = alpha;
+		mStatusBarView.setAlpha(alpha);
 	}
 }
