@@ -15,6 +15,11 @@
         android:key="donate_key"
         android:summary="@string/donate_summary"
         android:title="@string/menu_donate" />
+    <Preference
+        android:summary="@string/plugins_summary"
+        android:title="@string/plugins_title" >
+        <intent android:action="com.mohammadag.colouredstatusbar.DOWNLOAD_PLUGINS" />
+    </Preference>
 
     <PreferenceCategory android:title="@string/per_app_settings" >
         <Preference

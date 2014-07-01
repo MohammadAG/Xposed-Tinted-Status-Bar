@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -120,15 +121,42 @@ public class Utils {
 	public static boolean isPackageInstalled(Context context, String targetPackage) {
 		PackageManager pm = context.getPackageManager();
 		try {
-			pm.getPackageInfo(targetPackage,PackageManager.GET_META_DATA);
+			pm.getPackageInfo(targetPackage, 0);
 		} catch (NameNotFoundException e) {
 			return false;
 		}  
 		return true;
 	}
 
+	public static PackageInfo getPackageInfo(Context context, String targetPackage) {
+		PackageManager pm = context.getPackageManager();
+		try {
+			return pm.getPackageInfo(targetPackage, 0);
+		} catch (NameNotFoundException e) {
+			return null;
+		}
+	}
+
+	public static ApplicationInfo getApplicationInfo(Context context, String targetPackage) {
+		PackageManager pm = context.getPackageManager();
+		try {
+			return pm.getApplicationInfo(targetPackage, 0);
+		} catch (NameNotFoundException e) {
+			return null;
+		}
+	}
+
 	public static boolean isDonateVersionInstalled(Context context) {
 		return isPackageInstalled(context, PackageNames.DONATION);
+	}
+
+	public static Drawable getPackageIcon(Context context, String targetPackage) {
+		PackageManager pm = context.getPackageManager();
+		try {
+			return pm.getApplicationIcon(targetPackage);
+		} catch (NameNotFoundException e) {
+			return null;
+		}
 	}
 
 	public static boolean hasGeminiSupport() {
