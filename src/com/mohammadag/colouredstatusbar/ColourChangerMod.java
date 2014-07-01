@@ -93,7 +93,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
 	static {
-		if (Common.IS_MIUIV5)
+		if (MiuiV5Support.IS_MIUIV5)
 			mHookClockOnSystemUiInit = true;
 	}
 

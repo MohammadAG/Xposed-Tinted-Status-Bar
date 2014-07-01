@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.MiuiV5Support;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -27,7 +28,7 @@ public class TickerHooks {
 		String notificationClassName = android.os.Build.VERSION.SDK_INT > 17 ?
 				"android.service.notification.StatusBarNotification" :
 					"com.android.internal.statusbar.StatusBarNotification";
-		if (Common.IS_MIUIV5) 
+		if (MiuiV5Support.IS_MIUIV5) 
 			notificationClassName = "com.android.systemui.statusbar.ExpandedNotification";
 		String addMethod = "addEntry";
 		try {

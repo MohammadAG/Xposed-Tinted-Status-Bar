@@ -18,5 +18,4 @@ public class Common {
 	/* TODO: Use null instead of this. */
 	public static final String EXTRA_KEY_VALUE_NONE = "NONE";
 	
-	public static final boolean IS_MIUIV5 = true;
 }

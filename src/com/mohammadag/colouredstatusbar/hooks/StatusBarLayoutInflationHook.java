@@ -2,6 +2,7 @@ package com.mohammadag.colouredstatusbar.hooks;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.Common;
+import com.mohammadag.colouredstatusbar.MiuiV5Support;
 
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,7 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 		ViewGroup mIconArea = (ViewGroup) liparam.view.findViewById(
 				liparam.res.getIdentifier("system_icon_area", "id", "com.android.systemui"));
 		// for miuiv5
-		if (Common.IS_MIUIV5) {
+		if (MiuiV5Support.IS_MIUIV5) {
 			mIconArea = (ViewGroup) liparam.view.findViewById(
 					liparam.res.getIdentifier("icons", "id", "com.android.systemui"));
 			// find miuiv5 carrier label
@@ -76,7 +77,7 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 		}
 		
 		// if miuiv5, find and remove simple_statusbar from trackview
-		if (Common.IS_MIUIV5) {
+		if (MiuiV5Support.IS_MIUIV5) {
 			ViewGroup mTrackViewGroup = (ViewGroup) liparam.view.findViewById(liparam.res.getIdentifier(
 					"expanded_fixed", "id", "com.android.systemui"));
 			ViewGroup mSimpleStatusBar = (ViewGroup) mTrackViewGroup.findViewById(liparam.res.getIdentifier(
