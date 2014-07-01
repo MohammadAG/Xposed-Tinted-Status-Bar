@@ -93,6 +93,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
 	private static boolean mHookClockOnSystemUiInit = false;
+	static {
+		if (MiuiV5Support.IS_MIUIV5)
+			mHookClockOnSystemUiInit = true;
+	}
 
 	/* 
 	 * Workaround for race condition when an app is closed with the keyboard open.
