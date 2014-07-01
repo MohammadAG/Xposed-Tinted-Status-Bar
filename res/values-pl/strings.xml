@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- With love by: M. Kucharskov & P. Kowlaczyk (i don't know where she add) -->
+	<!-- With love by: M. Kucharskov & P. Kowlaczyk -->
 
     <!-- Title / Misc -->
     <string name="app_name">Tinted Status Bar</string>
