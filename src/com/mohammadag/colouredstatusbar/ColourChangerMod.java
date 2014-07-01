@@ -91,7 +91,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	/* Fall back to old method to get the clock when no clock is found */
 	private static ClassLoader mSystemUiClassLoader = null;
 	private static boolean mFoundClock = false;
-	private static boolean mHookClockOnSystemUiInit = false;
+	private static boolean mHookClockOnSystemUiInit = true;
 
 	/* 
 	 * Workaround for race condition when an app is closed with the keyboard open.
