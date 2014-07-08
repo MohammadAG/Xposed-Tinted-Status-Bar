@@ -29,8 +29,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nhaarman.listviewanimations.ArrayAdapter;
-import com.nhaarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
+import com.haarman.listviewanimations.ArrayAdapter;
+import com.haarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
 import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.PackageNames;
 import com.mohammadag.colouredstatusbar.R;
