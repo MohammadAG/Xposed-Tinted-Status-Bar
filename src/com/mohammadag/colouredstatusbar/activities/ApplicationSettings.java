@@ -58,6 +58,7 @@ public class ApplicationSettings extends Activity {
 	private SettingsHelper mSettingsHelper = null;
 
 	private Button mResetToAutoDetectButton;
+	private CheckBox mTranslucentStatusBarCheckbox;
 	private CheckBox mLinkPanelsCheckbox;
 	private CheckBox mReactToActionBarCheckbox;
 	private CheckBox mReverseTintActionBarChedkbox;
@@ -163,7 +164,16 @@ public class ApplicationSettings extends Activity {
 				resetToAutoDetect();
 			}
 		});
-
+		
+		mTranslucentStatusBarCheckbox = (CheckBox) findViewById(R.id.translucent_status_checkbox);
+		mTranslucentStatusBarCheckbox.setChecked(mSettingsHelper.isTranslucentStatus(mPackageName, mActivityName));
+		mTranslucentStatusBarCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSettingsHelper.setTranslucentStatus(mPackageName, mActivityName, isChecked);
+			}
+		});
+ 
 		mLinkPanelsCheckbox = (CheckBox) findViewById(R.id.link_panels_checkbox);
 		mLinkPanelsCheckbox.setChecked(mSettingsHelper.shouldLinkPanels(mPackageName, mActivityName));
 		mLinkPanelsCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -191,8 +201,13 @@ public class ApplicationSettings extends Activity {
 			}
 		});
 
-		if (mActivityName != null)
+		if (mActivityName != null) {
 			findViewById(R.id.package_specifc_options).setVisibility(View.GONE);
+			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) 
+				findViewById(R.id.activity_specifc_options).setVisibility(View.GONE);		
+		} else {
+			findViewById(R.id.activity_specifc_options).setVisibility(View.GONE);
+		}
 	}
 
 	@Override

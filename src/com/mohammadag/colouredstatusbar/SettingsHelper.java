@@ -496,4 +496,15 @@ public class SettingsHelper {
 		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
 				SettingsKeys.REVERSE_TINT_ACTION_BAR), reverseTint).commit();
 	}
+	
+	public boolean isTranslucentStatus(String packageName, String activityName) {
+		String keyName = getKeyName(packageName, activityName, SettingsKeys.TRANSLUCENT_STATUS);
+		return getBoolean(keyName, false);
+	}
+	
+	public void setTranslucentStatus(String packageName,
+			String activityName, boolean isTranslucentStatus) {
+		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
+				SettingsKeys.TRANSLUCENT_STATUS), isTranslucentStatus).commit();
+	}
 }

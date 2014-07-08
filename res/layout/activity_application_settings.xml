@@ -43,6 +43,21 @@
             android:layout_height="wrap_content"
             android:text="@string/reverse_tint_actionbar_title" />
     </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/activity_specifc_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="vertical" >
+        
+        <CheckBox
+            android:id="@+id/translucent_status_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/translucent_status_views_title" 
+            android:layout_marginLeft="0dp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

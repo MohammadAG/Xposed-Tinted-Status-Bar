@@ -3,6 +3,8 @@ package com.mohammadag.colouredstatusbar;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -19,7 +21,10 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class Utils {
 	private static Boolean mHasGeminiSupport = null;
@@ -218,5 +223,13 @@ public class Utils {
 
 	public static boolean hasActionBar() {
 		return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
+	}
+
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	public static void setTranslucentStatus(Activity activity, int childViewGroupIndex) {
+		Window win = activity.getWindow();
+		WindowManager.LayoutParams winParams = win.getAttributes();
+		winParams.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+		win.setAttributes(winParams);
 	}
 }

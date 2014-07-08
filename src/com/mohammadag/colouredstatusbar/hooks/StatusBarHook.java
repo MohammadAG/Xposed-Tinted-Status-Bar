@@ -7,15 +7,20 @@ import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import java.lang.reflect.Method;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
+import com.mohammadag.colouredstatusbar.MiuiV5Support;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.XperiaTransparencyHook;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
@@ -95,7 +100,25 @@ public class StatusBarHook {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+		
+		if (MiuiV5Support.IS_MIUIV5) {
+			try {
+				findAndHookMethod(PhoneStatusBar, "updateStatusBarForeground", new XC_MethodHook() {
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+						try {
+							FrameLayout mStatusBarView = (FrameLayout) getObjectField(param.thisObject, "mStatusBarView");
+							mStatusBarView.setForeground(null);
+						} catch (NoSuchFieldError e) {}
 
+					}
+				});
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+
+		}
+		
 		XC_MethodHook addRemoveIconHook = new XC_MethodHook() {
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 				mInstance.setStatusIcons((LinearLayout) getObjectField(param.thisObject, "mStatusIcons"));
