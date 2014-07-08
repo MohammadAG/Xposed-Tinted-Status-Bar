@@ -114,6 +114,14 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 				log("Activity has nav bar transclucency, overriding color to 66000000");
 				navigationBarTint = KK_TRANSPARENT_COLOR_STRING;
 				overridingNavBar = true;
+			}			
+		}
+		
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			if (mSettingsHelper.isTranslucentStatus(packageName, activityName)) {
+				Utils.setTranslucentStatus(activity, 0);
+				statusBarTint = KK_TRANSPARENT_COLOR_STRING;
+				overridingStatusBar = true;
 			}
 		}
 
