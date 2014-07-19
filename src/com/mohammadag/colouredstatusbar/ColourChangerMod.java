@@ -333,13 +333,12 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			return;
 
 		for (int i = 0; i < statusIcons.getChildCount(); i++) {
-			try {
-				ImageView view = (ImageView) statusIcons.getChildAt(i);
+			View childView = statusIcons.getChildAt(i);
+			if (childView instanceof ImageView) {
+				ImageView view = (ImageView) childView;
 				if (view != null) {
 					view.setColorFilter(color, mode);
 				}
-			} catch (ClassCastException e) {
-
 			}
 		}
 	}
