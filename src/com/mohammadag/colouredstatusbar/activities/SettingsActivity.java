@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -21,7 +22,7 @@ import com.mohammadag.colouredstatusbar.SettingsKeys;
 import com.mohammadag.colouredstatusbar.Utils;
 import com.mohammadag.colouredstatusbar.preferences.ColorPreference;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private SettingsHelper mSettingsHelper = null;
 
 	private static final String URL_MY_MODULES = "http://repo.xposed.info/module-overview?combine=MohammadAG&sort_by=title";
@@ -131,6 +132,25 @@ public class SettingsActivity extends PreferenceActivity {
 		});
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void onPause() {
+		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+		sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
+		super.onPause();
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

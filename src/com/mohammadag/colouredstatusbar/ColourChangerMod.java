@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
 import com.mohammadag.colouredstatusbar.drawables.BarBackgroundDrawable;
-import com.mohammadag.colouredstatusbar.drawables.GradientDrawable;
+import com.mohammadag.colouredstatusbar.drawables.OverlayDrawable;
 import com.mohammadag.colouredstatusbar.hooks.ActionBarHooks;
 import com.mohammadag.colouredstatusbar.hooks.ActivityOnResumeHook;
 import com.mohammadag.colouredstatusbar.hooks.BatteryHooks;
@@ -87,7 +87,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static final int KITKAT_TRANSPARENT_COLOR = Color.parseColor(KK_TRANSPARENT_COLOR_STRING);
 
 	private static XModuleResources mResources;
-	private GradientDrawable mGradientDrawable;
+	private OverlayDrawable mGradientDrawable;
 
 	/* Fall back to old method to get the clock when no clock is found */
 	private static ClassLoader mSystemUiClassLoader = null;
@@ -175,6 +175,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			} else if (Common.INTENT_SETTINGS_UPDATED.equals(intent.getAction())) {
 				Log.d("Xposed", "TintedStatusBar settings updated, reloading...");
 				mSettingsHelper.reload();
+				mSettingsHelper.reloadOverlayMode();
 			} else if (Common.INTENT_KEYBOARD_VISIBLITY_CHANGED.equals(intent.getAction())) {
 				if (intent.hasExtra(Common.EXTRA_KEY_KEYBOARD_UP))
 					onKeyboardVisible(intent.getBooleanExtra(Common.EXTRA_KEY_KEYBOARD_UP, false));
@@ -251,7 +252,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (!lpparam.packageName.equals("com.android.systemui"))
 			return;
 
-		mGradientDrawable = new GradientDrawable(mResources, Color.TRANSPARENT,
+		mGradientDrawable = new OverlayDrawable(mResources, Color.TRANSPARENT,
 				R.drawable.status_background);
 
 		if (mHookClockOnSystemUiInit)
@@ -351,50 +352,28 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		log("Setting statusbar color to " + tintColor);
 
 		if (mSettingsHelper.animateStatusBarTintChange()) {			
-			if (mSettingsHelper.shouldFakeGradient() || tintColor != KITKAT_TRANSPARENT_COLOR) {
-				int animateFrom = mLastSetColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : mLastSetColor;
-				int animateTo = tintColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : tintColor;
-				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), animateFrom, animateTo);
-				colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
-					@Override
-					public void onAnimationUpdate(ValueAnimator animator) {
-						if (mSettingsHelper.shouldFakeGradient()) {
-							mGradientDrawable.setColor((Integer)animator.getAnimatedValue());
-						} else {
-							mStatusBarView.setBackgroundColor((Integer)animator.getAnimatedValue());
-						}
-					}
-				});
-				if (mSettingsHelper.shouldFakeGradient()) {
-					mStatusBarView.setBackground(mGradientDrawable);
+			int animateFrom = mLastSetColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : mLastSetColor;
+			int animateTo = tintColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : tintColor;
+			ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), animateFrom, animateTo);
+			colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator animator) {
+					mGradientDrawable.setColor((Integer)animator.getAnimatedValue());
 				}
-				colorAnimation.start();
-			} else {
-				if (mSettingsHelper.shouldFakeGradient()) {
-					mStatusBarView.setBackground(mGradientDrawable);
-					mGradientDrawable.setColor(Color.TRANSPARENT);
-				} else {
-					Utils.setViewBackground(mStatusBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
-							mResources, R.drawable.status_background));
-				}
-			}
+			});
+			Utils.setViewBackground(mStatusBarView, mGradientDrawable);
+			mGradientDrawable.setMode(mSettingsHelper.getOverlayMode());
+			colorAnimation.start();
 		} else {
 			mStatusBarView.setAlpha(1f);
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
-				if (mSettingsHelper.shouldFakeGradient()) {
-					mStatusBarView.setBackground(mGradientDrawable);
-					mGradientDrawable.setColor(Color.TRANSPARENT);
-				} else {
-					Utils.setViewBackground(mStatusBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
-							mResources, R.drawable.status_background));
-				}
+				Utils.setViewBackground(mStatusBarView, mGradientDrawable);
+				mGradientDrawable.setColor(Color.TRANSPARENT);
+				mGradientDrawable.setMode(mSettingsHelper.getOverlayMode());
 			} else {
-				if (mSettingsHelper.shouldFakeGradient()) {
-					mStatusBarView.setBackground(mGradientDrawable);
-					mGradientDrawable.setColor(tintColor);
-				} else {
-					mStatusBarView.setBackgroundColor(tintColor);
-				}
+				Utils.setViewBackground(mStatusBarView, mGradientDrawable);
+				mGradientDrawable.setColor(tintColor);
+				mGradientDrawable.setMode(mSettingsHelper.getOverlayMode());
 			}
 		}
 
@@ -412,7 +391,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			setNavigationBarIconTint(iconTint, true);
 		}
 
-		if (mSettingsHelper.shouldFakeGradient()) {
+		if (mSettingsHelper.shouldForceWhiteTintWithOverlay()) {
 			iconTint = Color.parseColor("#ccffffff");
 		}
 
@@ -704,9 +683,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 	public void setStatusBarView(View view) {
 		mStatusBarView = view;
-		if (mSettingsHelper.shouldFakeGradient()) {
-			Utils.setViewBackground(mStatusBarView, mGradientDrawable);
-		}
+		Utils.setViewBackground(mStatusBarView, mGradientDrawable);
 	}
 
 	public int getColorForStatusIcons() {

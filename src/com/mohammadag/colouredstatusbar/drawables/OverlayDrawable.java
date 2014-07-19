@@ -14,7 +14,7 @@ public class OverlayDrawable extends ColorDrawable {
 	private int mColor;
 
 	public enum Mode {
-		OVERLAY, GRADIENT, COLOR
+		SEMI_TRANSPARENT, GRADIENT, COLOR, UNKNOWN
 	}
 
 	public OverlayDrawable(Resources res, int color, int resId) {
@@ -32,8 +32,8 @@ public class OverlayDrawable extends ColorDrawable {
 		if (mMode == Mode.GRADIENT) {
 			mNpd.setBounds(getBounds());
 			mNpd.draw(canvas);
-		} else if (mMode == Mode.OVERLAY) {
-			mPaint.setColor(Color.argb(120, 0, 0, 0));
+		} else if (mMode == Mode.SEMI_TRANSPARENT) {
+			mPaint.setColor(Color.argb(20, 0, 0, 0));
 			canvas.drawRect(getBounds(), mPaint);
 			mPaint.setColor(mColor);
 		}

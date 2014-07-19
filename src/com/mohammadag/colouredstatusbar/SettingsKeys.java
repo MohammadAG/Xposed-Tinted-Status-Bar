@@ -30,4 +30,6 @@ public class SettingsKeys {
 	public static final String RESPECT_KITKAT_API = "pref_respect_kitkat_api";
 	public static final String USE_FAKE_GRADIENT = "pref_use_fake_gradient";
 	public static final String REVERSE_TINT_ACTION_BAR = "pref_reverse_tint_action_bar";
+	public static final String OVERLAY_TYPE = "pref_overlay_type";
+	public static final String USE_WHITE_ICON_TINT_WITH_OVERLAY = "pref_white_icon_tint_with_overlay";
 }

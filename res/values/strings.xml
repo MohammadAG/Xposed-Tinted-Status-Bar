@@ -100,8 +100,10 @@
     <string name="react_lightsout_summary">Changes color of elements according to lights out mode</string>
     <string name="respect_kitkat_api_title">Respect KitKat APIs</string>
     <string name="respect_kitkat_api_summary">Settings for apps that request translucency will be ignored</string>
-    <string name="use_fake_gradient_title">Show a gradient over tint</string>
-    <string name="use_fake_gradient_summary">Emulate the KitKat look with a gradient</string>
+    <string name="overlay_mode_title">Overlay mode</string>
+    <string name="overlay_mode_summary">Choose the type of overlay to be shown over the tinted color</string>
+    <string name="white_icon_tint_with_overlay_title">White icon tint with overlay</string>
+    <string name="white_icon_tint_with_overlay_message">Force a white icon tint when using an overlay</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">Default settings</string>
@@ -134,6 +136,13 @@
     <string name="notification_add_activity">Add activity</string>
     <string name="apply_touch_color">Apply touch color</string>
     <string name="apply_general_color">Apply general color</string>
+
+    <!-- Overlay modes, order is important when translating! -->
+    <string-array name="overlay_entries">
+        <item>None</item>
+        <item>Gradient</item>
+        <item>Semi transparent</item>
+    </string-array>
 
     <!-- Plugins -->
     <string name="download_description">Tinted Status Bar Plugin</string>

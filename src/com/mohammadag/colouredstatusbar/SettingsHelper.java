@@ -1,5 +1,8 @@
 package com.mohammadag.colouredstatusbar;
 
+import com.mohammadag.colouredstatusbar.drawables.OverlayDrawable;
+import com.mohammadag.colouredstatusbar.drawables.OverlayDrawable.Mode;
+
 import android.annotation.SuppressLint;
 import android.app.AndroidAppHelper;
 import android.content.Context;
@@ -23,6 +26,8 @@ public class SettingsHelper {
 	/* TODO: Rework this class to use this enum for more consistent code */
 	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED,
 		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM }
+
+	public OverlayDrawable.Mode mOverlayMode = Mode.UNKNOWN;
 
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
@@ -478,8 +483,19 @@ public class SettingsHelper {
 		return getBoolean(SettingsKeys.RESPECT_KITKAT_API, true);
 	}
 
-	public boolean shouldFakeGradient() {
-		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, false);
+	public OverlayDrawable.Mode getOverlayMode() {
+		if (mOverlayMode == Mode.UNKNOWN) {
+			String overlayMode = getString(SettingsKeys.OVERLAY_TYPE, "none");
+			if ("none".equals(overlayMode)) {
+				mOverlayMode = Mode.COLOR;
+			} else if ("gradient".equals(overlayMode)) {
+				mOverlayMode = Mode.GRADIENT;
+			} else if ("semi_transparent".equals(overlayMode)) {
+				mOverlayMode = Mode.SEMI_TRANSPARENT;
+			}
+		}
+
+		return mOverlayMode;
 	}
 
 	public boolean shouldReverseTintAbColor(String packageName) {
@@ -495,5 +511,14 @@ public class SettingsHelper {
 			String activityName, boolean reverseTint) {
 		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
 				SettingsKeys.REVERSE_TINT_ACTION_BAR), reverseTint).commit();
+	}
+
+	public boolean shouldForceWhiteTintWithOverlay() {
+		return getBoolean(SettingsKeys.USE_WHITE_ICON_TINT_WITH_OVERLAY, false) && mOverlayMode != Mode.COLOR;
+	}
+
+	public void reloadOverlayMode() {
+		mOverlayMode = Mode.UNKNOWN;
+		getOverlayMode();
 	}
 }
