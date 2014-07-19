@@ -70,9 +70,6 @@ public class ActivitesListActivity extends ListActivity {
 		mFriendlyPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME);
 
 		loadActivitesForPackage(mPackageName);
-
-		getListView().setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
-
 		setTitle(mFriendlyPackageName);
 	}
 
@@ -128,7 +125,7 @@ public class ActivitesListActivity extends ListActivity {
 					mDirty = true;
 					String keyName = SettingsHelper.getKeyName(mPackageName, null, SettingsKeys.IS_ACTIVE);
 					mSettingsHelper.getSharedPreferences().edit().putBoolean(keyName, isChecked).commit();
-					getListView().invalidateViews();
+					mActivityListAdapter.notifyDataSetChanged();
 				}
 			});
 		}
