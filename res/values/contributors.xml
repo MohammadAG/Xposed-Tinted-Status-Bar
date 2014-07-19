@@ -50,9 +50,9 @@
 
     <!-- Libraries -->
     <string-array name="library_1">
-        <item>ListViewAnimations</item>
+        <item>ActionBar-PullToRefresh</item>
         <item>LIBRARY</item>
-        <item>https://github.com/nhaarman/ListViewAnimations</item>
+        <item>https://github.com/chrisbanes/ActionBar-PullToRefresh</item>
     </string-array>
     <string-array name="library_2">
         <item>HoloColorPicker</item>
