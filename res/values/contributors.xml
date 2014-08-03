@@ -5,7 +5,7 @@
     To add yourself to to the contributors page, change X to a new number
     Possible types are CODER, TRANSLATOR, DESIGN, LIBRARY, BITCHING
     
-	<string-array name="contributor_X">
+    <string-array name="contributor_X">
         <item>Name</>
         <item>CODER</> 
         <item>Link to your website, XDA page, etc</>
@@ -50,9 +50,9 @@
 
     <!-- Libraries -->
     <string-array name="library_1">
-        <item>ListViewAnimations</item>
+        <item>ActionBar-PullToRefresh</item>
         <item>LIBRARY</item>
-        <item>https://github.com/nhaarman/ListViewAnimations</item>
+        <item>https://github.com/chrisbanes/ActionBar-PullToRefresh</item>
     </string-array>
     <string-array name="library_2">
         <item>HoloColorPicker</item>
@@ -102,6 +102,16 @@
         <item>P_Toti (Italian)</item>
         <item>TRANSLATOR</item>
         <item>http://forum.xda-developers.com/member.php?u=4699410</item>
+    </string-array>
+    <string-array name="translator_9">
+        <item>JoseGalRe (Español)</item>
+        <item>TRANSLATOR</item>
+        <item>http://forum.xda-developers.com/member.php?u=4200595</item>
+    </string-array>
+    <string-array name="translator_10">
+        <item>M. Kucharskov</item>
+        <item>TRANSLATOR</item>
+        <item>http://forum.xda-developers.com/member.php?u=4493226</item>
     </string-array>
 
 </resources>

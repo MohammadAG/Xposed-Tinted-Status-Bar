@@ -1,6 +1,9 @@
 package com.mohammadag.colouredstatusbar.hooks;
 
+import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -71,7 +74,10 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 				&& (activityIntent.getFlags() & FLAG_FLOATING_WINDOW) == FLAG_FLOATING_WINDOW)
 			return;
 
-		if (activity.getWindow().isFloating())
+		// From Xposed SwipeBack by PeterCxy
+		// https://github.com/LOSP/SwipeBack/blob/master/src/us/shandian/mod/swipeback/hook/ModSwipeBack.java
+		int isFloating = getStaticIntField(findClass("com.android.internal.R.styleable", null), "Window_windowIsFloating");
+		if (activity.getWindow().getWindowStyle().getBoolean(isFloating, false))
 			return;
 
 		if (mSettingsHelper.getBoolean(SettingsKeys.ALLOW_API_CHANGES, true)) {

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -29,8 +31,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.haarman.listviewanimations.ArrayAdapter;
-import com.haarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
 import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.PackageNames;
 import com.mohammadag.colouredstatusbar.R;
@@ -70,12 +70,6 @@ public class ActivitesListActivity extends ListActivity {
 		mFriendlyPackageName = intent.getStringExtra(Common.EXTRA_KEY_PACKAGE_FRIENDLY_NAME);
 
 		loadActivitesForPackage(mPackageName);
-
-		float scale = getResources().getDisplayMetrics().density;
-		int padding = (int) (8 * scale + 0.5f);
-		getListView().setPadding(padding * 2, padding, padding * 2, padding);
-		getListView().setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
-
 		setTitle(mFriendlyPackageName);
 	}
 
@@ -131,7 +125,7 @@ public class ActivitesListActivity extends ListActivity {
 					mDirty = true;
 					String keyName = SettingsHelper.getKeyName(mPackageName, null, SettingsKeys.IS_ACTIVE);
 					mSettingsHelper.getSharedPreferences().edit().putBoolean(keyName, isChecked).commit();
-					getListView().invalidateViews();
+					mActivityListAdapter.notifyDataSetChanged();
 				}
 			});
 		}
@@ -193,11 +187,8 @@ public class ActivitesListActivity extends ListActivity {
 				Toast.makeText(this, R.string.gel_stub_toast, Toast.LENGTH_LONG).show();
 			}
 
-			mActivityListAdapter = new ActivityListAdapter(mActivityList);
-
-			AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mActivityListAdapter);
-			getListView().setAdapter(alphaAdapter);
-			alphaAdapter.setAbsListView(getListView());
+			mActivityListAdapter = new ActivityListAdapter(this, mActivityList);
+			setListAdapter(mActivityListAdapter);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 			finish();
@@ -208,8 +199,8 @@ public class ActivitesListActivity extends ListActivity {
 
 		private Filter filter;
 
-		public ActivityListAdapter(List<String> items) {
-			super(new ArrayList<String>(items));
+		public ActivityListAdapter(Context context, List<String> items) {
+			super(context, 0, new ArrayList<String>(items));
 			mFilteredActivityList.addAll(items);
 			filter = new ActivityListFilter(this);
 		}
@@ -311,7 +302,7 @@ public class ActivitesListActivity extends ListActivity {
 		ListView list = getListView();
 		if (requestCode >= list.getFirstVisiblePosition() && requestCode <= list.getLastVisiblePosition()) {
 			View v = list.getChildAt(requestCode - list.getFirstVisiblePosition());
-			list.getAdapter().getView(requestCode, v, list);
+			getListAdapter().getView(requestCode, v, list);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}

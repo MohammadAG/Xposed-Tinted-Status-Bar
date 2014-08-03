@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="5dp"
+    android:paddingStart="10dp"
+    android:paddingTop="5dp" >
+
+    <ImageView
+        android:id="@+id/pluginForPackageIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pluginForName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingEnd="5dp"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/pluginName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/pluginForPackageIcon"
+        android:ellipsize="end"
+        android:paddingEnd="5dp"
+        android:singleLine="true"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/versionNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pluginName"
+        android:layout_below="@+id/pluginName"
+        android:paddingEnd="5dp"
+        android:text="Version 1.0"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/pluginForName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/versionNumber"
+        android:layout_below="@+id/versionNumber"
+        android:paddingEnd="5dp"
+        android:text="Plugin for: Snapchat"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>

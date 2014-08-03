@@ -1,5 +1,8 @@
 package com.mohammadag.colouredstatusbar;
 
+import com.mohammadag.colouredstatusbar.drawables.OverlayDrawable;
+import com.mohammadag.colouredstatusbar.drawables.OverlayDrawable.Mode;
+
 import android.annotation.SuppressLint;
 import android.app.AndroidAppHelper;
 import android.content.Context;
@@ -23,6 +26,8 @@ public class SettingsHelper {
 	/* TODO: Rework this class to use this enum for more consistent code */
 	public enum Tint { STATUS_BAR, ICON, ICON_INVERTED,
 		NAV_BAR, NAV_BAR_ICON, NAV_BAR_IM, NAV_BAR_ICON_IM }
+
+	public OverlayDrawable.Mode mOverlayMode = Mode.UNKNOWN;
 
 	// To be used from within module class.
 	public SettingsHelper(XSharedPreferences prefs) {
@@ -110,10 +115,16 @@ public class SettingsHelper {
 		String keyName = getKeyName(packageName, activityName, SettingsKeys.NAVIGATION_BAR_TINT);
 		String defaultValue;
 
-		if (activityName == null)
-			defaultValue = getDefaultTint(Tint.NAV_BAR, false);
-		else
-			defaultValue = getNavigationBarTint(packageName, null, false);
+		// People don't read
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT
+				&& PackageNames.LOCKSCREEN_STUB.equals(packageName)) {
+			defaultValue = "66000000";
+		} else {
+			if (activityName == null)
+				defaultValue = getDefaultTint(Tint.NAV_BAR, false);
+			else
+				defaultValue = getNavigationBarTint(packageName, null, false);
+		}
 
 		String hexColor = getString(keyName, defaultValue);
 		if (hexColor != null) {
@@ -282,6 +293,12 @@ public class SettingsHelper {
 			return "50443d";
 		else if ("com.evernote".equals(packageName))
 			return "57a330";
+
+		// People don't read
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			if (PackageNames.LOCKSCREEN_STUB.equals(packageName))
+				return "66000000";
+		}
 
 		return null;
 	}
@@ -466,8 +483,19 @@ public class SettingsHelper {
 		return getBoolean(SettingsKeys.RESPECT_KITKAT_API, true);
 	}
 
-	public boolean shouldFakeGradient() {
-		return getBoolean(SettingsKeys.USE_FAKE_GRADIENT, false);
+	public OverlayDrawable.Mode getOverlayMode() {
+		if (mOverlayMode == Mode.UNKNOWN) {
+			String overlayMode = getString(SettingsKeys.OVERLAY_TYPE, "none");
+			if ("none".equals(overlayMode)) {
+				mOverlayMode = Mode.COLOR;
+			} else if ("gradient".equals(overlayMode)) {
+				mOverlayMode = Mode.GRADIENT;
+			} else if ("semi_transparent".equals(overlayMode)) {
+				mOverlayMode = Mode.SEMI_TRANSPARENT;
+			}
+		}
+
+		return mOverlayMode;
 	}
 
 	public boolean shouldReverseTintAbColor(String packageName) {
@@ -483,5 +511,14 @@ public class SettingsHelper {
 			String activityName, boolean reverseTint) {
 		mPreferences.edit().putBoolean(getKeyName(packageName, activityName,
 				SettingsKeys.REVERSE_TINT_ACTION_BAR), reverseTint).commit();
+	}
+
+	public boolean shouldForceWhiteTintWithOverlay() {
+		return getBoolean(SettingsKeys.USE_WHITE_ICON_TINT_WITH_OVERLAY, false) && mOverlayMode != Mode.COLOR;
+	}
+
+	public void reloadOverlayMode() {
+		mOverlayMode = Mode.UNKNOWN;
+		getOverlayMode();
 	}
 }

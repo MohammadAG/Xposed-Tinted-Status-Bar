@@ -37,17 +37,26 @@ public class StatusBarTintApi {
 	 */
 	public static final String METADATA_OVERRIDE_COLORS = "override_tinted_status_bar_defaults";
 
-	/* Helper method, pass -1 for a colour you don't want to change */
+	/*
+	 * You can use this meta-data value to provide custom made plugins for com.packagename
+	 * <meta-data android:name="tinted_status_bar_plugin" android:value="com.packagename" />
+	 *
+	 * For multiple packages, separate names with a #
+	 * <meta-data android:name="tinted_status_bar_plugin" android:value="com.packagename1#com.packagename2" />
+	 */
+	public static final String METADATA_PLUGIN = "tinted_status_bar_plugin";
+
+	/* Helper method, pass -3 for a colour you don't want to change */
 	public static void sendColorChangeIntent(int statusBarTint, int iconColorTint,
 			int navBarTint, int navBarIconTint, Context context) {
 		Intent intent = new Intent(INTENT_CHANGE_COLOR_NAME);
-		if (statusBarTint != -1)
+		if (statusBarTint != -3)
 			intent.putExtra(KEY_STATUS_BAR_TINT, statusBarTint);
-		if (iconColorTint != -1)
+		if (iconColorTint != -3)
 			intent.putExtra(KEY_STATUS_BAR_ICON_TINT, iconColorTint);
-		if (navBarTint != -1)
+		if (navBarTint != -3)
 			intent.putExtra(KEY_NAVIGATION_BAR_TINT, navBarTint);
-		if (navBarIconTint != -1)
+		if (navBarIconTint != -3)
 			intent.putExtra(KEY_NAVIGATION_BAR_ICON_TINT, navBarIconTint);
 
 		/* Used internally to keep track of delayed intents */

@@ -15,6 +15,11 @@
         android:key="donate_key"
         android:summary="@string/donate_summary"
         android:title="@string/menu_donate" />
+    <Preference
+        android:summary="@string/plugins_summary"
+        android:title="@string/plugins_title" >
+        <intent android:action="com.mohammadag.colouredstatusbar.DOWNLOAD_PLUGINS" />
+    </Preference>
 
     <PreferenceCategory android:title="@string/per_app_settings" >
         <Preference
@@ -76,10 +81,19 @@
             android:key="pref_animate_tint"
             android:summary="@string/animate_tint_summary"
             android:title="@string/animate_tint_title" />
+
+        <ListPreference
+            android:entries="@array/overlay_entries"
+            android:entryValues="@array/overlay_values"
+            android:key="pref_overlay_type"
+            android:summary="@string/overlay_mode_summary"
+            android:title="@string/overlay_mode_title"
+            android:defaultValue="none" />
+
         <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
-            android:key="pref_use_fake_gradient"
-            android:summary="@string/use_fake_gradient_summary"
-            android:title="@string/use_fake_gradient_title" />
+            android:key="pref_white_icon_tint_with_overlay"
+            android:summary="@string/white_icon_tint_with_overlay_message"
+            android:title="@string/white_icon_tint_with_overlay_title" />
         <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_react_lights_out"
             android:summary="@string/react_lightsout_summary"

@@ -4,7 +4,9 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getIntField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
+
 import android.app.ActionBar;
+import android.app.AndroidAppHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -36,6 +38,9 @@ public class ActionBarHooks {
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
 					String packageName = actionBar.getThemedContext().getPackageName();
+					if (!AndroidAppHelper.currentPackageName().equals(packageName))
+						return;
+
 					if (!mSettingsHelper.isEnabled(packageName, null))
 						return;
 
@@ -59,6 +64,9 @@ public class ActionBarHooks {
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
 					String packageName = actionBar.getThemedContext().getPackageName();
+					if (!AndroidAppHelper.currentPackageName().equals(packageName))
+						return;
+
 					if (!mSettingsHelper.isEnabled(packageName, null))
 						return;
 
@@ -79,6 +87,7 @@ public class ActionBarHooks {
 						ColourChangerMod.sendColorChangeIntent(statusBarTint, Utils.getIconColorForColor(statusBarTint, defaultNormal,
 								invertedIconTint, mSettingsHelper.getHsvMax()), actionBar.getThemedContext());
 				};
+
 			});
 
 			findAndHookMethod(ActionBarImpl, "show", new XC_MethodHook() {
@@ -86,6 +95,9 @@ public class ActionBarHooks {
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					ActionBar actionBar = (ActionBar) param.thisObject;
 					String packageName = actionBar.getThemedContext().getPackageName();
+					if (!AndroidAppHelper.currentPackageName().equals(packageName))
+						return;
+
 					if (!mSettingsHelper.isEnabled(packageName, null))
 						return;
 

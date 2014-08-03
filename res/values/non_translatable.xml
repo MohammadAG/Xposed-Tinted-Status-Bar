@@ -9,5 +9,10 @@
         <item>MULTIPLY</item>
         <item>SRC_ATOP</item>
     </string-array>
+    <string-array name="overlay_values">
+        <item>none</item>
+        <item>gradient</item>
+        <item>semi_transparent</item>
+    </string-array>
 
 </resources>
