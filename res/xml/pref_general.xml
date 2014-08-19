@@ -89,6 +89,12 @@
             android:summary="@string/overlay_mode_summary"
             android:title="@string/overlay_mode_title"
             android:defaultValue="none" />
+        <com.mohammadag.colouredstatusbar.preferences.SliderPreference
+            android:defaultValue="0.2"
+            android:enabled="false"
+            android:key="pref_semi_transparent_overlay_opacity"
+            android:title="@string/semi_transparent_overlay_opacity_title" />
+
 
         <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_white_icon_tint_with_overlay"

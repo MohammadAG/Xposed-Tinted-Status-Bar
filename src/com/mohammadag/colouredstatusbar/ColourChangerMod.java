@@ -361,20 +361,18 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				}
 			});
 			Utils.setViewBackground(mStatusBarView, mGradientDrawable);
-			mGradientDrawable.setMode(mSettingsHelper.getOverlayMode());
 			colorAnimation.start();
 		} else {
 			mStatusBarView.setAlpha(1f);
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
 				Utils.setViewBackground(mStatusBarView, mGradientDrawable);
 				mGradientDrawable.setColor(Color.TRANSPARENT);
-				mGradientDrawable.setMode(mSettingsHelper.getOverlayMode());
 			} else {
 				Utils.setViewBackground(mStatusBarView, mGradientDrawable);
 				mGradientDrawable.setColor(tintColor);
-				mGradientDrawable.setMode(mSettingsHelper.getOverlayMode());
 			}
 		}
+		mGradientDrawable.setMode(mSettingsHelper.getOverlayMode(), mSettingsHelper.getSemiTransparentOverlayOpacity());
 
 		mLastSetColor = tintColor;
 

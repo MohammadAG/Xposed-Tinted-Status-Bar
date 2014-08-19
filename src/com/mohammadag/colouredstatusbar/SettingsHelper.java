@@ -498,6 +498,10 @@ public class SettingsHelper {
 		return mOverlayMode;
 	}
 
+	public int getSemiTransparentOverlayOpacity() {
+		return (int) (getFloat(SettingsKeys.SEMI_TRANSPARENT_OVERLAY_OPACITY, 0.2f) * 255);
+	}
+
 	public boolean shouldReverseTintAbColor(String packageName) {
 		String keyName = getKeyName(packageName, null, SettingsKeys.REVERSE_TINT_ACTION_BAR);
 		return getBoolean(keyName, shouldAlwaysReverseTint());

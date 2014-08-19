@@ -102,6 +102,7 @@
     <string name="respect_kitkat_api_summary">Settings for apps that request translucency will be ignored</string>
     <string name="overlay_mode_title">Overlay mode</string>
     <string name="overlay_mode_summary">Choose the type of overlay to be shown over the tinted color</string>
+    <string name="semi_transparent_overlay_opacity_title">Overlay opacity</string>
     <string name="white_icon_tint_with_overlay_title">White icon tint with overlay</string>
     <string name="white_icon_tint_with_overlay_message">Force a white icon tint when using an overlay</string>
 

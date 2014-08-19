@@ -12,6 +12,7 @@ public class OverlayDrawable extends ColorDrawable {
 	private NinePatchDrawable mNpd;
 	private Mode mMode;
 	private int mColor;
+	private int mOpacity;
 
 	public enum Mode {
 		SEMI_TRANSPARENT, GRADIENT, COLOR, UNKNOWN
@@ -33,7 +34,7 @@ public class OverlayDrawable extends ColorDrawable {
 			mNpd.setBounds(getBounds());
 			mNpd.draw(canvas);
 		} else if (mMode == Mode.SEMI_TRANSPARENT) {
-			mPaint.setColor(Color.argb(20, 0, 0, 0));
+			mPaint.setColor(Color.argb(mOpacity, 0, 0, 0));
 			canvas.drawRect(getBounds(), mPaint);
 			mPaint.setColor(mColor);
 		}
@@ -45,11 +46,12 @@ public class OverlayDrawable extends ColorDrawable {
 		invalidateSelf();
 	}
 
-	public void setMode(Mode mode) {
+	public void setMode(Mode mode, int opacity) {
 		if (mode == mMode)
 			return;
 
 		mMode = mode;
+		mOpacity = opacity;
 		invalidateSelf();
 	}
 }

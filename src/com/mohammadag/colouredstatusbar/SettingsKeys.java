@@ -31,5 +31,6 @@ public class SettingsKeys {
 	public static final String USE_FAKE_GRADIENT = "pref_use_fake_gradient";
 	public static final String REVERSE_TINT_ACTION_BAR = "pref_reverse_tint_action_bar";
 	public static final String OVERLAY_TYPE = "pref_overlay_type";
+	public static final String SEMI_TRANSPARENT_OVERLAY_OPACITY = "pref_semi_transparent_overlay_opacity";
 	public static final String USE_WHITE_ICON_TINT_WITH_OVERLAY = "pref_white_icon_tint_with_overlay";
 }
