@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.XModuleResources;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.View;
@@ -61,7 +60,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
 	private static View mStatusBarView;
 	private static View mNavigationBarView;
-	private static View mKitKatBatteryView;
+	private static KitKatBattery mKitKatBattery;
 	private static ArrayList<ImageView> mSystemIconViews = new ArrayList<ImageView>();
 	private static ArrayList<ImageView> mNotificationIconViews = new ArrayList<ImageView>();
 	private static ArrayList<TextView> mTextLabels = new ArrayList<TextView>();
@@ -282,47 +281,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT)
 			return;
 
-		if (mKitKatBatteryView == null)
+		if (mKitKatBattery == null)
 			return;
 
-		boolean debug = mSettingsHelper.isDebugMode();
-
-		try {
-			final int[] colors = (int[]) XposedHelpers.getObjectField(mKitKatBatteryView, "mColors");
-			colors[colors.length - 1] = iconColor;
-			XposedHelpers.setObjectField(mKitKatBatteryView, "mColors", colors);
-		} catch (NoSuchFieldError e) {
-			if (debug) e.printStackTrace();
-		}
-
-		try {
-			final Paint framePaint = (Paint) XposedHelpers.getObjectField(mKitKatBatteryView, "mFramePaint");
-			framePaint.setColor(iconColor);
-			framePaint.setAlpha(100);
-		} catch (NoSuchFieldError e) {
-			if (debug) e.printStackTrace();
-		}
-
-		try {
-			final Paint boltPaint = (Paint) XposedHelpers.getObjectField(mKitKatBatteryView, "mBoltPaint");
-			boltPaint.setColor(Utils.getIconColorForColor(iconColor, Color.BLACK, Color.WHITE, 0.7f));
-			boltPaint.setAlpha(100);
-		} catch (NoSuchFieldError e) {
-			if (debug) e.printStackTrace();
-		}
-
-		try {
-			XposedHelpers.setIntField(mKitKatBatteryView, "mChargeColor", iconColor);
-		} catch (NoSuchFieldError e) {
-			/* Beanstalk, not sure why the ROM changed this */
-			try {
-				XposedHelpers.setIntField(mKitKatBatteryView, "mBatteryColor", iconColor);
-			} catch (NoSuchFieldError e1) {
-			}
-			if (debug) e.printStackTrace();
-		}
-
-		mKitKatBatteryView.invalidate();
+		mKitKatBattery.updateBattery(iconColor);
 	}
 
 	private static void setColorForLayout(LinearLayout statusIcons, int color, PorterDuff.Mode mode) {
@@ -691,8 +653,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		return mSettingsHelper;
 	}
 
-	public void setKitKatBatteryView(View batteryView) {
-		mKitKatBatteryView = batteryView;
+	public void setKitKatBatteryView(KitKatBattery kitkatBattery) {
+		mKitKatBattery = kitkatBattery;
 		setKitKatBatteryColor(mLastIconTint);
 	}
 
