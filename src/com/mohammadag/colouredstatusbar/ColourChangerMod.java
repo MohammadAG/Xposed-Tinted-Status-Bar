@@ -87,6 +87,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 	private static XModuleResources mResources;
 	private OverlayDrawable mGradientDrawable;
+	private OverlayDrawable mNavGradientDrawable;
 
 	/* Fall back to old method to get the clock when no clock is found */
 	private static ClassLoader mSystemUiClassLoader = null;
@@ -253,6 +254,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		mGradientDrawable = new OverlayDrawable(mResources, Color.TRANSPARENT,
 				R.drawable.status_background);
+		mNavGradientDrawable = new OverlayDrawable(mResources, Color.TRANSPARENT,
+				R.drawable.nav_background);
 
 		if (mHookClockOnSystemUiInit)
 			doClockHooks(lpparam.classLoader);
@@ -312,7 +315,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 
 		log("Setting statusbar color to " + tintColor);
 
-		if (mSettingsHelper.animateStatusBarTintChange()) {			
+		if (mSettingsHelper.animateStatusBarTintChange()) {
 			int animateFrom = mLastSetColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : mLastSetColor;
 			int animateTo = tintColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : tintColor;
 			ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), animateFrom, animateTo);
@@ -413,29 +416,28 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		log("Setting navigation bar color to " + tintColor);
 
 		if (mSettingsHelper.animateStatusBarTintChange()) {
-			if (tintColor != KITKAT_TRANSPARENT_COLOR) {
-				ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), mLastSetNavBarTint, tintColor);
-				colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
-					@Override
-					public void onAnimationUpdate(ValueAnimator animator) {
-						mNavigationBarView.setBackgroundColor((Integer) animator.getAnimatedValue());
-					}
-				});
-				colorAnimation.start();
-			} else {
-				mNavigationBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
-				Utils.setViewBackground(mNavigationBarView, new BarBackgroundDrawable(mStatusBarView.getContext(),
-						mResources, R.drawable.nav_background));
-			}
+			int animateFrom = mLastSetColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : mLastSetNavBarTint;
+			int animateTo = tintColor == KITKAT_TRANSPARENT_COLOR ? Color.TRANSPARENT : tintColor;
+			ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), animateFrom, animateTo);
+			colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator animator) {
+					mNavGradientDrawable.setColor((Integer)animator.getAnimatedValue());
+				}
+			});
+			Utils.setViewBackground(mNavigationBarView, mNavGradientDrawable);
+			colorAnimation.start();
 		} else {
+			mNavigationBarView.setAlpha(1f);
 			if (tintColor == KITKAT_TRANSPARENT_COLOR) {
-				mNavigationBarView.setBackgroundColor(KITKAT_TRANSPARENT_COLOR);
-				Utils.setViewBackground(mNavigationBarView, new BarBackgroundDrawable(mNavigationBarView.getContext(),
-						mResources, R.drawable.nav_background));
+				Utils.setViewBackground(mNavigationBarView, mNavGradientDrawable);
+				mNavGradientDrawable.setColor(Color.TRANSPARENT);
 			} else {
-				mNavigationBarView.setBackgroundColor(tintColor);
+				Utils.setViewBackground(mNavigationBarView, mNavGradientDrawable);
+				mNavGradientDrawable.setColor(tintColor);
 			}
 		}
+		mNavGradientDrawable.setMode(mSettingsHelper.getOverlayMode(), mSettingsHelper.getSemiTransparentOverlayOpacity());
 
 		if (mNavigationBarView != null && tintColor != KITKAT_TRANSPARENT_COLOR) {
 			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");
@@ -451,12 +453,16 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 		setNavigationBarTint(tintColor, false);
 	}
 
-	private void setNavigationBarIconTint(final int tintColor, boolean force) {
+	private void setNavigationBarIconTint(int tintColor, boolean force) {
 		if (mNavigationBarView == null)
 			return;
 
 		if (mSettingsHelper.shouldLinkStatusBarAndNavBar() && !force) {
 			return;
+		}
+
+		if (mSettingsHelper.shouldForceWhiteTintWithOverlay()) {
+			tintColor = Color.parseColor("#ccffffff");
 		}
 
 		ImageView recentsButton = null;
