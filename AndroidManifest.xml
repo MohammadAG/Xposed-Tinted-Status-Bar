@@ -55,7 +55,7 @@
             android:value="true" />
         <meta-data
             android:name="xposedminversion"
-            android:value="30+" />
+            android:value="54+" />
         <meta-data
             android:name="xposeddescription"
             android:value="Tint the status bar based on current activity" />
