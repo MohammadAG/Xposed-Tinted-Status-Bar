@@ -101,8 +101,6 @@
     <string name="react_lightsout_summary">Zmiana kolorów elementów stosownie do trybu oświetlenia</string>
     <string name="respect_kitkat_api_title">Respektuj API KitKat</string>
     <string name="respect_kitkat_api_summary">Ustawienia aplikacji, które żądają przezroczystość będą ignorowane</string>
-    <string name="use_fake_gradient_title">Pokaż gradient ponad odcieniem</string>
-    <string name="use_fake_gradient_summary">Emuluje wygląd KitKat z gradientem</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">Domyślne ustawienia</string>
