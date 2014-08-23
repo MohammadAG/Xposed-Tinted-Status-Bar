@@ -9,7 +9,6 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.Common;
 import com.mohammadag.colouredstatusbar.MiuiV5Support;
 
 import de.robv.android.xposed.XC_MethodHook;

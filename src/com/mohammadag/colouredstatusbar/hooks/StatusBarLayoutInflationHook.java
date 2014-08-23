@@ -1,13 +1,12 @@
 package com.mohammadag.colouredstatusbar.hooks;
 
-import com.mohammadag.colouredstatusbar.ColourChangerMod;
-import com.mohammadag.colouredstatusbar.Common;
-import com.mohammadag.colouredstatusbar.MiuiV5Support;
-
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.mohammadag.colouredstatusbar.ColourChangerMod;
+import com.mohammadag.colouredstatusbar.MiuiV5Support;
+
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 
 /* Taken from GravityBox */
