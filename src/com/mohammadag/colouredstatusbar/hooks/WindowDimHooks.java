@@ -12,29 +12,18 @@ public class WindowDimHooks {
 	public static final String KEY_DIM_AMOUNT = "dimAmount";
 
 	public static void doHook() {
-		findAndHookMethod(Window.class, "makeActive", new XC_MethodHook() {
+		findAndHookMethod("com.android.internal.policy.impl.PhoneWindow$DecorView", null,
+				"onWindowFocusChanged", boolean.class, new XC_MethodHook() {
 			@Override
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-				Window window = (Window) param.thisObject;
+				Window window = (Window) XposedHelpers.getObjectField(param.thisObject, "this$0");
 				if ((window.getAttributes().flags & LayoutParams.FLAG_DIM_BEHIND) == LayoutParams.FLAG_DIM_BEHIND) {
-					XposedHelpers.setAdditionalInstanceField(window, "isDialog", true);
+					boolean focused = (Boolean) param.args[0];
 					Intent intent = new Intent(INTENT_DIM_CHANGED);
-					intent.putExtra(KEY_DIM_AMOUNT, window.getAttributes().dimAmount);
+					intent.putExtra(KEY_DIM_AMOUNT, focused ? window.getAttributes().dimAmount : 0f);
 					window.getContext().sendBroadcast(intent);
 				}
 			}
-		});
-
-		findAndHookMethod(Window.class, "destroy", new XC_MethodHook() {
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-				Window window = (Window) param.thisObject;
-				boolean isDialog = (Boolean) XposedHelpers.getAdditionalInstanceField(window, "isDialog");
-				if (isDialog) {
-					Intent intent = new Intent(INTENT_DIM_CHANGED);
-					intent.putExtra(KEY_DIM_AMOUNT, 0);
-					window.getContext().sendBroadcast(intent);
-				}
-			};
 		});
 	}
 }
