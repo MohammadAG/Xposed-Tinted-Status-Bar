@@ -337,6 +337,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 		mGradientDrawable.setMode(mSettingsHelper.getOverlayMode(), mSettingsHelper.getSemiTransparentOverlayOpacity());
+		mGradientDrawable.setIsTransparentCauseOfKitKatApi(tintColor == KITKAT_TRANSPARENT_COLOR
+				&& mSettingsHelper.isLegacyGradientMode());
 
 		mLastSetColor = tintColor;
 
@@ -437,6 +439,8 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			}
 		}
 		mNavGradientDrawable.setMode(mSettingsHelper.getOverlayMode(), mSettingsHelper.getSemiTransparentOverlayOpacity());
+		mNavGradientDrawable.setIsTransparentCauseOfKitKatApi(tintColor == KITKAT_TRANSPARENT_COLOR
+				&& mSettingsHelper.isLegacyGradientMode());
 
 		if (mNavigationBarView != null && tintColor != KITKAT_TRANSPARENT_COLOR) {
 			Intent intent = new Intent("gravitybox.intent.action.ACTION_NAVBAR_CHANGED");

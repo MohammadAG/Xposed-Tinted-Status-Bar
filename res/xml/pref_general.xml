@@ -83,18 +83,23 @@
             android:title="@string/animate_tint_title" />
 
         <ListPreference
+            android:defaultValue="none"
             android:entries="@array/overlay_entries"
             android:entryValues="@array/overlay_values"
             android:key="pref_overlay_type"
             android:summary="@string/overlay_mode_summary"
-            android:title="@string/overlay_mode_title"
-            android:defaultValue="none" />
+            android:title="@string/overlay_mode_title" />
+
         <com.mohammadag.colouredstatusbar.preferences.SliderPreference
             android:defaultValue="0.2"
             android:enabled="false"
             android:key="pref_semi_transparent_overlay_opacity"
             android:title="@string/semi_transparent_overlay_opacity_title" />
 
+        <CheckBoxPreference
+            android:key="pref_legacy_gradient_mode"
+            android:summary="@string/legacy_gradient_mode_summary"
+            android:title="@string/legacy_gradient_mode_title" />
 
         <com.mohammadag.colouredstatusbar.preferences.MultiLineCheckBoxPreference
             android:key="pref_white_icon_tint_with_overlay"

@@ -521,6 +521,10 @@ public class SettingsHelper {
 		return getBoolean(SettingsKeys.USE_WHITE_ICON_TINT_WITH_OVERLAY, false) && mOverlayMode != Mode.COLOR;
 	}
 
+	public boolean isLegacyGradientMode() {
+		return getBoolean(SettingsKeys.LEGACY_GRADIENT_MODE, false);
+	}
+
 	public void reloadOverlayMode() {
 		mOverlayMode = Mode.UNKNOWN;
 		getOverlayMode();

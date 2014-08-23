@@ -33,4 +33,5 @@ public class SettingsKeys {
 	public static final String OVERLAY_TYPE = "pref_overlay_type";
 	public static final String SEMI_TRANSPARENT_OVERLAY_OPACITY = "pref_semi_transparent_overlay_opacity";
 	public static final String USE_WHITE_ICON_TINT_WITH_OVERLAY = "pref_white_icon_tint_with_overlay";
+	public static final String LEGACY_GRADIENT_MODE = "pref_legacy_gradient_mode";
 }

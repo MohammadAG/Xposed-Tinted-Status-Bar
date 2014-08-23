@@ -13,6 +13,7 @@ public class OverlayDrawable extends ColorDrawable {
 	private Mode mMode;
 	private int mColor;
 	private int mOpacity;
+	private boolean mIsKitkatTransparency = false;
 
 	public enum Mode {
 		SEMI_TRANSPARENT, GRADIENT, COLOR, UNKNOWN
@@ -30,7 +31,7 @@ public class OverlayDrawable extends ColorDrawable {
 		super.draw(canvas);
 
 		canvas.drawRect(getBounds(), mPaint);
-		if (mMode == Mode.GRADIENT) {
+		if (mMode == Mode.GRADIENT || mIsKitkatTransparency) {
 			mNpd.setBounds(getBounds());
 			mNpd.draw(canvas);
 		} else if (mMode == Mode.SEMI_TRANSPARENT) {
@@ -52,6 +53,11 @@ public class OverlayDrawable extends ColorDrawable {
 
 		mMode = mode;
 		mOpacity = opacity;
+		invalidateSelf();
+	}
+
+	public void setIsTransparentCauseOfKitKatApi(boolean isKitkatTransparency) {
+		mIsKitkatTransparency = isKitkatTransparency;
 		invalidateSelf();
 	}
 }

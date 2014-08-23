@@ -154,5 +154,7 @@
     <string name="plugin_version_update">Update available: %1$s (%2$d)</string>
     <string name="open_xposed">Xposed Installer</string>
     <string name="uninstall">Uninstall</string>
+    <string name="legacy_gradient_mode_title">Legacy gradient mode</string>
+    <string name="legacy_gradient_mode_summary">Even when overlay is set to none, draw the gradient when 66000000 is used or when an app is made for KitKat</string>
 
 </resources>
