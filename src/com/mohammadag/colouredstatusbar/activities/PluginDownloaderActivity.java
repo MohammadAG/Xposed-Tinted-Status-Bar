@@ -41,6 +41,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mohammadag.colouredstatusbar.DownloadsUtil;
 import com.mohammadag.colouredstatusbar.DownloadsUtil.DownloadInfo;
@@ -159,7 +160,9 @@ public class PluginDownloaderActivity extends ListActivity implements OnRefreshL
 					return pluginsList;
 				}
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				Toast.makeText(getApplicationContext(), "Error loading plugin list: " + e.getMessage(),
+						Toast.LENGTH_LONG).show();
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -172,7 +175,8 @@ public class PluginDownloaderActivity extends ListActivity implements OnRefreshL
 	}
 
 	public void onGotPlugins(List<Plugin> result) {
-		setListAdapter(new PluginArrayAdapter(this, 0, result));
+		if (result != null)
+			setListAdapter(new PluginArrayAdapter(this, 0, result));
 		mPullToRefreshLayout.setRefreshComplete();
 	}
 
