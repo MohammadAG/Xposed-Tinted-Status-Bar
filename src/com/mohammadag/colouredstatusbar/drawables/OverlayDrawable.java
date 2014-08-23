@@ -31,7 +31,7 @@ public class OverlayDrawable extends ColorDrawable {
 		super.draw(canvas);
 
 		canvas.drawRect(getBounds(), mPaint);
-		if (mMode == Mode.GRADIENT || mIsKitkatTransparency) {
+		if (mMode == Mode.GRADIENT || (mMode == Mode.COLOR && mIsKitkatTransparency)) {
 			mNpd.setBounds(getBounds());
 			mNpd.draw(canvas);
 		} else if (mMode == Mode.SEMI_TRANSPARENT) {
