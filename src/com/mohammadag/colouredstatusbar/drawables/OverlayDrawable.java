@@ -47,7 +47,7 @@ public class OverlayDrawable extends ColorDrawable {
 	}
 
 	public void setMode(Mode mode, int opacity) {
-		if (mode == mMode)
+		if (mode == mMode && mOpacity == opacity)
 			return;
 
 		mMode = mode;
