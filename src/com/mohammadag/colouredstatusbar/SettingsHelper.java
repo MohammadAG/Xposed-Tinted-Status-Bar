@@ -522,7 +522,7 @@ public class SettingsHelper {
 	}
 
 	public boolean isLegacyGradientMode() {
-		return getBoolean(SettingsKeys.LEGACY_GRADIENT_MODE, false);
+		return getBoolean(SettingsKeys.LEGACY_GRADIENT_MODE, true);
 	}
 
 	public void reloadOverlayMode() {

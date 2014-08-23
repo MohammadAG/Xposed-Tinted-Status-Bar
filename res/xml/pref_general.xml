@@ -97,6 +97,7 @@
             android:title="@string/semi_transparent_overlay_opacity_title" />
 
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="pref_legacy_gradient_mode"
             android:summary="@string/legacy_gradient_mode_summary"
             android:title="@string/legacy_gradient_mode_title" />
