@@ -13,6 +13,7 @@ public class OverlayDrawable extends ColorDrawable {
 	private Mode mMode;
 	private int mColor;
 	private int mOpacity;
+	private float mDimAmount;
 	private boolean mIsKitkatTransparency = false;
 
 	public enum Mode {
@@ -39,6 +40,12 @@ public class OverlayDrawable extends ColorDrawable {
 			canvas.drawRect(getBounds(), mPaint);
 			mPaint.setColor(mColor);
 		}
+
+		if (mDimAmount > 0) {
+			mPaint.setColor(Color.argb((int) (mDimAmount * 255), 0, 0, 0));
+			canvas.drawRect(getBounds(), mPaint);
+			mPaint.setColor(mColor);
+		}
 	}
 
 	public void setColor(int color) {
@@ -58,6 +65,11 @@ public class OverlayDrawable extends ColorDrawable {
 
 	public void setIsTransparentCauseOfKitKatApi(boolean isKitkatTransparency) {
 		mIsKitkatTransparency = isKitkatTransparency;
+		invalidateSelf();
+	}
+
+	public void setDimAmount(float alphaPercent) {
+		mDimAmount = alphaPercent;
 		invalidateSelf();
 	}
 }

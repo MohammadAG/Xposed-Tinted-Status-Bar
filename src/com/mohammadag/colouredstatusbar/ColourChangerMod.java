@@ -39,7 +39,7 @@ import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarLayoutInflationHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarViewHook;
 import com.mohammadag.colouredstatusbar.hooks.TickerHooks;
-import com.mohammadag.colouredstatusbar.hooks.WindowManagerServiceHooks;
+import com.mohammadag.colouredstatusbar.hooks.WindowDimHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.CustomRomHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.HtcTransparencyHook;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.LGHooks;
@@ -178,9 +178,9 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			} else if (Common.INTENT_KEYBOARD_VISIBLITY_CHANGED.equals(intent.getAction())) {
 				if (intent.hasExtra(Common.EXTRA_KEY_KEYBOARD_UP))
 					onKeyboardVisible(intent.getBooleanExtra(Common.EXTRA_KEY_KEYBOARD_UP, false));
-			} else if (WindowManagerServiceHooks.INTENT_DIM_CHANGED.equals(intent.getAction())) {
-				if (intent.hasExtra(WindowManagerServiceHooks.KEY_TARGET_ALPHA))
-					onDimLayerChanged(intent.getFloatExtra(WindowManagerServiceHooks.KEY_TARGET_ALPHA, -1));
+			} else if (WindowDimHooks.INTENT_DIM_CHANGED.equals(intent.getAction())) {
+				if (intent.hasExtra(WindowDimHooks.KEY_DIM_AMOUNT))
+					onDimLayerChanged(intent.getFloatExtra(WindowDimHooks.KEY_DIM_AMOUNT, -1));
 			}
 		}
 	};
@@ -196,6 +196,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 				new OnWindowFocusedHook(mSettingsHelper, mResources));
 		findAndHookMethod(Activity.class, "performResume",
 				new ActivityOnResumeHook(mSettingsHelper, mResources));
+		WindowDimHooks.doHook();
 
 		if (Utils.hasActionBar())
 			new ActionBarHooks(mSettingsHelper);
@@ -769,7 +770,7 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private void onDimLayerChanged(float alpha) {
 		log("Dim changed");
 
-		mDimLayerAlpha = alpha;
-		mStatusBarView.setAlpha(alpha);
+		mGradientDrawable.setDimAmount(alpha);
+		mNavGradientDrawable.setDimAmount(alpha);
 	}
 }
