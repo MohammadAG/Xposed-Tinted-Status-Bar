@@ -108,8 +108,6 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 	private static int qmemoButtonRESID = 0;
 	private static int notificationButtonRESID = 0;
 
-	private float mDimLayerAlpha;
-
 	public void log(String text) {
 		if (mSettingsHelper.isDebugMode())
 			XposedBridge.log("TintedStatusBar: " + text);
