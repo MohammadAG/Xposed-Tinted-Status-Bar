@@ -128,6 +128,9 @@ public class OverlayDrawable extends ColorDrawable {
 	}
 
 	public void setDimAmount(float alphaPercent) {
+		if (mIsKitkatTransparency)
+			return;
+
 		mDimAmount = alphaPercent;
 		invalidateSelf();
 	}
