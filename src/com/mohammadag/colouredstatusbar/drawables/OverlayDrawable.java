@@ -7,7 +7,6 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.NinePatchDrawable;
@@ -38,14 +37,11 @@ public class OverlayDrawable extends ColorDrawable {
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
 
-		int destColor;
-
 		if (mOverrideColor != -3)
-			destColor = mOverrideColor;
+			mPaint.setColor(mOverrideColor);
 		else
-			destColor = mColor;
+			mPaint.setColor(mColor);
 
-		mPaint.setColor(destColor);
 		if (mDimAmount > 0) {
 			mPaint.setAlpha((int) ((1 - mDimAmount) * 255));
 		} else {
