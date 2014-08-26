@@ -100,6 +100,11 @@
     <string name="react_lightsout_summary">Lights outモード(ステータスバーを暗くするモード)の時にアイテムの色を変えるようにします。</string>
     <string name="respect_kitkat_api_title">KitKat APIを優先</string>
     <string name="respect_kitkat_api_summary">KitKatのAPIに対応したアプリの設定を無視します。</string>
+    <string name="overlay_mode_title">オーバーレイモード</string>
+    <string name="overlay_mode_summary">変更した色の上に表示するオーバーレイのタイプを選びます。</string>
+    <string name="semi_transparent_overlay_opacity_title">オーバーレイの透過度</string>
+    <string name="white_icon_tint_with_overlay_title">アイコンを白にする(オーバーレイ使用時)</string>
+    <string name="white_icon_tint_with_overlay_message">オーバーレイを使用しているときはアイコンを白くするようにします。</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">デフォルト設定</string>
@@ -132,5 +137,24 @@
     <string name="notification_add_activity">アクティビティを追加</string>
     <string name="apply_touch_color">タッチ色を適用</string>
     <string name="apply_general_color">一般色を適用</string>
+
+    <!-- Overlay modes, order is important when translating! -->
+    <string-array name="overlay_entries">
+        <item>なし</item>
+        <item>グラデーション</item>
+        <item>半透明</item>
+    </string-array>
+
+    <!-- Plugins -->
+    <string name="download_description">Tinted Status Barプラグイン</string>
+    <string name="title_activity_plugins">プラグイン</string>
+    <string name="plugins_title">プラグインのダウンロード</string>
+    <string name="plugins_summary">プラグインでTinted Status Barが色を検出できないアプリでも色を変えられるように出来ます。</string>
+    <string name="plugin_version">バージョン: %1$s (%2$d)</string>
+    <string name="plugin_version_update">更新あり: %1$s (%2$d)</string>
+    <string name="open_xposed">Xposed Installer</string>
+    <string name="uninstall">アンインストール</string>
+    <string name="legacy_gradient_mode_title">古いグラデーションモード</string>
+    <string name="legacy_gradient_mode_summary">オーバーレイモードをなしにしても、66000000が指定されている時、またはKitKat向けにアプリが作られている場合はグラデーションを表示するようにします。</string>
 
 </resources>
