@@ -38,23 +38,28 @@ public class OverlayDrawable extends ColorDrawable {
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
 
+		int destColor;
+
 		if (mOverrideColor != -3)
-			mPaint.setColor(mOverrideColor);
+			destColor = mOverrideColor;
 		else
-			mPaint.setColor(mColor);
+			destColor = mColor;
+
+		mPaint.setColor(destColor);
+		if (mDimAmount > 0) {
+			mPaint.setAlpha((int) ((1 - mDimAmount) * 255));
+		} else {
+			mPaint.setAlpha(255);
+		}
+
+		if (mMode == Mode.SEMI_TRANSPARENT) {
+			mPaint.setAlpha(mPaint.getAlpha() - mOpacity);
+		}
 
 		canvas.drawRect(getBounds(), mPaint);
 		if (mMode == Mode.GRADIENT || (mMode == Mode.COLOR && mIsKitkatTransparency)) {
 			mNpd.setBounds(getBounds());
 			mNpd.draw(canvas);
-		} else if (mMode == Mode.SEMI_TRANSPARENT) {
-			mPaint.setColor(Color.argb(mOpacity, 0, 0, 0));
-			canvas.drawRect(getBounds(), mPaint);
-		}
-
-		if (mDimAmount > 0) {
-			mPaint.setColor(Color.argb((int) (mDimAmount * 255), 0, 0, 0));
-			canvas.drawRect(getBounds(), mPaint);
 		}
 	}
 
