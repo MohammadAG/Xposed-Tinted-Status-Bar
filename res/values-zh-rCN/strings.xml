@@ -15,7 +15,7 @@
 
     <!-- Contributors, don't forgot to add yourself in contributors.xml if you translated TSB -->
     <string name="contributors">贡献者</string>
-    <string name="contributors_summary">点击查看变色状态栏项目背后的贡献者团队，感谢他们！</string>
+    <string name="contributors_summary">点击查看变色状态栏项目背后的贡献者们，感谢他们！</string>
     <string name="coders">程序员</string>
     <string name="designers">设计师</string>
     <string name="libraries">使用的库</string>
@@ -56,7 +56,7 @@
 
     <!-- Activity color settings -->
     <string name="all_activities_title">全部界面</string>
-    <string name="all_the_wonderful_activities">A全部界面（下面的界面会统一使用这里的设置）</string>
+    <string name="all_the_wonderful_activities">全部界面（下面的界面会统一使用这里的设置）</string>
     <string name="status_bar_tint_text">状态栏背景色</string>
     <string name="status_bar_icon_tint_text">状态栏图标色</string>
     <string name="navigation_bar_tint_text">虚拟按键条背景色</string>
@@ -100,6 +100,11 @@
     <string name="react_lightsout_summary">熄灯模式下自动调节元素的颜色</string>
     <string name="respect_kitkat_api_title">支持 KitKat 接口</string>
     <string name="respect_kitkat_api_summary">运行对 KitKat 特别适配过的应用时，变色状态栏将遵从应用自身设定</string>
+	<string name="overlay_mode_title">叠加模式</string>
+    <string name="overlay_mode_summary">选择您想要在状态栏颜色上叠加的效果</string>
+    <string name="semi_transparent_overlay_opacity_title">叠加效果透明度</string>
+    <string name="white_icon_tint_with_overlay_title">强制使用白色图标</string>
+    <string name="white_icon_tint_with_overlay_message">启用叠加效果时，强制使用白色图标</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">默认颜色设置</string>
@@ -108,12 +113,12 @@
     <string name="default_colors_summary">自定义要使用的默认颜色</string>
     <string name="default_status_bar_tint_title">默认状态栏背景色</string>
     <string name="default_status_bar_icon_tint_title">默认状态栏图标色</string>
-    <string name="default_status_bar_inverted_icon_tint_title">默认状态栏图标色（明亮背景下）</string>
+    <string name="default_status_bar_inverted_icon_tint_title">明亮背景下默认状态栏图标色</string>
     <string name="default_status_bar_inverted_icon_tint_summary">设置在明亮的背景下的状态栏图标色</string>
     <string name="default_navigation_bar_tint_title">默认虚拟按键条背景色</string>
     <string name="default_navigation_bar_icon_tint_title">默认虚拟按键条按键色</string>
-    <string name="default_navigation_bar_icon_im_tint_title">虚拟按键条按键色（键盘打开时）</string>
-    <string name="default_navigation_bar_im_tint_title">虚拟按键条背景色（键盘打开时）</string>
+    <string name="default_navigation_bar_icon_im_tint_title">键盘打开时虚拟按键条按键色</string>
+    <string name="default_navigation_bar_im_tint_title">键盘打开时虚拟按键条背景色</string>
     <string name="default_summary">如果没有为应用设置颜色，则使用这里的颜色</string>
     <string name="default_summary_keyboard">设置当键盘打开时的默认颜色</string>
 
@@ -133,4 +138,23 @@
     <string name="apply_touch_color">应用触摸点的颜色</string>
     <string name="apply_general_color">应用全局颜色</string>
 
+	<!-- Overlay modes, order is important when translating! -->
+    <string-array name="overlay_entries">
+        <item>None</item>
+        <item>Gradient</item>
+        <item>Semi transparent</item>
+    </string-array>
+
+    <!-- Plugins -->
+    <string name="download_description">变色状态栏插件</string>
+    <string name="title_activity_plugins">插件</string>
+    <string name="plugins_title">下载插件</string>
+    <string name="plugins_summary">插件可以增强变色状态栏在一些不能自动检测颜色的应用中的兼容性</string>
+    <string name="plugin_version">版本： %1$s (%2$d)</string>
+    <string name="plugin_version_update">有可用更新： %1$s (%2$d)</string>
+    <string name="open_xposed">Xposed 安装器</string>
+    <string name="uninstall">卸载</string>
+    <string name="legacy_gradient_mode_title">官方渐变叠加</string>
+    <string name="legacy_gradient_mode_summary">在运行您填写 66000000 颜色代码或为 KitKat 适配过的应用时，即使您禁用叠加模式，仍然叠加渐变效果</string>
+	
 </resources>
