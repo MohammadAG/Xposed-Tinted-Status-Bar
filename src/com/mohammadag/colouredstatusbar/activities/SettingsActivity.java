@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -127,6 +128,21 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				sendBroadcast(new Intent(Common.INTENT_SETTINGS_UPDATED));
+				return true;
+			}
+		});
+
+		ListPreference overlayTypePreference = (ListPreference) findPreference("pref_overlay_type");
+		final Preference overlayTransparencyPreference = findPreference("pref_semi_transparent_overlay_opacity");
+		if (overlayTypePreference.getValue().equals("semi_transparent"))
+			overlayTransparencyPreference.setEnabled(true);
+		overlayTypePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (newValue.equals("semi_transparent"))
+					overlayTransparencyPreference.setEnabled(true);
+				else
+					overlayTransparencyPreference.setEnabled(false);
 				return true;
 			}
 		});

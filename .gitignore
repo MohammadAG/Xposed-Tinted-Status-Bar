@@ -1,2 +1,8 @@
 gen
 bin
+.gradle/
+.idea/
+*.iml
+build/
+local.properties
+out/

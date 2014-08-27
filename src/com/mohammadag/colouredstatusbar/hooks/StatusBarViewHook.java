@@ -39,6 +39,7 @@ public class StatusBarViewHook {
 					iF.addAction(StatusBarTintApi.INTENT_CHANGE_COLOR_NAME);
 					iF.addAction(Common.INTENT_RESET_ACTIONBAR_COLOR_NAME);
 					iF.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+					iF.addAction(WindowDimHooks.INTENT_DIM_CHANGED);
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF);
 
 					IntentFilter iF2 = new IntentFilter();

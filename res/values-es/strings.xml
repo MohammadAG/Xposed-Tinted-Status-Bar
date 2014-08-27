@@ -100,8 +100,6 @@
     <string name="react_lightsout_summary">Cambia el color de los elementos de acuerdo con el modo de luz</string>
     <string name="respect_kitkat_api_title">Respetar KitKat APIs</string>
     <string name="respect_kitkat_api_summary">Configuración para aplicaciones que requieran translucidez serán ignorados</string>
-    <string name="use_fake_gradient_title">Mostar degradado de color</string>
-    <string name="use_fake_gradient_summary">Emular el aspecto KitKat con colores degradados</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">Ajustes por defecto</string>

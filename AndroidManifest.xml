@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mohammadag.colouredstatusbar"
-    android:versionCode="14"
-    android:versionName="1.8.9.3" >
+    android:versionCode="15"
+    android:versionName="1.8.9.5" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -55,7 +55,7 @@
             android:value="true" />
         <meta-data
             android:name="xposedminversion"
-            android:value="30+" />
+            android:value="54+" />
         <meta-data
             android:name="xposeddescription"
             android:value="Tint the status bar based on current activity" />

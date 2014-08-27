@@ -100,8 +100,6 @@
     <string name="react_lightsout_summary">Cambia i colori in accordo con la modalità lights out</string>
     <string name="respect_kitkat_api_title">Rispetta API KitKat</string>
     <string name="respect_kitkat_api_summary">TSB non interferirà con applicazioni che richiedono la translucenza</string>
-    <string name="use_fake_gradient_title">Mostra ombra nelle applicazioni</string>
-    <string name="use_fake_gradient_summary">Abilita l\'effetto ombreggiatura in stile KitKat nelle applicazioni</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">Impostazioni generali</string>

@@ -100,8 +100,6 @@
     <string name="react_lightsout_summary">熄灯模式下自动调节元素的颜色</string>
     <string name="respect_kitkat_api_title">支持 KitKat 接口</string>
     <string name="respect_kitkat_api_summary">运行对 KitKat 特别适配过的应用时，变色状态栏将遵从应用自身设定</string>
-    <string name="use_fake_gradient_title">渐变叠加</string>
-    <string name="use_fake_gradient_summary">在颜色上叠加黑-透明渐变，以模拟 KitKat 效果</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">默认颜色设置</string>
