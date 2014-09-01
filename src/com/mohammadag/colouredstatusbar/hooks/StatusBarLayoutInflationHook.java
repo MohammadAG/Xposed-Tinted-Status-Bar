@@ -66,7 +66,13 @@ public class StatusBarLayoutInflationHook extends XC_LayoutInflated {
 		} catch (Throwable t) {
 			// No sense in logging this, it'll happen on most ROMs
 		}
-
+		
+		// CM11 center clock
+		 TextView cmCenterClock = (TextView) liparam.view.findViewById(
+                	liparam.res.getIdentifier("center_clock", "id", "com.android.systemui"));
+        	if (cmCenterClock != null) {
+        	    mInstance.addTextLabel(cmCenterClock);
+		}
 
 		if (clock != null) {
 			mInstance.setClockFound();
