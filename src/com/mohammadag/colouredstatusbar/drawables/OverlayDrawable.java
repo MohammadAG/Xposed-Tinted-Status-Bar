@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.NinePatchDrawable;
@@ -37,19 +38,29 @@ public class OverlayDrawable extends ColorDrawable {
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
 
+		int destColor;
 		if (mOverrideColor != -3)
-			mPaint.setColor(mOverrideColor);
+			destColor = mOverrideColor;
 		else
-			mPaint.setColor(mColor);
+			destColor = mColor;
+		mPaint.setColor(destColor);
 
 		if (mDimAmount > 0) {
-			mPaint.setAlpha((int) ((1 - mDimAmount) * 255));
+			if (mMode == Mode.SEMI_TRANSPARENT) {
+				mPaint.setAlpha(((int) ((1 - mDimAmount) * Color.alpha(destColor))) - mOpacity);
+			} else {
+				mPaint.setAlpha((int) ((1 - mDimAmount) * Color.alpha(destColor)));
+			}
 		} else {
-			mPaint.setAlpha(255);
-		}
-
-		if (mMode == Mode.SEMI_TRANSPARENT) {
-			mPaint.setAlpha(mPaint.getAlpha() - mOpacity);
+			if (mMode == Mode.SEMI_TRANSPARENT) {
+				if (Color.alpha(destColor) > mOpacity) {
+					mPaint.setAlpha(Color.alpha(destColor) - mOpacity);
+				} else {
+					mPaint.setAlpha(mOpacity);
+				}
+			} else {
+				mPaint.setAlpha(Color.alpha(destColor));
+			}
 		}
 
 		canvas.drawRect(getBounds(), mPaint);
