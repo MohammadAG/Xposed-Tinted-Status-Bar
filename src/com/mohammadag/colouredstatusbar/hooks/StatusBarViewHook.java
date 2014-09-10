@@ -45,6 +45,7 @@ public class StatusBarViewHook {
 					IntentFilter iF2 = new IntentFilter();
 					iF2.addAction(INTENT_SAMSUNG_SVIEW_COVER);
 					iF2.addAction(Common.INTENT_SETTINGS_UPDATED);
+					iF2.addAction("com.mohammadag.colouredstatusbar.PROFILE_MEMORY_USAGE");
 					context.registerReceiver(mInstance.getBroadcastReceiver(), iF2);
 
 					IntentFilter lockscreenFilter = new IntentFilter();

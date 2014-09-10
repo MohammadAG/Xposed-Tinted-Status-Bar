@@ -177,6 +177,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			} else if (WindowDimHooks.INTENT_DIM_CHANGED.equals(intent.getAction())) {
 				if (intent.hasExtra(WindowDimHooks.KEY_DIM_AMOUNT))
 					onDimLayerChanged(intent.getFloatExtra(WindowDimHooks.KEY_DIM_AMOUNT, -1));
+			} else if ("com.mohammadag.colouredstatusbar.PROFILE_MEMORY_USAGE".equals(intent.getAction())) {
+				log("mSystemIconViews size: " + mSystemIconViews.size());
+				log("mNotificationIconViews size: " + mNotificationIconViews.size());
+				log("mTextLabels size: " + mTextLabels.size());
 			}
 		}
 	};
