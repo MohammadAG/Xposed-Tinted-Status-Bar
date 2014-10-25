@@ -108,5 +108,10 @@
         <item>TRANSLATOR</item>
         <item>http://forum.xda-developers.com/member.php?u=4493226</item>
     </string-array>
+    <string-array name="translator_10">
+        <item>Micks29 (French)</item>
+        <item>TRANSLATOR</item>
+        <item>http://forum.xda-developers.com/member.php?u=5178843</item>
+    </string-array>
 
 </resources>
