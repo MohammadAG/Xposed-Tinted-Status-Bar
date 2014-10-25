@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Title / Misc -->
+	<string name="app_name">Tinted Status Bar</string>
+	<string name="app_name_donate_version">Tinted Status Bar (Version donation)</string>
+	<string name="title_activity_applications_settings">Paramètres Tinted Status Bar</string>
+	<string name="copyright_summary">Copyright © 2013-2014 - Mohammad Abu-Garbeyyeh\nVoir plus d\'applis et de modules</string>
+	<string name="loading_title">Chargement...</string>
+	<string name="donate_summary">Soutenir le développement. Des fonctionnalités supplémentaires peuvent être débloquées dans l'avenir</string>
+	<string name="thank_you">Merci !</string>
+	<string name="thank_you_summary">Merci pour votre don. J\'apprécie beaucoup :)</string>
+	<string name="android_lockscreen_stub_name">Écran de verrouillage Android</string>
+	<string name="unlocked_secret_settings">Vous avez débloqué certains paramètres secrets, ceux-ci peuvent ou ne peuvent pas fonctionner comme prévu</string>
+
+	<!-- Contributors, don't forgot to add yourself in contributors.xml if you translated TSB -->
+	<string name="contributors">Contributeurs</string>
+	<string name="contributors_summary">Découvrir la communauté derrière Tinted Status Bar, merci à tous ceux listés ci-dessous !</string>
+	<string name="coders">Codeurs</string>
+	<string name="designers">Concepteurs</string>
+	<string name="libraries">Librairies</string>
+	<string name="translators">Traducteurs</string>
+
+	<!-- Contributor links text -->
+	<string name="link_facebook">Ajoutez-moi sur Facebook</string>
+	<string name="link_twitter">Suivez-moi sur Twitter</string>
+	<string name="link_google_plus">Ajoutez-moi sur Google+</string>
+	<string name="link_github">Suivez-moi sur Github</string>
+	<string name="link_github_library">Forker-le sur Github</string>
+	<string name="link_xda">Voir le profil des développeurs sur XDA</string>
+	<string name="link_youtube">Abonnez-vous à ma chaîne YouTube</string>
+	<string name="link_linkedin">Connectez-vous avec moi sur LinkedIn</string>
+	<string name="link_generic">Voir mon site internet</string>
+	<string name="link_generic_library">Voir le site des librairies</string>
+
+	<!-- Menu actions -->
+	<string name="action_settings">Paramètres</string>
+	<string name="action_search">Rechercher</string>
+	<string name="menu_save">Enregistrer</string>
+	<string name="menu_launch">Lancer</string>
+	<string name="menu_settings">Paramètres</string>
+	<string name="menu_playstore">Play Store</string>
+	<string name="menu_xposed">Modules Xposed</string>
+	<string name="menu_donate">Donation</string>
+
+	<!-- Color picker -->
+	<string name="enabled">Activé</string>
+	<string name="apply">Appliquer</string>
+	<string name="saturation">Saturation</string>
+	<string name="value">Valeur</string>
+	<string name="opacity">Opacité</string>
+	<string name="preview">Aperçu</string>
+	<string name="restore">Restorer</string>
+	<string name="save">Enregistrer</string>
+	<string name="invalid_color">Couleur invalide</string>
+
+	<!-- Activity color settings -->
+	<string name="all_activities_title">Toutes les activitées</string>
+	<string name="all_the_wonderful_activities">Toutes les activitées, les paramètres ci-dessous les remplacent</string>
+	<string name="status_bar_tint_text">Teinte de la barre d\'état</string>
+	<string name="status_bar_icon_tint_text">Couleur des icônes de la barre d\'état</string>
+	<string name="navigation_bar_tint_text">Teinte de la barre de naviguation</string>
+	<string name="navigation_bar_icon_tint_text">Teinte des icônes de la barre de navigation</string>
+	<string name="reset_to_auto_detect">Réinitialiser la détection automatique</string>
+
+	<!-- Preference categories -->
+	<string name="advanced">Avancé</string>
+	<string name="action_bar">Barre d\'action</string>
+	<string name="per_app_settings">Paramètres par application</string>
+	<string name="appearance">Apparence</string>
+	<string name="reverse_tint_actionbar_title">Teinte identique pour la barre d\'action</string>
+	<string name="reverse_tint_actionbar_summary">Définir la couleur de la barre d'\état à la barre d\'action</string>
+
+	<!-- Preferences -->
+	<string name="per_app_tints_title">Teintes par applications</string>
+	<string name="per_app_tints_summary">Configurez votre teinte de barre d\'état et les teintes de changement de la barre d\'action</string>
+	<string name="api_override_title">Permettre l'interaction de l\'API externe dans les applications</string>
+	<string name="api_override_summary">L\'API externe peut utiliser l\'API fournie pour changer la couleur de la barre d\'état dans les applications</string>
+	<string name="max_hsv_title">Teinte, saturation, valeur, maximum pour les icônes noires</string>
+	<string name="max_hsv_summary">Teinte, saturation, valeur maximum avant l\'activation automatique aux icônes noires quand la barre d\'action n\'a pas de texte pour titre</string>
+	<string name="current_hsv_value">Valeure actuelle : %s</string>
+	<string name="toast_activity_names_title">Titres activité toast</string>
+	<string name="toast_activity_names_summary">Les notifications toasts seront affichées à chaques fois qu\'une activités sera démarrée, cela vous aidera à trouver le nom de l\'activité</string>
+	<string name="awesome_ab_color_picker_title">Définir la couleur de la notification</string>
+	<string name="awesome_ab_color_picker_summary">Vous permet de définir immédiatement la couleur pour l\'activité</string>
+	<string name="react_actionbar_title">Réagir au changement de visibilité de la barre d\'action</string>
+	<string name="react_actionbar_description">Activer cette option provoque le changement de teinte de la barre d\'état en fonction de la visibilité de la barre d\'action</string>
+	<string name="system_cf_mode_title">Mode filtre de couleur des icônes du système</string>
+	<string name="notification_cf_mode_title">Mode filtre de couleur des icônes de notification</string>
+	<string name="cf_mode">Modes filtre de couleur</string>
+	<string name="explain_cf_mode_text">Explication des paramètres suivants</string>
+	<string name="cf_mode_explanation">Les changements du mode filtre de couleur vous permet d\'avoir plus de contrôle sur la façon dont les couleurs des icônes sont modifiées, MULTIPLY préserve les couleurs de l\'icône d\'origine, tandis que SRC_ATOP garantit les couleurs que vous avez choisi d\'appliquer.</string>
+	<string name="animate_tint_title">Animer les changements de couleur</string>
+	<string name="animate_tint_summary">Modifier peu à peu les couleurs de la barre d\'état et de la barre de naviguation</string>
+	<string name="link_panel_views_title">Lier les couleurs de la barre d\'état et de la barre de naviguation</string>
+	<string name="link_panel_views_summary">La barre de naviguation suivra les couleurs de la barre d\'état</string>
+	<string name="debug_mode_title">Mode déboguage</string>
+	<string name="debug_mode_summary">Active la journalisation dans Logcat et/ou les journaux de Xposed</string>
+	<string name="react_lightsout_title">Réagir à l\'extinction de luminosité</string>
+	<string name="react_lightsout_summary">Modifier la couleur des éléments selon le mode de luminosité appliqué</string>
+	<string name="respect_kitkat_api_title">Respecter les APIs KitKat</string>
+	<string name="respect_kitkat_api_summary">Les paramètres pour les applications qui demandent la transparence seront ignorées</string>
+	<string name="overlay_mode_title">Mode de superposition</string>
+	<string name="overlay_mode_summary">Choisir le type de superposition à afficher sur les couleurs teintées</string>
+	<string name="semi_transparent_overlay_opacity_title">Opacité de la superposition</string>
+	<string name="white_icon_tint_with_overlay_title">Teinte des icônes blanches avec superposition</string>
+	<string name="white_icon_tint_with_overlay_message">Forcer l\'utilisation d\'icônes blanches quand la superposition est utilisée</string>
+
+	<!-- Defaults -->
+	<string name="default_settings_title">Paramètres par défaut</string>
+	<string name="default_settings_summary">Valeurs par défaut pour certains paramètres d\'applications</string>
+	<string name="default_colors">Teintes par défaut</string>
+	<string name="default_colors_summary">Modifier les teintes utilisées par défaut</string>
+	<string name="default_status_bar_tint_title">Couleur de teinte par défaut pour la barre d\'état</string>
+	<string name="default_status_bar_icon_tint_title">Couleur de teinte par défaut pour les icônes de la barre d\'état</string>
+	<string name="default_status_bar_inverted_icon_tint_title">Couleur inversée par défaut pour les icônes</string>
+	<string name="default_status_bar_inverted_icon_tint_summary">Définir la couleur par défaut si un fond clair est appliqué</string>
+	<string name="default_navigation_bar_tint_title">Couleur de teinte par défaut pour la barre de naviguation</string>
+	<string name="default_navigation_bar_icon_tint_title">Teinte par défaut pour les icônes de la barre de naviguation</string>
+	<string name="default_navigation_bar_icon_im_tint_title">Teinte de la barre de naviguation (IM)</string>
+	<string name="default_navigation_bar_im_tint_title">Teinte de la barre de naviguation (IM)</string>
+	<string name="default_summary">Définir la couleur par défaut si aucune couleur ne peut être déterminée</string>
+	<string name="default_summary_keyboard">Définir la couleur par défaut quand le clavier est visible</string>
+
+	<!-- Errors / Notices -->
+	<string name="warning">Attention</string>
+	<string name="no_activities_error">Aucune activité, cette application ne devrait pas apparaître dans la liste.</string>
+	<string name="gel_stub_warning">Cette application est un composant du lanceur actuel. Aller au paquet actuel ?</string>
+	<string name="gel_stub_toast">Cette application est un composant du lanceur actuel, pour appliquer les changements à ce dernier, éditez les paramètres de Google Search\'s GNL</string>
+
+	<!-- Toast activity text -->
+	<string name="toast_text_package_name">Nom du paquet : %s</string>
+	<string name="toast_text_activity_name">Nom de l\'activité : %s</string>
+
+	<!-- Notification color picker -->
+	<string name="notification_add_app">Ajouter une application</string>
+	<string name="notification_add_activity">Ajouter une activité</string>
+	<string name="apply_touch_color">Appliquer une couleur tactile</string>
+	<string name="apply_general_color">Appliquer une couleur générale</string>
+
+	<!-- Overlay modes, order is important when translating! -->
+	<string-array name="overlay_entries">
+		<item>Aucun</item>
+		<item>Dégradé</item>
+		<item>Semi-transparent</item>
+	</string-array>
+
+	<!-- Plugins -->
+	<string name="download_description">Extension Tinted Status Bar</string>
+	<string name="title_activity_plugins">Extensions</string>
+	<string name="plugins_title">Télécharger des extensions</string>
+	<string name="plugins_summary">Les extensions étendent les fonctionnalités de Tinted Status Bar dans les applications où les teintes ne sont pas automatiquement détectées</string>
+	<string name="plugin_version">Version : %1$s (%2$d)</string>
+	<string name="plugin_version_update">Mise à jour disponible : %1$s (%2$d)</string>
+	<string name="open_xposed">Xposed Installer</string>
+	<string name="uninstall">Désinstaller</string>
+	<string name="legacy_gradient_mode_title">Mode dégradé</string>
+	<string name="legacy_gradient_mode_summary">Même quand la superposition est définie sur aucun, dessiner le dégradé quand 66000000 est utilisé ou quand une application est conçue pour KitKat</string>
+
+</resources>
