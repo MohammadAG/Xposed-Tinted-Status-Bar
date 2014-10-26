@@ -7,7 +7,7 @@
 	<string name="title_activity_applications_settings">Paramètres Tinted Status Bar</string>
 	<string name="copyright_summary">Copyright © 2013-2014 - Mohammad Abu-Garbeyyeh\nVoir plus d\'applis et de modules</string>
 	<string name="loading_title">Chargement...</string>
-	<string name="donate_summary">Soutenir le développement. Des fonctionnalités supplémentaires peuvent être débloquées dans l'avenir</string>
+	<string name="donate_summary">Soutenir le développement. Des fonctionnalités supplémentaires peuvent être débloquées dans l\'avenir</string>
 	<string name="thank_you">Merci !</string>
 	<string name="thank_you_summary">Merci pour votre don. J\'apprécie beaucoup :)</string>
 	<string name="android_lockscreen_stub_name">Écran de verrouillage Android</string>
@@ -50,7 +50,7 @@
 	<string name="value">Valeur</string>
 	<string name="opacity">Opacité</string>
 	<string name="preview">Aperçu</string>
-	<string name="restore">Restorer</string>
+	<string name="restore">Restaurer</string>
 	<string name="save">Enregistrer</string>
 	<string name="invalid_color">Couleur invalide</string>
 
@@ -69,18 +69,18 @@
 	<string name="per_app_settings">Paramètres par application</string>
 	<string name="appearance">Apparence</string>
 	<string name="reverse_tint_actionbar_title">Teinte identique pour la barre d\'action</string>
-	<string name="reverse_tint_actionbar_summary">Définir la couleur de la barre d'\état à la barre d\'action</string>
+	<string name="reverse_tint_actionbar_summary">Définir la couleur de la barre d\'état à la barre d\'action</string>
 
 	<!-- Preferences -->
-	<string name="per_app_tints_title">Teintes par applications</string>
-	<string name="per_app_tints_summary">Configurez votre teinte de barre d\'état et les teintes de changement de la barre d\'action</string>
-	<string name="api_override_title">Permettre l'interaction de l\'API externe dans les applications</string>
+	<string name="per_app_tints_title">Teintes par application</string>
+	<string name="per_app_tints_summary">Configurer votre teinte de barre d\'état et les teintes de changement de la barre d\'action</string>
+	<string name="api_override_title">Permettre l\'interaction de l\'API externe dans les applications</string>
 	<string name="api_override_summary">L\'API externe peut utiliser l\'API fournie pour changer la couleur de la barre d\'état dans les applications</string>
 	<string name="max_hsv_title">Teinte, saturation, valeur, maximum pour les icônes noires</string>
 	<string name="max_hsv_summary">Teinte, saturation, valeur maximum avant l\'activation automatique aux icônes noires quand la barre d\'action n\'a pas de texte pour titre</string>
 	<string name="current_hsv_value">Valeure actuelle : %s</string>
 	<string name="toast_activity_names_title">Titres activité toast</string>
-	<string name="toast_activity_names_summary">Les notifications toasts seront affichées à chaques fois qu\'une activités sera démarrée, cela vous aidera à trouver le nom de l\'activité</string>
+	<string name="toast_activity_names_summary">Les notifications toasts seront affichées à chaques fois qu\'une activité sera démarrée, cela vous aidera à trouver le nom de l\'activité</string>
 	<string name="awesome_ab_color_picker_title">Définir la couleur de la notification</string>
 	<string name="awesome_ab_color_picker_summary">Vous permet de définir immédiatement la couleur pour l\'activité</string>
 	<string name="react_actionbar_title">Réagir au changement de visibilité de la barre d\'action</string>
@@ -108,7 +108,7 @@
 
 	<!-- Defaults -->
 	<string name="default_settings_title">Paramètres par défaut</string>
-	<string name="default_settings_summary">Valeurs par défaut pour certains paramètres d\'applications</string>
+	<string name="default_settings_summary">Valeurs par défaut pour certains paramètres par application</string>
 	<string name="default_colors">Teintes par défaut</string>
 	<string name="default_colors_summary">Modifier les teintes utilisées par défaut</string>
 	<string name="default_status_bar_tint_title">Couleur de teinte par défaut pour la barre d\'état</string>
