@@ -38,6 +38,7 @@ import com.mohammadag.colouredstatusbar.hooks.StatusBarHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarLayoutInflationHook;
 import com.mohammadag.colouredstatusbar.hooks.StatusBarViewHook;
 import com.mohammadag.colouredstatusbar.hooks.TickerHooks;
+import com.mohammadag.colouredstatusbar.hooks.WindowDecorActionBarHooks;
 import com.mohammadag.colouredstatusbar.hooks.WindowDimHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.CustomRomHooks;
 import com.mohammadag.colouredstatusbar.hooks.oemhooks.HtcTransparencyHook;
@@ -249,8 +250,10 @@ public class ColourChangerMod implements IXposedHookLoadPackage, IXposedHookZygo
 			HtcTransparencyHook.doLockscreenHooks(lpparam.classLoader);
 		}
 
-		if (!lpparam.packageName.equals("com.android.systemui"))
+		if (!lpparam.packageName.equals("com.android.systemui")) {
+			new WindowDecorActionBarHooks(mSettingsHelper, lpparam);
 			return;
+		}
 
 		mGradientDrawable = new OverlayDrawable(mResources, Color.TRANSPARENT,
 				R.drawable.status_background);
