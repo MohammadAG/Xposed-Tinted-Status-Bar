@@ -1,5 +1,6 @@
 package com.mohammadag.colouredstatusbar.hooks;
 
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
@@ -14,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -135,37 +137,59 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 		boolean colorHandled = false;
 
 		if (Utils.hasActionBar() && !overridingStatusBar) {
-			ActionBar actionBar = activity.getActionBar();
+			Object actionBar = activity.getActionBar();
+			boolean isToolbar = false;
+			if (actionBar == null) {
+				try {
+					Class actionBarActivityClass = findClass("android.support.v7.app.ActionBarActivity",
+							activity.getClassLoader());
+					if (actionBarActivityClass.isAssignableFrom(activity.getClass())) {
+						actionBar = callMethod(activity, "getSupportActionBar");
+						Class toolbarActionBarClass = findClass("android.support.v7.internal.app.ToolbarActionBar",
+								activity.getClassLoader());
+						if (toolbarActionBarClass.isAssignableFrom(actionBar.getClass()))
+							isToolbar = true;
+					}
+				} catch (Throwable t) {
+
+				}
+			}
 			if (actionBar != null) {
 				// If it's not showing, we shouldn't detect it.
-				if (actionBar.isShowing()) {
-					FrameLayout container = (FrameLayout) XposedHelpers.getObjectField(actionBar, "mContainerView");
-					if (container != null) {
-						Drawable backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
-						if (backgroundDrawable != null) {
+				if ((Boolean) callMethod(actionBar, "isShowing")) {
+					View container;
+					Drawable backgroundDrawable = null;
+					if (isToolbar) {
+						container = (View) getObjectField(actionBar, "mToolbar");
+						backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
+					} else {
+						container = (View) getObjectField(actionBar, "mContainerView");
+						if (container != null) {
+							backgroundDrawable = (Drawable) XposedHelpers.getObjectField(container, "mBackground");
 							try {
-								color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
-								colorHandled = true;
-								if (!mSettingsHelper.shouldAlwaysReverseTint()
-										&& mSettingsHelper.shouldReverseTintAbColor(packageName)) {
-									actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
+								TextView mTitleView = (TextView) getObjectField(
+										getObjectField(container, "mActionBarView"), "mTitleView");
+								if (mTitleView != null) {
+									if (mTitleView.getVisibility() == View.VISIBLE) {
+										actionBarTextColor = mTitleView.getCurrentTextColor();
+									}
 								}
-							} catch (IllegalArgumentException e) {
-							}
-							container.invalidate();
-						}
+							} catch (Throwable t) {
 
+							}
+						}
+					}
+					if (backgroundDrawable != null) {
 						try {
-							TextView mTitleView = (TextView) getObjectField(
-									getObjectField(container, "mActionBarView"), "mTitleView");
-							if (mTitleView != null) {
-								if (mTitleView.getVisibility() == View.VISIBLE) {
-									actionBarTextColor = mTitleView.getCurrentTextColor();
-								}
+							color = Utils.getMainColorFromActionBarDrawable(backgroundDrawable);
+							colorHandled = true;
+							if (!mSettingsHelper.shouldAlwaysReverseTint()
+									&& mSettingsHelper.shouldReverseTintAbColor(packageName)) {
+								callMethod(actionBar, "setBackgroundDrawable", new IgnoredColorDrawable(color));
 							}
-						} catch (Throwable t) {
-
+						} catch (IllegalArgumentException e) {
 						}
+						container.invalidate();
 					}
 				}
 			}
