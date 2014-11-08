@@ -2,6 +2,7 @@ package com.mohammadag.colouredstatusbar.hooks;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static de.robv.android.xposed.XposedHelpers.getStaticIntField;
 
@@ -151,12 +152,20 @@ public class ActivityOnResumeHook extends XC_MethodHook {
 							isToolbar = true;
 					}
 				} catch (Throwable t) {
-
 				}
 			}
 			if (actionBar != null) {
 				// If it's not showing, we shouldn't detect it.
-				if ((Boolean) callMethod(actionBar, "isShowing")) {
+				boolean isShowing;
+				try {
+					isShowing = (Boolean) callMethod(actionBar, "isShowing");
+				} catch (NoSuchMethodError e) {
+					// It's a WindowDecorActionBar
+					boolean hiddenByApp = getBooleanField(actionBar, "mHiddenByApp");
+					boolean hiddenBySystem = getBooleanField(actionBar, "mHiddenBySystem");
+					isShowing = !(hiddenByApp && hiddenBySystem);
+				}
+				if (isShowing) {
 					View container;
 					Drawable backgroundDrawable = null;
 					if (isToolbar) {

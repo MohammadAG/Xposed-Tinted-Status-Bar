@@ -1,16 +1,13 @@
 package com.mohammadag.colouredstatusbar.hooks;
 
 import android.app.AndroidAppHelper;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.mohammadag.colouredstatusbar.ColourChangerMod;
 import com.mohammadag.colouredstatusbar.SettingsHelper;
 import com.mohammadag.colouredstatusbar.SettingsHelper.Tint;
-import com.mohammadag.colouredstatusbar.StatusBarTintApi;
 import com.mohammadag.colouredstatusbar.Utils;
 import com.mohammadag.colouredstatusbar.drawables.IgnoredColorDrawable;
 
@@ -18,6 +15,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -29,7 +27,57 @@ public class WindowDecorActionBarHooks {
 		mSettingsHelper = settingsHelper;
 
 		try {
-			Class<?> WindowDecorActionBar = findClass("android.support.v7.internal.app.WindowDecorActionBar", lpparam.classLoader);
+			// TODO: should probably rename this class. Also look for hide/show hooks.
+			Class<?> ActionBarContainer = findClass("android.support.v7.internal.widget.ActionBarContainer", lpparam.classLoader);
+			findAndHookConstructor(ActionBarContainer, new XC_MethodHook() {
+				@Override
+				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+					FrameLayout actionBarContainer = (FrameLayout) param.thisObject;
+					String packageName = actionBarContainer.getContext().getPackageName();
+
+					if (!mSettingsHelper.isEnabled(packageName, null))
+						return;
+
+					Drawable drawable = (Drawable) getObjectField(param.thisObject, "mBackground");
+					if (drawable != null) {
+						if (drawable instanceof IgnoredColorDrawable)
+							return;
+						int color = Utils.getMainColorFromActionBarDrawable(drawable);
+						if (mSettingsHelper.shouldReverseTintAbColor(packageName) && actionBarContainer.getVisibility() == View.VISIBLE)
+							actionBarContainer.setBackgroundDrawable(new IgnoredColorDrawable(color));
+						int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
+						int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
+						ColourChangerMod.sendColorChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
+								invertedIconTint, mSettingsHelper.getHsvMax()), actionBarContainer.getContext());
+					}
+				}
+			});
+
+			findAndHookMethod(ActionBarContainer, "setPrimaryBackground", Drawable.class, new XC_MethodHook() {
+				@Override
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+					FrameLayout actionBarContainer = (FrameLayout) param.thisObject;
+					String packageName = actionBarContainer.getContext().getPackageName();
+
+					if (!mSettingsHelper.isEnabled(packageName, null))
+						return;
+
+					Drawable drawable = (Drawable) param.args[0];
+					if (drawable != null) {
+						if (drawable instanceof IgnoredColorDrawable)
+							return;
+						int color = Utils.getMainColorFromActionBarDrawable(drawable);
+						if (mSettingsHelper.shouldReverseTintAbColor(packageName) && actionBarContainer.getVisibility() == View.VISIBLE)
+							actionBarContainer.setBackgroundDrawable(new IgnoredColorDrawable(color));
+						int defaultNormal = mSettingsHelper.getDefaultTint(Tint.ICON);
+						int invertedIconTint = mSettingsHelper.getDefaultTint(Tint.ICON_INVERTED);
+						ColourChangerMod.sendColorChangeIntent(color, Utils.getIconColorForColor(color, defaultNormal,
+								invertedIconTint, mSettingsHelper.getHsvMax()), actionBarContainer.getContext());
+					}
+				}
+			});
+
+			/*Class<?> WindowDecorActionBar = findClass("android.support.v7.internal.app.WindowDecorActionBar", lpparam.classLoader);
 			findAndHookMethod(WindowDecorActionBar, "setBackgroundDrawable", Drawable.class, new XC_MethodHook() {
 				@Override
 				protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -43,9 +91,8 @@ public class WindowDecorActionBarHooks {
 
 					Drawable drawable = (Drawable) param.args[0];
 					if (drawable != null) {
-						if (drawable instanceof IgnoredColorDrawable) {
+						if (drawable instanceof IgnoredColorDrawable)
 							return;
-						}
 						int color = Utils.getMainColorFromActionBarDrawable(drawable);
 						if (mSettingsHelper.shouldReverseTintAbColor(packageName) && actionBar.getVisibility() == View.VISIBLE)
 							actionBar.setBackgroundDrawable(new IgnoredColorDrawable(color));
@@ -137,7 +184,7 @@ public class WindowDecorActionBarHooks {
 					if (mSettingsHelper.shouldReactToActionBarVisibility())
 						ColourChangerMod.sendColorChangeIntent(color, iconTint, actionBar.getContext());
 				}
-			});
+			});*/
 		} catch (ClassNotFoundError e) {
 		} catch (NoSuchMethodError e) {
 		}
