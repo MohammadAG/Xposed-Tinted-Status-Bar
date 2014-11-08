@@ -70,7 +70,12 @@ public class Utils {
 
 	public static int getMainColorFromActionBarDrawable(Drawable drawable) throws IllegalArgumentException {
 		/* This should fix the bug where a huge part of the ActionBar background is drawn white. */
-		Drawable copyDrawable = drawable.getConstantState().newDrawable();
+		Drawable copyDrawable;
+		Drawable.ConstantState constantState = drawable.getConstantState();
+		if (constantState != null)
+			copyDrawable = drawable.getConstantState().newDrawable();
+		else
+			copyDrawable = drawable;
 
 		if (copyDrawable instanceof ColorDrawable) {
 			return ((ColorDrawable) drawable).getColor();
