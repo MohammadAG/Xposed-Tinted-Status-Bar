@@ -67,12 +67,12 @@
     <string name="warning">Aviso</string>
     
     <!-- Not translated -->
-    <string name="animate_tint_title">Animate status bar color changes</string>
-    <string name="animate_tint_summary">Fade in and out the status bar when changing its color</string>
-    <string name="link_panel_views_title">Link status and nav bar colors</string>
-    <string name="link_panel_views_summary">The navigation bar will follow the status bar colors</string>
-    <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
-    <string name="default_navigation_bar_im_tint_title">Navigation Bar Tint (IM)</string>
-    <string name="default_summary_keyboard">Select the default color when the keyboard is visible</string>
+    <string name="animate_tint_title">Animar status ao mudar de cor bar</string>
+    <string name="animate_tint_summary">Desvanece-se e em fora na barra de status quando se muda sua cor</string>
+    <string name="link_panel_views_title">Status do link e barra de navegação cores</string>
+    <string name="link_panel_views_summary"> A barra de navegação seguirá as cores da barra de status</string>
+    <string name="default_navigation_bar_icon_im_tint_title">A barra de navegação seguirá as cores da barra de status (IM)</string>
+    <string name="default_navigation_bar_im_tint_title">Barra de navegação Ícone Tint (IM)</string>
+    <string name="default_summary_keyboard"> Selecione a cor padrão quando o teclado é visível</string>
     
 </resources>
