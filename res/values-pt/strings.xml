@@ -1,78 +1,300 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <string name="app_name">Tinted Status Bar</string>
-    <string name="app_name_donate_version">Tinted Status Bar (Versão de doação)</string>
-    <string name="action_settings">Configurações</string>
-    <string name="menu_save">Salvar</string>
-    <string name="title_activity_applications_settings">Configurações do Tinted Status Bar</string>
-    <string name="menu_launch">Lançar</string>
-    <string name="menu_settings">Configurações</string>
-    <string name="menu_playstore">Play Store</string>
-    <string name="menu_xposed">Módulos do Xposed</string>
-    <string name="menu_donate">Doar</string>
-    <string name="status_bar_tint_text">Coloração da barra de status</string>
-    <string name="status_bar_icon_tint_text">Cor dos ícones da barra de status</string>
-    <string name="navigation_bar_tint_text">Coloração da barra de navegação</string>
-    <string name="navigation_bar_icon_tint_text">Cor dos ícones da barra de navegação</string>
-    <string name="enabled">Habilitado</string>
-    <string name="apply">Aplicar</string>
-    <string name="saturation">Saturação</string>
-    <string name="value">Valor</string>
-    <string name="opacity">Opacidade</string>
-    <string name="preview">Pré-visualizar</string>
-    <string name="restore">Restaurar</string>
-    <string name="save">Salvar</string>
-    <string name="invalid_color">Cor inválida</string>
-    <string name="all_activities_title">Todas as atividades</string>
-    <string name="all_the_wonderful_activities">"Todas as atividades, as configurações abaixo vai sobrescrever isso"</string>
-    <string name="reset_to_auto_detect">Resetar a auto-detectação</string>
-    <string name="copyright_summary">Copyright © 2013 – Mohammad Abu-Garbeyyeh\nVeja mais apps e módulos</string>
-    <string name="api_override_title">Permitir interação de aplicativos de terceiros</string>
-    <string name="api_override_summary">Aplicativos de terceiros podem usar a API disponibilizada para alterar a cor da barra de status nos seguintes aplicativos</string>
-    <string name="default_status_bar_tint_title">Cor padrão da barra de status</string>
-    <string name="default_status_bar_icon_tint_title">Cor padrão dos ícones da barra de status</string>
-    <string name="default_status_bar_inverted_icon_tint_title">Cor padrão dos ícones invertidos</string>
-    <string name="default_status_bar_inverted_icon_tint_summary">Seleciona a cor padrão se um fundo não pode ser determinado</string>
-    <string name="default_navigation_bar_tint_title">Cor padrão da barra de navegação.</string>
-    <string name="default_navigation_bar_icon_tint_title">Cor padrão dos ícones da barra de navegação</string>
-    <string name="default_summary">Seleciona a cor padrão se nenhuma cor pode ser determinada.</string>
-    <string name="max_hsv_title">HS[V] máximo para ícones pretos</string>
-    <string name="max_hsv_summary">HS[V] máximo antes de auto-alternar para ícones pretos</string>
-    <string name="current_hsv_value">Valor atual: %s</string>
-    <string name="no_activities_error">Sem atividades, esse aplicativonão deve ser mostrado na lista.</string>
-    <string name="loading_title">Carregando…</string>
-    <string name="donate_summary">Apoiar o desenvolvimento. Recursos extras podem ser desbloqueados no futuro</string>
-    
-    <string name="toast_activity_names_title">Toast activity titles</string>
-    <string name="toast_activity_names_summary">Toasts will be shown whenever an activity is started, this can help you find activity names</string>
-    <string name="toast_text_package_name">Package name: %s</string>
-    <string name="toast_text_activity_name">Activity name: %s</string>
-    
-    <string name="thank_you">Obrigado!</string>
-    <string name="thank_you_summary">Obrigado por sua doação. Eu realmente aprecio isso :)</string>
-    <string name="android_lockscreen_stub_name">Tela de bloqueio do Android</string>
-    <string name="gel_stub_warning">Esse aplicativo é um esboço para o launcher atual. Ir para o pacote atual?</string>
-    <string name="gel_stub_toast">Esse aplicativo é um esboço para o launcher atual, para efetivar mudanças a ele, edite as configurações do Google Search\'s GEL</string>
-    <string name="react_actionbar_title">Mudar a reação para a visibilidade da barra de ação</string>
-    <string name="react_actionbar_description">Habilitando isso faz com que a coloração da barra de status se altere baseando-se na visibilidade da barra de ação</string>
-    <string name="system_cf_mode_title">Modo de filtragem de cores dos ícones do sistema</string>
-    <string name="notification_cf_mode_title">Modo de filtragem de cores dos ícones de notificações</string>
-    <string name="cf_mode_explanation">Alterando o modo de filtragem permite que você tenha mais controle sobre como as cores dos ícones serão alterados, MULTIPLY irá preservar cores do ícone original, enquanto SRC_ATOP garante que a cor selecionada seja definida.</string>
-    <string name="default_colors">Colorações padrões</string>
-    <string name="default_colors_summary">Muda as colorações usadas por padrão</string>
-    <string name="cf_mode">Modo de filtragem de cores</string>
-    <string name="explain_cf_mode_text">Explicando as configurações que se segue</string>
-    <string name="unlocked_secret_settings">Você desbloqueiou alguns configurações secretas, elas podem ou não funcionar como o esperado.</string>
-    <string name="warning">Aviso</string>
-    
-    <!-- Not translated -->
-    <string name="animate_tint_title">Animate status bar color changes</string>
-    <string name="animate_tint_summary">Fade in and out the status bar when changing its color</string>
-    <string name="link_panel_views_title">Link status and nav bar colors</string>
-    <string name="link_panel_views_summary">The navigation bar will follow the status bar colors</string>
-    <string name="default_navigation_bar_icon_im_tint_title">Navigation Bar Icon Tint (IM)</string>
-    <string name="default_navigation_bar_im_tint_title">Navigation Bar Tint (IM)</string>
-    <string name="default_summary_keyboard">Select the default color when the keyboard is visible</string>
-    
+-<resources>
+
+<!-- Title / Misc -->
+
+
+<string name="app_name">Tinted Status Bar</string>
+
+<string name="app_name_donate_version">Tinted Status Bar (Versão de Doação)</string>
+
+<string name="title_activity_applications_settings">Configurações do Tinted Status Bar</string>
+
+<string name="copyright_summary">Copyright © 2013-2014 – Mohammad Abu-Garbeyyeh\nVer mais aplicativos e módulos</string>
+
+<string name="loading_title">Carregamento…</string>
+
+<string name="donate_summary">Apoiar desenvolvimento. Recursos extras podem ser desbloqueados no futuro.</string>
+
+<string name="thank_you">Obrigado!</string>
+
+<string name="thank_you_summary">Obrigado por sua doação. Eu realmente aprecio isso :)</string>
+
+<string name="android_lockscreen_stub_name">Tela de bloqueio do Android</string>
+
+<string name="unlocked_secret_settings">Você desbloqueiou alguns configurações secretas, elas podem ou não funcionar como o esperado.</string>
+
+<!-- Contributors, don't forgot to add yourself in contributors.xml if you translated TSB -->
+
+
+<string name="contributors">Contribuidores</string>
+
+<string name="contributors_summary">Ver a comunidade Tinted Status Bar, graças a todos listados aqui!</string>
+
+<string name="coders">Codificadores</string>
+
+<string name="designers">Designers</string>
+
+<string name="libraries">Bibliotecas</string>
+
+<string name="translators">Tradutores</string>
+
+<!-- Contributor links text -->
+
+
+<string name="link_facebook">Adicionar-me no Facebook</string>
+
+<string name="link_twitter">Seguir-me no Twitter</string>
+
+<string name="link_google_plus">Adicionar-me no Google+</string>
+
+<string name="link_github">Seguir-me no Github</string>
+
+<string name="link_github_library">Fork-lo em Github</string>
+
+<string name="link_xda">Ver perfil no XDA Developers</string>
+
+<string name="link_youtube">Inscrever-se no meu canal YouTube</string>
+
+<string name="link_linkedin">Conecte-se com LinkedIn</string>
+
+<string name="link_generic">Visitar meu site</string>
+
+<string name="link_generic_library">Ver biblioteca do meu site</string>
+
+<!-- Menu actions -->
+
+
+<string name="action_settings">Configurações</string>
+
+<string name="action_search">Pesquisar</string>
+
+<string name="menu_save">Salvar</string>
+
+<string name="menu_launch">Lançar</string>
+
+<string name="menu_settings">Configurações</string>
+
+<string name="menu_playstore">Play Store</string>
+
+<string name="menu_xposed">Xposed módulos</string>
+
+<string name="menu_donate">Doar</string>
+
+<!-- Color picker -->
+
+
+<string name="enabled">Habilitar</string>
+
+<string name="apply">Aplocar</string>
+
+<string name="saturation">Saturação</string>
+
+<string name="value">Valor</string>
+
+<string name="opacity">Opacidade</string>
+
+<string name="preview">Pré-visualização</string>
+
+<string name="restore">Restaurar</string>
+
+<string name="save">Salvar</string>
+
+<string name="invalid_color">Cor inválida</string>
+
+<!-- Activity color settings -->
+
+
+<string name="all_activities_title">Todas as atividades</string>
+
+<string name="all_the_wonderful_activities">Todas as atividades abaixo, configurações de substituir este</string>
+
+<string name="status_bar_tint_text">Status Bar Tint</string>
+
+<string name="status_bar_icon_tint_text">Cor dos ícones da barra de status</string>
+
+<string name="navigation_bar_tint_text">Coloração da barra de navegação</string>
+
+<string name="navigation_bar_icon_tint_text">Cor dos ícones da barra de navegação</string>
+
+<string name="reset_to_auto_detect">Redefinir para detectar automaticamente</string>
+
+<!-- Preference categories -->
+
+
+<string name="advanced">Avançado</string>
+
+<string name="action_bar">Barra de ação</string>
+
+<string name="per_app_settings">Configurar por aplicativo</string>
+
+<string name="appearance">Aparência</string>
+
+<string name="reverse_tint_actionbar_title">Inverter matiz da barra de ação</string>
+
+<string name="reverse_tint_actionbar_summary">Defenir a cor da barra de status com a barra de ação</string>
+
+<!-- Preferences -->
+
+
+<string name="per_app_tints_title">Por aplicativo</string>
+
+<string name="per_app_tints_summary">Configurar a barra de status e barra de ação aqui</string>
+
+<string name="api_override_title">Permitir a interação da parte 3</string>
+
+<string name="api_override_summary">Aplicativos de 3° parte podem usar API para alterar a cor da barra de status entres os aplicativos</string>
+
+<string name="max_hsv_title">Máximo de preto para ícones não especificados</string>
+
+<string name="max_hsv_summary">Anteriormente máximo não especificados de auto-mudança para ícones pretos, quando a barra de ação não tem texto de titulo.</string>
+
+<string name="current_hsv_value">Valor atual: %s</string>
+
+<string name="toast_activity_names_title">Toast de títulos das atividades</string>
+
+<string name="toast_activity_names_summary">Toast será msotrado sempre que uma atividade é iniciado, isso pode ajudá-lo a encontrar nomes das atividades.</string>
+
+<string name="awesome_ab_color_picker_title">Notificações do seletor de cores</string>
+
+<string name="awesome_ab_color_picker_summary">Permite defenir dinamicamente a cor para a atividade</string>
+
+<string name="react_actionbar_title">Reagir visibilidade na mudança da barra de ação</string>
+
+<string name="react_actionbar_description">Permitindo que isso faz para mudar a tonalidade da barra de status de acordo com a visibilidade da barra ação</string>
+
+<string name="system_cf_mode_title">Modo de filtro na cor do ícone do sistema</string>
+
+<string name="notification_cf_mode_title">Notificação modo de filtro de cores do ícone </string>
+
+<string name="cf_mode">Modos de Filtros</string>
+
+<string name="explain_cf_mode_text">Explicar as seguintes configurações</string>
+
+<string name="cf_mode_explanation">Alterar o modo de filtro de cores permite que você tenha mais controle sobre, como os ícones são alteradas, MULTIPLY pode preservar cores do ícone original, enquanto SRC_ATOP garante a cor que voc^selecionou para ser defenido.</string>
+
+<string name="animate_tint_title">Animar mudanças das cores</string>
+
+<string name="animate_tint_summary">Aos poucos, mudar barra de status e cores da barra de navegação</string>
+
+<string name="link_panel_views_title">Status do link e cores da barra de navegação</string>
+
+<string name="link_panel_views_summary">Barra de navegação irá seguir cores a barra de status</string>
+
+<string name="debug_mode_title">Modo de Depuração</string>
+
+<string name="debug_mode_summary">Ativar registro de Logcat ou registros Xposed</string>
+
+<string name="react_lightsout_title">Reagem a luzes apagadas</string>
+
+<string name="react_lightsout_summary">Mudar de cor de elementos de acordo com modo de luzes para fora</string>
+
+<string name="respect_kitkat_api_title">Respeito KitKat APIs</string>
+
+<string name="respect_kitkat_api_summary">Configurações para aplicativos, esse pedido translucidez será ignorado</string>
+
+<string name="overlay_mode_title">Modo de sobreposição</string>
+
+<string name="overlay_mode_summary">Escolha o tipo de sobreposição de ser mostrado ao longo colorido</string>
+
+<string name="semi_transparent_overlay_opacity_title">Opacidade sobreposicão</string>
+
+<string name="white_icon_tint_with_overlay_title">Ícone branco com sobreposição</string>
+
+<string name="white_icon_tint_with_overlay_message">Forçar tonalidade de um ícone branco quando se usa uma sobreposicão</string>
+
+<!-- Defaults -->
+
+
+<string name="default_settings_title">Configurações padrão</string>
+
+<string name="default_settings_summary">Configurações padrão do aplicativo</string>
+
+<string name="default_colors">Matizes padrão</string>
+
+<string name="default_colors_summary">Altere os padrões usados</string>
+
+<string name="default_status_bar_tint_title">Cor padrão da barra de status</string>
+
+<string name="default_status_bar_icon_tint_title">Cor do ícone padrão da barra de status</string>
+
+<string name="default_status_bar_inverted_icon_tint_title">Cor do ícone padrão invertido</string>
+
+<string name="default_status_bar_inverted_icon_tint_summary">Selecione a cor padrão, se uma luz de fundo é determinada</string>
+
+<string name="default_navigation_bar_tint_title">Cor padrão da barra de navegação</string>
+
+<string name="default_navigation_bar_icon_tint_title">Cor do ícone padrão da barra de navegação</string>
+
+<string name="default_navigation_bar_icon_im_tint_title">Ícone da barra de navegação (IM)</string>
+
+<string name="default_navigation_bar_im_tint_title">Barra de Navegação Matiz (IM)</string>
+
+<string name="default_summary">Selecionar a cor, quando ser determinada</string>
+
+<string name="default_summary_keyboard">Selecione a cor padrão quando o teclado estiver visível</string>
+
+<!-- Errors / Notices -->
+
+
+<string name="warning">Aviso</string>
+
+<string name="no_activities_error">Nenhuma atividade, este aplicativo não deve ser mostrado na lista.</string>
+
+<string name="gel_stub_warning">Este aplicativo é um esboço para o lançador real. Ir para o pacote real?</string>
+
+<string name="gel_stub_toast">Este aplicativo é um esboço sobre o real lançador, para fazer alterações em que, editar as configurações Google Pesquisa.</string>
+
+<!-- Toast activity text -->
+
+
+<string name="toast_text_package_name">Nome do pacote: %s</string>
+
+<string name="toast_text_activity_name">Nome da atividade: %s</string>
+
+<!-- Notification color picker -->
+
+
+<string name="notification_add_app">Adicionar aplicativo</string>
+
+<string name="notification_add_activity">Adicionar atividade</string>
+
+<string name="apply_touch_color">Aplicar cor</string>
+
+<string name="apply_general_color">Aplicar cor geral</string>
+
+<!-- Overlay modes, order is important when translating! -->
+
+
+
+-<string-array name="overlay_entries">
+
+<item>Nenhum</item>
+
+<item>Gradiente</item>
+
+<item>Semi transparente</item>
+
+</string-array>
+
+<!-- Plugins -->
+
+
+<string name="download_description">Tinted Status Bar Plugin</string>
+
+<string name="title_activity_plugins">Plugins</string>
+
+<string name="plugins_title">Baixar plugins</string>
+
+<string name="plugins_summary">Esteder a funcionalidade dos plugins na barra de status em aplicações onde não pode detectar automaticamente</string>
+
+<string name="plugin_version">Versão: %1$s (%2$d)</string>
+
+<string name="plugin_version_update">Atualização disponível: %1$s (%2$d)</string>
+
+<string name="open_xposed">Instalador Xposed</string>
+
+<string name="uninstall">Desinstalar</string>
+
 </resources>
