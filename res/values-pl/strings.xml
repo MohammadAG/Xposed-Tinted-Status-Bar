@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- With love by: M. Kucharskov & P. Kowlaczyk (i don't know where she add) -->
-
+	<!-- With love by: M. Kucharskov & P. Kowlaczyk -->
     <!-- Title / Misc -->
     <string name="app_name">Tinted Status Bar</string>
     <string name="app_name_donate_version">Tinted Status Bar (dotacja)</string>
@@ -101,6 +100,11 @@
     <string name="react_lightsout_summary">Zmiana kolorów elementów stosownie do trybu oświetlenia</string>
     <string name="respect_kitkat_api_title">Respektuj API KitKat</string>
     <string name="respect_kitkat_api_summary">Ustawienia aplikacji, które żądają przezroczystość będą ignorowane</string>
+    <string name="overlay_mode_title">Tryb nakładki</string>
+    <string name="overlay_mode_summary">Wybierz typ nakładki do wyświetlania ponad kolorem odcienia</string>
+    <string name="semi_transparent_overlay_opacity_title">Krycie nakładki</string>
+    <string name="white_icon_tint_with_overlay_title">Białe ikony z nakłdką</string>
+    <string name="white_icon_tint_with_overlay_message">Wymuszaj białe ikony podczas używania nakładki</string>
 
     <!-- Defaults -->
     <string name="default_settings_title">Domyślne ustawienia</string>
@@ -133,5 +137,24 @@
     <string name="notification_add_activity">Dodaj czynność</string>
     <string name="apply_touch_color">Zastosuj kolor dotyku</string>
     <string name="apply_general_color">Zastosuj główny kolor</string>
+
+    <!-- Overlay modes, order is important when translating! -->
+    <string-array name="overlay_entries">
+        <item>Brak</item>
+        <item>Gradient</item>
+        <item>Pół przezroczysty</item>
+    </string-array>
+
+    <!-- Plugins -->
+    <string name="download_description">Wtyczka Tinted Status Bar</string>
+    <string name="title_activity_plugins">Wtyczki</string>
+    <string name="plugins_title">Pobierz wtyczki</string>
+    <string name="plugins_summary">Wtyczki rozszerzają funkcjonalność Tinted Status Bar w apkilacjach gdzie nie można automatycznie wykryć odcienia</string>
+    <string name="plugin_version">Wersja: %1$s (%2$d)</string>
+    <string name="plugin_version_update">Dostępna aktualizacja: %1$s (%2$d)</string>
+    <string name="open_xposed">Instalator Xposed</string>
+    <string name="uninstall">Odinstaluj</string>
+    <string name="legacy_gradient_mode_title">Tryb dziedziczenia gradientu</string>
+    <string name="legacy_gradient_mode_summary">Za każdym razem gdy nakładka jest wyłączona, rysuj gradient gdy 66000000 jest użyty lub gdy aplikacja jest stworzona dla KitKat'a</string>
 
 </resources>
